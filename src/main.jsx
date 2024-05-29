@@ -11,7 +11,7 @@ import './index.css';
 import "@fontsource/outfit";
 import "@fontsource/roboto";
 
-/*const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
@@ -20,12 +20,12 @@ import "@fontsource/roboto";
     path: "resume",
     element: <Resume/>,
   },
-]);*/
+], {
+  basename: process.env.NODE_ENV === 'production' ? 'Jaden-portfolio' : '/'
+});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App/>
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );
-
-//    <RouterProvider router={router}  />
