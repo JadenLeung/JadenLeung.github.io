@@ -11,7 +11,7 @@ import './index.css';
 import "@fontsource/outfit";
 import "@fontsource/roboto";
 
-const router = createBrowserRouter([
+/*const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
@@ -20,10 +20,12 @@ const router = createBrowserRouter([
     path: "resume",
     element: <Resume/>,
   },
-]);
+]);*/
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <App/>
   </React.StrictMode>,
 );
+
+//    <RouterProvider router={router}  />
