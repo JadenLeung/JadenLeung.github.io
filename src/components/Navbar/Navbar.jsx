@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
+import { animateScroll as scroll, scroller } from 'react-scroll';
 import styles from "./Navbar.module.css";
 import {getImageUrl} from "../../utils";
 
@@ -18,6 +20,14 @@ const projects = [
 
 ];
 
+const scrollToSection = (sectionId) => {
+    scroller.scrollTo(sectionId, {
+      duration: 800,
+      delay: 0,
+    });
+  };
+
+
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [projectOpen, setProjectOpen] = useState(false);
@@ -31,7 +41,7 @@ export const Navbar = () => {
 
     return (
         <nav className={styles.navbar}>
-            <a className={styles.title} href="/">Jaden's Website</a>
+            <Link to="/" className={styles.title}>Jaden's Website</Link>
             <div className={styles.menu}>
                 <img 
                     className =  {menuOpen? styles.menuClose : styles.menuBtn} 
@@ -53,7 +63,7 @@ export const Navbar = () => {
                             setProjectOpen(false);
                         }}
                         >
-                        <a href={"/#Projects"} className={styles.projects}>Projects</a></li>
+                        <Link to="/" onClick={() => scrollToSection('Projects')} className={styles.projects}>Projects</Link></li>
                         <div className={projectOpen || linksOpen ? styles.dropDown2 : styles.dropDownClose}
                             onMouseOver={()=>{
                                 setLinksOpen(true);
@@ -67,8 +77,8 @@ export const Navbar = () => {
                             )}
                         </div>
                     </div>
-                    <li key={0}><a href={"/resume"} target="_blank">Resume</a></li>
-                    <li key={0}><a href={"#Contact"}>Contacts</a></li>
+                    <li key={10}><Link to="/resume" target="_blank">Resume</Link></li>
+                    <li key={12}><Link to="/" onClick={() => scrollToSection('Contact')}>Contacts</Link></li>
                 </ul>
             </div>
         </nav>
