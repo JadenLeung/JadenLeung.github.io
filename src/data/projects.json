@@ -18,7 +18,7 @@
     {
         "title": "Lunar New Year Gala",
         "imageSrc": "projects/gala.png",
-        "description": "As a member of the STEAM, I mentored the design of this website for the town library promoting its lunar new year festival.",
+        "description": "As a member of the STEAM Team, I mentored the design of this website for the town library promoting its LNY festival.",
         "skills": ["HTML", "CSS"],
         "demo": "http://lny2023.caal-ma.org/",
         "source": "https://github.com/JadenLeung/lunar"
