@@ -13,6 +13,7 @@
     font-weight: 700;
     letter-spacing: 1.75px;
     text-transform: uppercase;
+    z-index: 0;
 }
 
 .content {
@@ -20,6 +21,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     margin-top: 14px;
+    z-index: 0;
 }
 
 .skills {

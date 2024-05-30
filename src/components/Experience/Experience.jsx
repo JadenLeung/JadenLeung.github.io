@@ -35,7 +35,7 @@ export const Experience = () => {
                         </li>
                     })
                 }
-                <a href="/resume" target="_blank">Click here for my full resume</a>
+                <a href="/#/resume" target="_blank">Click here for my full resume</a>
             </ul>
        </div>
     </section>);
