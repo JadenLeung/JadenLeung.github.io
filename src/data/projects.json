@@ -8,19 +8,19 @@
         "source": "https://github.com/JadenLeung/rubiks"
     },
     {
-        "title": "Sleepy Chess",
-        "imageSrc": "projects/chess.png",
-        "description": "A chess-based puzzle game where the black pieces don't capture you unless you're in sight. Go for the checkmate!",
-        "skills": ["Unity", "C#"],
-        "demo": "https://virtual-cube.net/",
-        "source": "https://github.com/JadenLeung/rubiks"
-    },
-    {
         "title": "Symptocare",
         "imageSrc": "projects/symptocare.png",
         "description": "An AI diagnosis for Boston University's Civil Tech hackathon using Machine Learning and OpenAI to give a diagnosis.",
         "skills": ["Python", "OpenAI"],
         "demo": "https://devpost.com/software/symptocare",
         "source": "https://github.com/Ryan-J-Gilbert/tfc-hack-2024-symptocare/?tab=readme-ov-file"
+    },
+    {
+        "title": "Lunar New Year Gala",
+        "imageSrc": "projects/gala.png",
+        "description": "As a member of the STEAM, I mentored the design of this website for the town library promoting its lunar new year festival.",
+        "skills": ["HTML", "CSS"],
+        "demo": "http://lny2023.caal-ma.org/",
+        "source": "https://github.com/JadenLeung/lunar"
     }
 ]

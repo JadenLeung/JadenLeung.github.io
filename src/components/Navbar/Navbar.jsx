@@ -6,18 +6,21 @@ import {getImageUrl} from "../../utils";
 
 const projects = [
     {
-        name: "Sleepy Chess",
-        link: "https://chess.com/",
+        name: "Lunar New Year",
+        link: "http://lny2023.caal-ma.org/",
     },
     {
-        name: "Fruit Tower Defense",
-        link: "https://turbowarp.org/412656358/fullscreen",
+        name: "Symptocare",
+        link: "https://devpost.com/software/symptocare",
     },
     {
         name: "Wordle",
         link: "https://replit.com/@JadenLeung2/Wordle",
     },
-
+    {
+        name: "Fruit Tower Defense",
+        link: "https://turbowarp.org/412656358/fullscreen",
+    }
 ];
 
 const scrollToSection = (sectionId) => {
