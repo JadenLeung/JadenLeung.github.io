@@ -2,6 +2,7 @@ import React from 'react';
 import skills from "../../data/skills.json";
 import styles from "./Experience.module.css";
 import history from "../../data/history.json";
+import { Link } from "react-router-dom";
 import { getImageUrl } from "../../utils";
 
 export const Experience = () => {
@@ -35,7 +36,7 @@ export const Experience = () => {
                         </li>
                     })
                 }
-                <a href="/Jaden-portfolio/#/resume" target="_blank">Click here for my full resume</a>
+                <Link to="/resume" target="_blank">Click here for my full resume</Link>
             </ul>
        </div>
     </section>);
