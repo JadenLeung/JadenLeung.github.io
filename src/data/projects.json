@@ -3,7 +3,7 @@
         "title": "virtual-cube.net",
         "imageSrc": "projects/cube.png",
         "description": "An online rubiks cube with webcam integration, self-solving, custom cube designs, and more!",
-        "skills": ["HTML", "CSS", "P5.JS"],
+        "skills": ["HTML", "CSS", "P5.js", "Node.js"],
         "demo": "https://virtual-cube.net/",
         "source": "https://github.com/JadenLeung/rubiks"
     },
