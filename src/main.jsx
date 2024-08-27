@@ -7,6 +7,7 @@ import {
 import { HashRouter, Route, Routes, Link } from "react-router-dom";
 import App from './pages/App.jsx';
 import Resume from './pages/Resume.jsx';
+import Lazy from './pages/Lazy.jsx';
 import './index.css';
 
 import "@fontsource/outfit";
@@ -20,6 +21,10 @@ const router = createHashRouter([
   {
     path: "resume",
     element: <Resume/>,
+  },
+  {
+    path: "lazychess",
+    element: <Lazy/>,
   },
 ]);
 

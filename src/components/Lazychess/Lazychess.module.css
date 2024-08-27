@@ -1,0 +1,33 @@
+@import "../../vars.css";
+
+.container {
+    display: flex;
+    justify-content: center;  /* Horizontally center */
+    align-items: center;
+}
+
+.iframe {
+    background-color: var(--color-bg);
+    overflow-x: hidden;
+    color: white;
+    padding-top:50px;
+}
+
+.miniframe {
+    background-color: var(--color-bg);
+    width: 75%;
+    height: 100%;
+    overflow-x: hidden;
+    color: white;
+    padding-top:50px;
+    padding-left: 35%;
+    padding-right: 10%;
+    padding-bottom: 20px;
+}
+
+.text {
+    font-size: 20px;
+    padding-top: 100px;
+    padding-left: 10%;
+    padding-right: 10%;
+}

@@ -1,2 +1,3 @@
 https://jadenleung.github.io/index.html
 https://jadenleung.github.io/#/resume
+https://jadenleung.github.io/#/lazychess

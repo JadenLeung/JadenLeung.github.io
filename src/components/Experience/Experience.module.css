@@ -79,11 +79,13 @@
 
 .historyItemDetails {
     font-family: var(--font-roboto);
+    background-color: transparent;
 }
 
 .historyItemDetails h3 {
     font-size: 30px;
     font-weight: 500;
+    background-color: transparent;
 }
 
 

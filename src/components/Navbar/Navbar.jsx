@@ -6,6 +6,10 @@ import {getImageUrl} from "../../utils";
 
 const projects = [
     {
+        name: "Lazy Chess",
+        link: "/lazychess",
+    },
+    {
         name: "Lunar New Year",
         link: "http://lny2023.caal-ma.org/",
     },
@@ -75,7 +79,8 @@ export const Navbar = () => {
                                 setLinksOpen(false);
                             }}>
                             {projects.map((item, id) => {
-                                return <a key={id} href={item.link} target="_blank" className={styles.link}>{item.name}</a>
+                                return item.link[0] == '/' ? <Link key={id} className={styles.link} to={item.link} target="_blank">{item.name}</Link> 
+                                : <a key={id} href={item.link} target="_blank" className={styles.link}>{item.name}</a>
                             }
                             )}
                         </div>
