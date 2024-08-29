@@ -6,12 +6,16 @@ import {getImageUrl} from "../../utils";
 
 const projects = [
     {
-        name: "Lazy Chess",
-        link: "/lazychess",
+        name: "AI Plays Chess",
+        link: "/aichess",
     },
     {
         name: "Lunar New Year",
         link: "http://lny2023.caal-ma.org/",
+    },
+    {
+        name: "Lazy Chess",
+        link: "/lazychess",
     },
     {
         name: "Symptocare",

@@ -3,17 +3,33 @@
         "title": "virtual-cube.net",
         "imageSrc": "projects/cube.png",
         "description": "An online rubiks cube with webcam integration, self-solving, custom cube designs, and more!",
-        "skills": ["HTML", "CSS", "P5.js", "Express.js"],
+        "skills": ["HTML/CSS", "SQL", "P5.JS", "Express.js"],
         "demo": "https://virtual-cube.net/",
         "source": "https://github.com/JadenLeung/rubiks"
+    },
+    {
+        "title": "AI Plays: Chess",
+        "imageSrc": "projects/symptocare.png",
+        "description": "Simulate a chess game between GPT-4o-mini, Gemini, Stockfish, Randombot, and yourself.",
+        "skills": ["Flask", "C#", "Unity", "OpenAI", "Gemini"],
+        "demo": "https://jadenleung.github.io/#/aichess",
+        "source": "https://github.com/JadenLeung/ai-chess"
     },
     {
         "title": "Symptocare",
         "imageSrc": "projects/symptocare.png",
         "description": "An AI diagnosis for Boston University's Civil Tech hackathon using Machine Learning and OpenAI to give a diagnosis.",
-        "skills": ["Python", "OpenAI"],
+        "skills": ["Flask", "OpenAI"],
         "demo": "https://devpost.com/software/symptocare",
         "source": "https://github.com/Ryan-J-Gilbert/tfc-hack-2024-symptocare/?tab=readme-ov-file"
+    },
+    {
+        "title": "Lazy Chess",
+        "imageSrc": "projects/lazychess3.png",
+        "description": "A chess-based puzzle game to strengthen chess tactics and strategies. Contains 28 levels of mind-inducing gameplay.",
+        "skills": ["C#", "Unity"],
+        "demo": "https://jadenleung.github.io/#/lazychess",
+        "source": "https://github.com/JadenLeung/lazy-chess"
     },
     {
         "title": "Lunar New Year Gala",
@@ -22,5 +38,13 @@
         "skills": ["HTML", "CSS"],
         "demo": "http://lny2023.caal-ma.org/",
         "source": "https://github.com/JadenLeung/lunar"
+    },
+    {
+        "title": "Wordle",
+        "imageSrc": "projects/Wordle.png",
+        "description": "A command line Wordle Game featuring a bot that predicts the best word, versus mode, and a bot simulation mode.",
+        "skills": ["Java"],
+        "demo": "https://replit.com/@JadenLeung2/Wordle",
+        "source": "https://github.com/JadenLeung/wordle"
     }
 ]

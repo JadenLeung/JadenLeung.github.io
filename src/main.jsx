@@ -8,6 +8,7 @@ import { HashRouter, Route, Routes, Link } from "react-router-dom";
 import App from './pages/App.jsx';
 import Resume from './pages/Resume.jsx';
 import Lazy from './pages/Lazy.jsx';
+import AIchess from './pages/AIchess.jsx';
 import './index.css';
 
 import "@fontsource/outfit";
@@ -26,6 +27,10 @@ const router = createHashRouter([
     path: "lazychess",
     element: <Lazy/>,
   },
+  {
+    path: "aichess",
+    element: <AIchess/>,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
