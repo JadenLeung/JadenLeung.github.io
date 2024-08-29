@@ -1,5 +1,10 @@
 @import "../../vars.css";
 
+
+.page {
+    display: flex;
+    flex-direction: column;
+}
 .container {
     display: flex;
     justify-content: center;  /* Horizontally center */
@@ -34,8 +39,20 @@
 
 @media screen and (max-width: 830px) {
     .iframe {
-        transform: scale(0.95);
+        /* transform: scale(0.95); */
         /*transform-origin: center;*/
+        display:none;
+    }
+    .text {
+        order: 2;
+        padding-bottom:100%;
+    }
+    .miniframe {
+        background-color: var(--color-bg);
+        width: 75%;
+        height: 100%;
+        order: 1;
+
     }
     .text {
         font-size: 15px;
