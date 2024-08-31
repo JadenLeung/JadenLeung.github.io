@@ -26,6 +26,10 @@ const projects = [
         link: "https://replit.com/@JadenLeung2/Wordle",
     },
     {
+        name: "Global Pilot UI",
+        link: "https://devpost.com/software/global-pilot",
+    },
+    {
         name: "Fruit Tower Defense",
         link: "https://turbowarp.org/412656358/fullscreen",
     }

@@ -9,7 +9,7 @@
     },
     {
         "title": "AI Plays: Chess",
-        "imageSrc": "projects/symptocare.png",
+        "imageSrc": "projects/ailogo6.png",
         "description": "Simulate a chess game between GPT-4o-mini, Gemini, Stockfish, Randombot, and yourself.",
         "skills": ["Flask", "C#", "Unity", "OpenAI", "Gemini"],
         "demo": "https://jadenleung.github.io/#/aichess",
