@@ -6,9 +6,13 @@ import { Hero } from '../components/Hero/Hero';
 import { Navbar } from '../components/Navbar/Navbar';
 import { Projects } from '../components/Projects/Projects';
 import { ResumePDF } from '../components/ResumePDF/ResumePDF';
+import {useEffect} from "react";
+import {modeData} from '../backend/backend';
 
 function Resume() {
-
+  useEffect(() => {
+    modeData("Resume");
+  }, []);
 
   return (
     <div className={styles.App}>
