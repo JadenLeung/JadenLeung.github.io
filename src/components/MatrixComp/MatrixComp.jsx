@@ -41,6 +41,7 @@ function ridWhite(str) {
   }
   return str.trim().replace(/\s+/g, ' ').toLowerCase();
 }
+
 let file = "~";
 let iq = 0;
 let historyC = [];
@@ -61,9 +62,10 @@ export const MatrixComp = () => {
 
 
   useEffect(() => {
+    const punc = ['?', '!', ','];
     if (i <= messages[m].length) {
       setDisplay(messages[m].substring(0, i)); // Update the displayed text
-      setWait(messages[m][i] == '.' || messages[m][i] == '?' ? 500 : 20); // Adjust wait time for punctuation
+      setWait((messages[m][i] == '.' && messages[m][i+1] != 'e') || punc.includes(messages[m][i]) ? 500 : 20); // Adjust wait time for punctuation
 
       const timeout = setTimeout(() => {
         setI(i + 1); // Increment index after the specified wait
@@ -86,8 +88,17 @@ export const MatrixComp = () => {
     setUserInput(e.target.value);
   };
 
+  function replaceVars(str) {
+    let arr = str.split(' ');
+    arr = arr.map((s) => {
+      return s[0] == '$' && vars.hasOwnProperty(s.substring(1)) ? vars[s.substring(1)] : s[0] == '$' ? "" : s;
+    })
+    return arr.join(' ');
+  }
+
   useEffect(() => {
     const handleKeyPress = (e) => {
+      inputRef.current?.scrollIntoView();
       if (e.key === ' ' || e.key === 'Space' && !inputVisible && m < 6) {
         setI(messages[m].length);
       }
@@ -106,8 +117,9 @@ export const MatrixComp = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && m + 1 < messages.length) {
-        const inp = ridWhite(userInput);
+        let inp = ridWhite(userInput);
         let toadd = (history != ""? "\n" : "") + file + "$ " + userInput;
+        inp = replaceVars(inp);
         if (m == 5) {
           if (commands[file].hasOwnProperty(inp)) {
             toadd += "\n" + commands[file][inp];
@@ -146,20 +158,8 @@ export const MatrixComp = () => {
           if (inp.split(' ')[0] == "vim") {
             toadd += "\n" + "Vim not available on this terminal (too much David vibes)";
           }
-          if (inp.split(' ')[0] == "echo") {
-            if (inp.split(' ').length > 1 && inp.split(' ')[1] == "$IQ") {
-              toadd += "\n" + iq;
-            } else if (inp.split(' ').length > 1 && inp.split(' ')[1][0] == '$') {
-              let variable = inp.split(' ')[1].substring(1);
-              console.log(variable);
-              if (vars.hasOwnProperty(variable)) {
-                toadd += "\n" + vars[variable];
-              } else {
-                toadd += "";
-              }
-            } else {
+          if (inp.split(' ')[0] == "echo" && inp.split(' ').length > 1 && ridWhite(inp.split(' ')[1]) != "") {
               toadd += "\n" + inp.substring(5);
-            }
           }
           if (inp == "cd ~/innermatrix" || file == "~" && inp == "cd innermatrix") {
               file = "~/innermatrix";
@@ -168,8 +168,8 @@ export const MatrixComp = () => {
           } else if (inp == "cd outermatrix/~" || file == "~" && inp == "cd .." ) {
             file = "outermatrix/~";
           }
-          if (inp == "history") {
-            alert(historyC);
+          if (inp == "pwd") {
+            toadd += "\n" + file;
           }
           if (historyC.length > 0) {
             historyC.push(userInput); 
