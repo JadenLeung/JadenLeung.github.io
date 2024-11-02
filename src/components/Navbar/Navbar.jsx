@@ -69,7 +69,7 @@ export const Navbar = () => {
                 />
                 <ul className={`${styles.menuItems} ${menuOpen && styles.menuOpen}`}
                     onClick={() => setMenuOpen(false)}>
-                    <li key={10}><a href={"https://virtual-cube.net/"} target="_blank">Virtual-Cube</a></li>
+                    <li key={20}><a href={"https://virtual-cube.net/"} target="_blank">Virtual-Cube</a></li>
                     <div className={styles.dropDown}>
                         <li key={1} onMouseOver={()=>{
                             setProjectOpen(true);

@@ -1,0 +1,53 @@
+@import "../../vars.css";
+
+
+.page {
+    background-color: black;
+    height: 100vh;
+}
+.text{
+    background-color: black;
+    font-family: 'Courier New';
+    color: #00FF41;
+    white-space: pre-line;
+}
+.matrixInput {
+    color: #00FF41; /* Text color */
+    background-color: black; /* Background color */
+    border: 1px solid black; /* Default border color */
+    width: 100%;
+    font-family: 'Courier New';
+  }
+  
+.matrixInput:focus {
+    outline: none; /* Remove default focus outline */
+}
+.container {
+    background-color: black; /* Background color */
+    display: flex;           /* Use flexbox layout */
+    align-items: center;    /* Center items vertically */
+}
+
+
+@media screen and (max-width: 830px) {
+    .iframe {
+        /* transform: scale(0.95);  */
+        /*transform-origin: center;*/
+        display: none;
+    }
+    .text {
+        order: 2;
+        padding-bottom:100%;
+    }
+    .miniframe {
+        background-color: var(--color-bg);
+        width: 75%;
+        height: 100%;
+        order: 1;
+
+    }
+    .text {
+        font-size: 15px;
+        padding-top: 0px;
+    }
+}

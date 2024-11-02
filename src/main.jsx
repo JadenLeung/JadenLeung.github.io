@@ -9,6 +9,7 @@ import App from './pages/App.jsx';
 import Resume from './pages/Resume.jsx';
 import Lazy from './pages/Lazy.jsx';
 import AIchess from './pages/AIchess.jsx';
+import Matrix from './pages/Matrix.jsx';
 import './index.css';
 
 import "@fontsource/outfit";
@@ -30,6 +31,10 @@ const router = createHashRouter([
   {
     path: "aichess",
     element: <AIchess/>,
+  },
+  {
+    path: "matrix",
+    element: <Matrix/>,
   }
 ]);
 
