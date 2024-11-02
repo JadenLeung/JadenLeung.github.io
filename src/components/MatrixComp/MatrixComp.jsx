@@ -28,7 +28,7 @@ let commands = {"~" : {
   "outermatrix/~" : {
     "ls": "~ .bashrc",
     "ls -a": "~ .bashrc sentinel.exec",
-    "cat .bashrc" : "export lynIQ=1000",
+    "cat .bashrc" : "export IQ=1000",
     "cat sentinel.exec" : "sentinel.exec: Permission denied",
     "./sentinel.exec" : "You get a tickle!",
   }
@@ -36,10 +36,13 @@ let commands = {"~" : {
 
 
 function ridWhite(str) {
+  if (str.includes('$') || str.includes('=')) {
+    return str.trim().replace(/\s+/g, ' ');
+  }
   return str.trim().replace(/\s+/g, ' ').toLowerCase();
 }
 let file = "~";
-let lyniq = 0;
+let iq = 0;
 let historyC = [];
 
 export const MatrixComp = () => {
@@ -110,17 +113,17 @@ export const MatrixComp = () => {
             toadd += "\n" + commands[file][inp];
           }
           if (inp == "source .bashrc" || inp == ". .bashrc" || inp == "source outermatrix/~.bashrc" || inp == ". outermatrix/~.bashrc" ) {
-            lyniq = 100;
+            iq = 100;
           }
           if (randomCommands.hasOwnProperty(inp)) {
             toadd += "\n" + randomCommands[inp];
           }
           if (file == "outermatrix/~" && inp == "rm sentinel.exec") {
-            if (lyniq < 100) {
-              toadd += "\nyour IQ is too low to remove me! Proof: do command [echo $lynIQ]";
+            if (iq < 100) {
+              toadd += "\nyour IQ is too low to remove me! Proof: do command [echo $IQ]";
             } else if (!vars.hasOwnProperty("one") || vars["one"] != "true") {
               if (vars.hasOwnProperty("one")) {
-                toadd += "\nEverything in this world is a boolean.\nEither you are the one, or you are not.";
+                toadd += "\nEverything in this world is a boolean.\nEither you are kind, or not\nEither you are sinful, or not\nEither you are the one, or you are not.";
               } else {
                 toadd += "\nSorry, you are not the one. You thought all this time you were, right? Well, too bad.\nYOU ARE NOT THE $one";
               }
@@ -131,9 +134,9 @@ export const MatrixComp = () => {
               setUserInput("");
             }
           }
-          if (inp.includes('=') && inp.split('=')[0].replace(' ', '') == "lynIQ") {
-            toadd += "\n" + "HAHAAHHAHAHAHAH you thoguht! I've already patched this exploit. HAHAHAHA - sentinel\nlynIQ is now -100.";
-            lyniq = -100;
+          if (inp.includes('=') && inp.split('=')[0].replace(' ', '') == "IQ") {
+            toadd += "\n" + "HAHAAHHAHAHAHAH you thoguht! I've already patched this exploit. HAHAHAHA - sentinel\nIQ is now -100.";
+            iq = -100;
           }
           if (inp.includes('=') && inp.split('=').length == 2) {
             let key = inp.split('=')[0].replace(' ', '');
@@ -144,8 +147,8 @@ export const MatrixComp = () => {
             toadd += "\n" + "Vim not available on this terminal (too much David vibes)";
           }
           if (inp.split(' ')[0] == "echo") {
-            if (inp.split(' ').length > 1 && inp.split(' ')[1] == "$lynIQ") {
-              toadd += "\n" + lyniq;
+            if (inp.split(' ').length > 1 && inp.split(' ')[1] == "$IQ") {
+              toadd += "\n" + iq;
             } else if (inp.split(' ').length > 1 && inp.split(' ')[1][0] == '$') {
               let variable = inp.split(' ')[1].substring(1);
               console.log(variable);
