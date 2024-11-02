@@ -17,10 +17,12 @@ let commands = {"~" : {
     "ls": "neo.txt",
     "cat neo.txt": "those who are hidden are not seen clearly",
     "ls -a": "neo.txt innermatrix",
+    "ls -al": "-r--r--r--@ neo.txt\n-r--r--r--@ innermatrix",
   },
   "~/innermatrix" : {
     "ls": "suiteq3.txt",
     "ls -a": "suiteq3.txt trinity.exec",
+    "ls -al": "-r--r--r--@ suiteq3.txt\n-r-xr-xr-x@ trinity.exec",
     "cat suiteq3.txt" : "sample\nsample2\nsample3",
     "cat trinity.exec" : "01001000 01101111 01110111 00100000 01100011 01100001 01101110 00100000 01111001 01101111 01110101 00100000 01110110 01101001 01110011 01101001 01110100 00100000 01110100 01101000 01100101 00100000 01101111 01110101 01110100 01100101 01110010 01101101 01100001 01110100 01110010 01101001 01111000 00111111 00100000 01001001 01110011 00100000 01110100 01101000 01100101 01110010 01100101 00100000 01100001 01101110 01111001 01110100 01101000 01101001 01101110 01100111 00100000 01100100 01100101 01100101 01110000 01100101 01110010 00100000 01110100 01101000 01100001 01101110 00100000 01100001 00100000 01110010 01101111 01101111 01110100 00111111",
     "./trinity.exec" : "How can you visit the outermatrix? Is there anything deeper than a root?"
@@ -28,6 +30,7 @@ let commands = {"~" : {
   "outermatrix/~" : {
     "ls": "~ .bashrc",
     "ls -a": "~ .bashrc sentinel.exec",
+    "ls -al": "-r--r--r--@ ~\n-r--r--r--@ .bashrc\n-r-xr-xr-x@ sentinel.exec",
     "cat .bashrc" : "export IQ=1000",
     "cat sentinel.exec" : "sentinel.exec: Permission denied",
     "./sentinel.exec" : "You get a tickle!",
@@ -43,7 +46,6 @@ function ridWhite(str) {
 }
 
 let file = "~";
-let iq = 0;
 let historyC = [];
 
 export const MatrixComp = () => {
@@ -58,7 +60,7 @@ export const MatrixComp = () => {
   const [inputVisible, setInputVisible] = useState(false);
   const [userInput, setUserInput] = useState("");
   const inputRef = useRef(null);
-  const [vars, setVars] = useState({});
+  const [vars, setVars] = useState({IQ : 0});
 
 
   useEffect(() => {
@@ -125,13 +127,13 @@ export const MatrixComp = () => {
             toadd += "\n" + commands[file][inp];
           }
           if (inp == "source .bashrc" || inp == ". .bashrc" || inp == "source outermatrix/~.bashrc" || inp == ". outermatrix/~.bashrc" ) {
-            iq = 100;
+            setVars({...vars, IQ:100});
           }
           if (randomCommands.hasOwnProperty(inp)) {
             toadd += "\n" + randomCommands[inp];
           }
           if (file == "outermatrix/~" && inp == "rm sentinel.exec") {
-            if (iq < 100) {
+            if (vars["IQ"] < 100) {
               toadd += "\nyour IQ is too low to remove me! Proof: do command [echo $IQ]";
             } else if (!vars.hasOwnProperty("one") || vars["one"] != "true") {
               if (vars.hasOwnProperty("one")) {
@@ -147,16 +149,17 @@ export const MatrixComp = () => {
             }
           }
           if (inp.includes('=') && inp.split('=')[0].replace(' ', '') == "IQ") {
-            toadd += "\n" + "HAHAAHHAHAHAHAH you thoguht! I've already patched this exploit. HAHAHAHA - sentinel\nIQ is now -100.";
-            iq = -100;
+            toadd += "\n" + "HAHAAHHAHAHAHAH you thought! I've already patched this exploit. (A trusty source told me you'd do this) HAHAHAHA - sentinel\nIQ is now -100.";
+            setVars({...vars, IQ : -100});
           }
           if (inp.includes('=') && inp.split('=').length == 2) {
             let key = inp.split('=')[0].replace(' ', '');
             let value = inp.split('=')[1].replace(' ', '');
             setVars({...vars, [key] : value});
           }
-          if (inp.split(' ')[0] == "vim") {
-            toadd += "\n" + "Vim not available on this terminal (too much David vibes)";
+          const editors = ["nano", "vi", "vim"];
+          if (editors.includes(inp.split(' ')[0])) {
+            toadd += "\n" + inp.split(' ')[0] + " is not available on this terminal (too much David vibes)";
           }
           if (inp.split(' ')[0] == "echo" && inp.split(' ').length > 1 && ridWhite(inp.split(' ')[1]) != "") {
               toadd += "\n" + inp.substring(5);
