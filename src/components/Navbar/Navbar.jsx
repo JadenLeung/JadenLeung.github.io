@@ -22,6 +22,10 @@ const projects = [
         link: "https://devpost.com/software/symptocare",
     },
     {
+        name: "The Matrix",
+        link: "/matrix",
+    },
+    {
         name: "Wordle",
         link: "https://replit.com/@JadenLeung2/Wordle",
     },

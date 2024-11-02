@@ -8,7 +8,7 @@ export const randomCommands = {
     "whoami" : "You are not the one - sentinel",
     "gemma" : "미소 잃지않는 당신이 되었으면 좋겠어요. 오늘은 하시는 일마다 시원시원하게 풀리시길 바래요. 한주 마무리 잘하세요~~♬",
     "rayan" : "💀",
-    "vilo" : "S***, you know my true identity - Morphius",
+    "vilo" : "S***, you know my true identity - Morpheus",
     "sanjay" : "Bro imma head out",
     "chloe" : "OP",
     "dance" : `*//////////////////////////////////////////////////////////////(####//***/*#@&#(

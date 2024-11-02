@@ -5,7 +5,7 @@ import Webcam from './Webcam';
 import { MatrixText } from './MatrixText';
 import { randomCommands } from '../../data/commands.js';
 
-let messages = ["Hello. It is I, Morpheius. Are you ready to open your mind?", 
+let messages = ["Hello. It is I, Morpheus. Are you ready to open your mind?", 
   "I really want to show you something. But first I must make sure you are the one.\nOnly the one can answer this question:\nAre you really the person you see yourself as?",
   "Look at yourself. In reality, this is just a bunch of tiny pixels made of artificial lights.\nThis is merely a projection of you. Yet this is what you see, and what others will see. But it is not who you are.\nHow many people are looking at your projection right now? 1? 2?\nThe truth is, I know am looking at it right now. Yet I know someone is watching me, watching you.\nThere may megabytes and gigabytes of entities watching you, worshipping you, and praying on your demise.\nTake some time to think about this. When you are ready, we can begin.",
   "You take the blue pill. The story ends. You wake up in the bed and believe whatever you want to believe. And I will feel sad.\nYou take the red pill, you stay in wonderland, and I will show you how\ndeep\ndown\nthis\nrabbit\nhole\n\n\n\n\n\n\ngoes.",
