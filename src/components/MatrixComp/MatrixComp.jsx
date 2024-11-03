@@ -3,39 +3,7 @@ import { getImageUrl } from '../../utils';
 import styles from './MatrixComp.module.css';
 import Webcam from './Webcam';
 import { MatrixText } from './MatrixText';
-import { randomCommands } from '../../data/commands.js';
-
-let messages = ["Hello. It is I, Morpheus. Are you ready to open your mind?", 
-  "I really want to show you something. But first I must make sure you are the one.\nOnly the one can answer this question:\nAre you really the person you see yourself as?",
-  "Look at yourself. In reality, this is just a bunch of tiny pixels made of artificial lights.\nThis is merely a projection of you. Yet this is what you see, and what others will see. But it is not who you are.\nHow many people are looking at your projection right now? 1? 2?\nThe truth is, I know am looking at it right now. Yet I know someone is watching me, watching you.\nThere may megabytes and gigabytes of entities watching you, worshipping you, and praying on your demise.\nTake some time to think about this. When you are ready, we can begin.",
-  "You take the blue pill. The story ends. You wake up in the bed and believe whatever you want to believe. And I will feel sad.\nYou take the red pill, you stay in wonderland, and I will show you how\ndeep\ndown\nthis\nrabbit\nhole\n\n\n\n\n\n\ngoes.",
-  "I am sad. You take the blue pill, I will remain sad (And Jaden will tickle you).\n You take the red pill, and you might have a prize at the end!",
-  "You are not in the matrix.\nYou control our matrix. This computer. Is owned by you. You are god. And to some, you are satan.\nYour mission today is to save us from the evil sentinel.exec, which causes bugs and glitches to arise!\n Destroy him! I'll leave you be.",
-  "WE ARE SAVED! I CANNOT THANK YOU ENOUGH!\nWe are saved...but I know about other worlds that are not.\nTo be continued.\n"];
-
-let commands = {"~" : {
-    "ls": "neo.txt",
-    "cat neo.txt": "those who are hidden are not seen clearly",
-    "ls -a": "neo.txt innermatrix",
-    "ls -al": "-r--r--r--@ neo.txt\n-r--r--r--@ innermatrix",
-  },
-  "~/innermatrix" : {
-    "ls": "suiteq3.txt",
-    "ls -a": "suiteq3.txt trinity.exec",
-    "ls -al": "-r--r--r--@ suiteq3.txt\n-r-xr-xr-x@ trinity.exec",
-    "cat suiteq3.txt" : "sample\nsample2\nsample3",
-    "cat trinity.exec" : "01001000 01101111 01110111 00100000 01100011 01100001 01101110 00100000 01111001 01101111 01110101 00100000 01110110 01101001 01110011 01101001 01110100 00100000 01110100 01101000 01100101 00100000 01101111 01110101 01110100 01100101 01110010 01101101 01100001 01110100 01110010 01101001 01111000 00111111 00100000 01001001 01110011 00100000 01110100 01101000 01100101 01110010 01100101 00100000 01100001 01101110 01111001 01110100 01101000 01101001 01101110 01100111 00100000 01100100 01100101 01100101 01110000 01100101 01110010 00100000 01110100 01101000 01100001 01101110 00100000 01100001 00100000 01110010 01101111 01101111 01110100 00111111",
-    "./trinity.exec" : "How can you visit the outermatrix? Is there anything deeper than a root?"
-  },
-  "outermatrix/~" : {
-    "ls": "~ .bashrc",
-    "ls -a": "~ .bashrc sentinel.exec",
-    "ls -al": "-r--r--r--@ ~\n-r--r--r--@ .bashrc\n-r-xr-xr-x@ sentinel.exec",
-    "cat .bashrc" : "export IQ=1000",
-    "cat sentinel.exec" : "sentinel.exec: Permission denied",
-    "./sentinel.exec" : "You get a tickle!",
-  }
-};
+import { randomCommands, messages, commands, filesystem } from '../../data/commands.js';
 
 
 function ridWhite(str) {
@@ -45,8 +13,22 @@ function ridWhite(str) {
   return str.trim().replace(/\s+/g, ' ').toLowerCase();
 }
 
+
+
+function autoComplete(str) {
+  let arr = filesystem[file];
+  let ans = "";
+  arr.forEach((s) => {
+    if (s.substring(0, str.length) == str) {
+      ans = s;
+    }
+  })
+  return ans;
+}
+
 let file = "~";
 let historyC = [];
+console.log(31);
 
 export const MatrixComp = () => {
   const [display, setDisplay] = useState("");
@@ -61,14 +43,51 @@ export const MatrixComp = () => {
   const [userInput, setUserInput] = useState("");
   const inputRef = useRef(null);
   const [vars, setVars] = useState({IQ : 0});
+  const audioRef = useRef(new Audio(getImageUrl("matrix/win.mp3")));
 
+  const [playing, setPlaying] = useState(false);
+  const audioContextRef = React.useRef(null); // Store AudioContext as ref to persist it
+
+  useEffect(() => {
+    // Create an AudioContext only once
+    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    return () => audioContextRef.current.close(); // Clean up AudioContext on component unmount
+  }, []);
+
+  const playANote = () => {
+    if(inputVisible || m == 0 || (m == 6 && i  >= messages[m].length)) return;
+    if (playing) return; // If a sound is already playing, do nothing
+    setPlaying(true); 
+
+    const oscillator = audioContextRef.current.createOscillator();
+    const gainNode = audioContextRef.current.createGain();
+    oscillator.frequency.setValueAtTime(Math.floor(Math.random() * (100)) + (m == 3 && i > 200? (i < 230 ? 100: 10) : 250), audioContextRef.current.currentTime); // A note (440 Hz)
+    oscillator.type = 'triangle';
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContextRef.current.destination);
+
+    gainNode.gain.setValueAtTime(0.1, audioContextRef.current.currentTime); // Adjust volume
+    oscillator.start();
+
+    setTimeout(() => {
+      oscillator.stop();
+      setPlaying(false); // Allow new sound to play
+    }, 80); // Play for 0.5 seconds
+  };
+
+  useEffect(() => {
+    if (m == 6 && i >= messages[m].length) {
+      audioRef.current.play();
+    }
+  },[m, i])
 
   useEffect(() => {
     const punc = ['?', '!', ','];
     if (i <= messages[m].length) {
       setDisplay(messages[m].substring(0, i)); // Update the displayed text
       setWait((messages[m][i] == '.' && messages[m][i+1] != 'e') || punc.includes(messages[m][i]) ? 500 : 20); // Adjust wait time for punctuation
-
+      playANote();
       const timeout = setTimeout(() => {
         setI(i + 1); // Increment index after the specified wait
       }, wait);
@@ -101,7 +120,7 @@ export const MatrixComp = () => {
   useEffect(() => {
     const handleKeyPress = (e) => {
       inputRef.current?.scrollIntoView();
-      if (e.key === ' ' || e.key === 'Space' && !inputVisible && m < 6) {
+      if ((e.key === ' ' || e.key === 'Space') && i < messages[m].length) {
         setI(messages[m].length);
       }
     };
@@ -118,6 +137,8 @@ export const MatrixComp = () => {
   }
 
   const handleKeyDown = (e) => {
+    if (!e.key.includes("Arrow"))
+      playANote();
     if (e.key === 'Enter' && m + 1 < messages.length) {
         let inp = ridWhite(userInput);
         let toadd = (history != ""? "\n" : "") + file + "$ " + userInput;
@@ -160,6 +181,10 @@ export const MatrixComp = () => {
           const editors = ["nano", "vi", "vim"];
           if (editors.includes(inp.split(' ')[0])) {
             toadd += "\n" + inp.split(' ')[0] + " is not available on this terminal (too much David vibes)";
+          }
+          const actions = ["touch", "mkdir"];
+          if (actions.includes(inp.split(' ')[0])) {
+            toadd += "\nPermission denied. You actually thought!";
           }
           if (inp.split(' ')[0] == "echo" && inp.split(' ').length > 1 && ridWhite(inp.split(' ')[1]) != "") {
               toadd += "\n" + inp.substring(5);
@@ -206,6 +231,18 @@ export const MatrixComp = () => {
           setI(0);
           setUserInput("");
         }
+    }
+    if (e.key == 'Tab') {
+      e.preventDefault();
+      let inp = ridWhite(userInput);
+      let arr = inp.split(' ');
+      if (userInput && m == 5 && arr.length > 0) {
+        let s = autoComplete(arr[arr.length - 1]);
+        if (s != "") {
+          arr[arr.length - 1] = s;
+          setUserInput(arr.join(' '));
+        }
+      }
     }
     if (e.key == 'ArrowUp') {
       e.preventDefault();

@@ -13,6 +13,14 @@ export const MatrixText = () => {
             if (i % 150 == 0) {
                 newtext += "\n";
             }
+            if (i == 3075) {
+                newtext += "you are the chosen one";
+                i += 22;
+            }
+            if (i == 4060) {
+                newtext += "maybe you have good gaming chair";
+                i += 32;
+            }
             newtext += String.fromCharCode((Math.floor(Math.random() * (126 - 32 + 1)) + 32));
         }
         setText(newtext);
