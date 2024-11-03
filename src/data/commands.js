@@ -1,4 +1,4 @@
-export const messages = ["Hello. It is I, Morpheus. Are you ready to open your mind? Speak, and we will make our voices heard.", 
+export let messages = ["Hello. It is I, Morpheus. Are you ready to open your mind? Speak, and we will make our voices heard.", 
   "I really want to show you something. But first I must make sure you are the one.\nOnly the one can answer this question:\nAre you really the person you see yourself as?",
   "Look at yourself. In reality, this is just a bunch of tiny pixels made of artificial lights.\nThis is merely a projection of you. Yet this is what you see, and what others will see. But it is not who you are.\nHow many people are looking at your projection right now? 1? 2?\nThe truth is, I know am looking at it right now. Yet I know someone is watching me, watching you.\nThere may megabytes and gigabytes of entities watching you, worshipping you, and praying on your demise.\nTake some time to think about this. When you are ready, we can begin.",
   "You take the blue pill. The story ends. You wake up in the bed and believe whatever you want to believe. And I will feel sad.\nYou take the red pill, you stay in wonderland, and I will show you how\ndeep\ndown\nthis\nrabbit\nhole\n\n\n\n\n\n\ngoes.",
@@ -6,36 +6,36 @@ export const messages = ["Hello. It is I, Morpheus. Are you ready to open your m
   "You are not in the matrix.\nYou control our matrix. This computer. Is owned by you. You are god. And to some, you are satan.\nYour mission today is to save us from the evil sentinel.exec, which causes bugs and glitches to arise!\n Destroy him! I'll leave you be.",
   "WE ARE SAVED! I CANNOT THANK YOU ENOUGH!\nWe are saved...but I know about other worlds that are not.\nTo be continued.\n"];
 
-export const commands = {"~" : {
+export let commands = {"~" : {
     "ls": "neo.txt",
     "cat neo.txt": "those who are hidden are not seen clearly",
     "ls -a": "neo.txt innermatrix",
     "ls -al": "-r--r--r--@ neo.txt\n-r--r--r--@ innermatrix",
   },
   "~/innermatrix" : {
-    "ls": "suiteq3.txt",
-    "ls -a": "suiteq3.txt trinity.exec",
-    "ls -al": "-r--r--r--@ suiteq3.txt\n-r-xr-xr-x@ trinity.exec",
-    "cat suiteq3.txt" : "sample\nsample2\nsample3",
-    "cat trinity.exec" : "01001000 01101111 01110111 00100000 01100011 01100001 01101110 00100000 01111001 01101111 01110101 00100000 01110110 01101001 01110011 01101001 01110100 00100000 01110100 01101000 01100101 00100000 01101111 01110101 01110100 01100101 01110010 01101101 01100001 01110100 01110010 01101001 01111000 00111111 00100000 01001001 01110011 00100000 01110100 01101000 01100101 01110010 01100101 00100000 01100001 01101110 01111001 01110100 01101000 01101001 01101110 01100111 00100000 01100100 01100101 01100101 01110000 01100101 01110010 00100000 01110100 01101000 01100001 01101110 00100000 01100001 00100000 01110010 01101111 01101111 01110100 00111111",
-    "./trinity.exec" : "How can you visit the outermatrix? Is there anything deeper than a root?"
+    "ls": "test1.in code.cc Makefile",
+    "ls -a": "test1.in code.cc Makefile",
+    "ls -al": "-r--r--r--@ test1.in\n-r-xr-xr-x@ code.cc\n---x--x--x@ Makefile",
+    "cat test1.in" : "4\n3\ngfsdgsre\nfsdgsdf\nidk i dont wanna test this\nrandom bs",
+    "cat code.cc" : '#include <iostream>\n#include <encrypt>\nint main(){\nstd::cout << encrypt(*f8we&*E9889f);// unsecure & dangerous, according to lushman but i forgot how to fix it\n))}',
+    "cat makefile" : "Permission denied",
   },
   "outermatrix/~" : {
     "ls": "~ .bashrc",
     "ls -a": "~ .bashrc sentinel.exec",
-    "ls -al": "-r--r--r--@ ~\n-r--r--r--@ .bashrc\n-r-xr-xr-x@ sentinel.exec",
+    "ls -al": "-r--r--r--@ ~\n-r--r--r--@ .bashrc\n---x--x--x@ sentinel.exec",
     "cat .bashrc" : "export IQ=1000",
     "cat sentinel.exec" : "sentinel.exec: Permission denied",
     "./sentinel.exec" : "You get a tickle!",
   }
 };
 
-export const filesystem = {
+export let filesystem = {
   "~": ["neo.txt", "innermatrix"],
-  "~/innermatrix" : ["suiteq3.txt", "trinity.exec"],
+  "~/innermatrix" : ["test1.in", "Makefile", "code.cc"],
   "outermatrix/~" : ["~", ".bashrc", "sentinel.exec"],
 }
-export const randomCommands = {
+export let randomCommands = {
     "lyn": "LLLLLLLLL",
     "jaden": "WWWWWWWW",
     "whatever": "BRO. THIS IS SERIOUS. THE SENTINELS ARE TAKING OVER!",

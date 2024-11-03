@@ -6,8 +6,8 @@ import { MatrixText } from './MatrixText';
 import { randomCommands, messages, commands, filesystem } from '../../data/commands.js';
 
 
-function ridWhite(str) {
-  if (str.includes('$') || str.includes('=')) {
+function ridWhite(str, keepcase = false) {
+  if (str.includes('$') || str.includes('=') || keepcase) {
     return str.trim().replace(/\s+/g, ' ');
   }
   return str.trim().replace(/\s+/g, ' ').toLowerCase();
@@ -16,14 +16,24 @@ function ridWhite(str) {
 
 
 function autoComplete(str) {
+  let tempstr = str;
   let arr = filesystem[file];
   let ans = "";
+  let i = str.lastIndexOf("/");
+  let before = "";
+  if (i != -1) {
+    before = str.substring(0, i+1);
+    str = str.substring(i + 1);
+    console.log(str);
+  }
+  if (str == "") return before + ans;
   arr.forEach((s) => {
+    console.log(s, i);
     if (s.substring(0, str.length) == str) {
       ans = s;
     }
   })
-  return ans;
+  return ans == "" ? "" : before + ans;
 }
 
 let file = "~";
@@ -61,7 +71,7 @@ export const MatrixComp = () => {
 
     const oscillator = audioContextRef.current.createOscillator();
     const gainNode = audioContextRef.current.createGain();
-    oscillator.frequency.setValueAtTime(Math.floor(Math.random() * (100)) + (m == 3 && i > 200? (i < 230 ? 100: 10) : 250), audioContextRef.current.currentTime); // A note (440 Hz)
+    oscillator.frequency.setValueAtTime(m == 1 || m == 6 ? 391 : Math.floor(Math.random() * (100)) + (m == 3 && i > 200? (i < 230 ? 100: 10) : 250), audioContextRef.current.currentTime); // A note (440 Hz)
     oscillator.type = 'triangle';
 
     oscillator.connect(gainNode);
@@ -150,6 +160,19 @@ export const MatrixComp = () => {
           if (inp == "source .bashrc" || inp == ". .bashrc" || inp == "source outermatrix/~.bashrc" || inp == ". outermatrix/~.bashrc" ) {
             setVars({...vars, IQ:100});
           }
+          if (inp == "make" && file == "~/innermatrix") {
+            console.log(filesystem)
+            if (!filesystem["~/innermatrix"].includes("trinity.exec")) {
+              commands["~/innermatrix"]["./trinity.exec"] = "How can you visit the outermatrix? Is there anything deeper than a root?";
+              commands["~/innermatrix"]["ls"] += " trinity.exec";
+              commands["~/innermatrix"]["ls -a"] += " trinity.exec";
+              filesystem["~/innermatrix"].push("trinity.exec");
+              commands["~/innermatrix"]["ls -al"] += "\n-r-xr-xr-x@ trinity.exec";
+              commands["~/innermatrix"]["cat trinity.exec"] = "Hehe no way ur trying to print out an executable :)";
+            } 
+            toadd+= "\ncreated trinity.exec";
+            console.log(commands);
+          }
           if (randomCommands.hasOwnProperty(inp)) {
             toadd += "\n" + randomCommands[inp];
           }
@@ -234,7 +257,7 @@ export const MatrixComp = () => {
     }
     if (e.key == 'Tab') {
       e.preventDefault();
-      let inp = ridWhite(userInput);
+      let inp = ridWhite(userInput, true);
       let arr = inp.split(' ');
       if (userInput && m == 5 && arr.length > 0) {
         let s = autoComplete(arr[arr.length - 1]);
