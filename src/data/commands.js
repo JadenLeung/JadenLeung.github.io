@@ -24,7 +24,7 @@ export let commands = {"~" : {
     "ls": "~ .bashrc",
     "ls -a": "~ .bashrc sentinel.exec",
     "ls -al": "-r--r--r--@ ~\n-r--r--r--@ .bashrc\n---x--x--x@ sentinel.exec",
-    "cat .bashrc" : "export IQ=1000",
+    "cat .bashrc" : "export IQ=100",
     "cat sentinel.exec" : "sentinel.exec: Permission denied",
     "./sentinel.exec" : "You get a tickle!",
   }

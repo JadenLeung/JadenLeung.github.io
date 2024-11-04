@@ -195,8 +195,7 @@ export const MatrixComp = () => {
           if (inp.includes('=') && inp.split('=')[0].replace(' ', '') == "IQ") {
             toadd += "\n" + "HAHAAHHAHAHAHAH you thought! I've already patched this exploit. (A trusty source told me you'd do this) HAHAHAHA - sentinel\nIQ is now -100.";
             setVars({...vars, IQ : -100});
-          }
-          if (inp.includes('=') && inp.split('=').length == 2) {
+          } else if (inp.includes('=') && inp.split('=').length == 2) {
             let key = inp.split('=')[0].replace(' ', '');
             let value = inp.split('=')[1].replace(' ', '');
             setVars({...vars, [key] : value});
