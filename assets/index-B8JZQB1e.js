@@ -107,7 +107,7 @@ int main(){
 std::cout << encrypt(*f8we&*E9889f);// unsecure & dangerous, according to lushman but i forgot how to fix it
 ))}`,"cat makefile":"Permission denied"},"outermatrix/~":{ls:"~ .bashrc","ls -a":"~ .bashrc sentinel.exec","ls -al":`-r--r--r--@ ~
 -r--r--r--@ .bashrc
----x--x--x@ sentinel.exec`,"cat .bashrc":"export IQ=1000","cat sentinel.exec":"sentinel.exec: Permission denied","./sentinel.exec":"You get a tickle!"}},No={"~":["neo.txt","innermatrix"],"~/innermatrix":["test1.in","Makefile","code.cc"],"outermatrix/~":["~",".bashrc","sentinel.exec"]},$f={lyn:"LLLLLLLLL",jaden:"WWWWWWWW",whatever:"BRO. THIS IS SERIOUS. THE SENTINELS ARE TAKING OVER!",LGTM:"DNLGTM",SGTM:"DNSGTM",whoami:"You are not the one - sentinel","man man":"Maybe you should Google Google, or GPT GPT yknow if you're this stupid","man cd":"Duh","man cat":"Meow","man rm":`Description:
+---x--x--x@ sentinel.exec`,"cat .bashrc":"export IQ=100","cat sentinel.exec":"sentinel.exec: Permission denied","./sentinel.exec":"You get a tickle!"}},No={"~":["neo.txt","innermatrix"],"~/innermatrix":["test1.in","Makefile","code.cc"],"outermatrix/~":["~",".bashrc","sentinel.exec"]},$f={lyn:"LLLLLLLLL",jaden:"WWWWWWWW",whatever:"BRO. THIS IS SERIOUS. THE SENTINELS ARE TAKING OVER!",LGTM:"DNLGTM",SGTM:"DNSGTM",whoami:"You are not the one - sentinel","man man":"Maybe you should Google Google, or GPT GPT yknow if you're this stupid","man cd":"Duh","man cat":"Meow","man rm":`Description:
 Removes a file
 Usage:
 rm a3q3.cc`,"man echo":"Olga :)","man ls":`Description:
@@ -194,9 +194,9 @@ Either you are kind, or not
 Either you are sinful, or not
 Either you are the one, or you are not.`:H+=`
 Sorry, you are not the one. You thought all this time you were, right? Well, too bad.
-YOU ARE NOT THE $one`:(S(!1),o(l+1),a(0),y(""))),D.includes("=")&&D.split("=")[0].replace(" ","")=="IQ"&&(H+=`
+YOU ARE NOT THE $one`:(S(!1),o(l+1),a(0),y(""))),D.includes("=")&&D.split("=")[0].replace(" ","")=="IQ")H+=`
 HAHAAHHAHAHAHAH you thought! I've already patched this exploit. (A trusty source told me you'd do this) HAHAHAHA - sentinel
-IQ is now -100.`,d({...h,IQ:-100})),D.includes("=")&&D.split("=").length==2){let Pt=D.split("=")[0].replace(" ",""),R=D.split("=")[1].replace(" ","");d({...h,[Pt]:R})}["nano","vi","vim"].includes(D.split(" ")[0])&&(H+=`
+IQ is now -100.`,d({...h,IQ:-100});else if(D.includes("=")&&D.split("=").length==2){let Pt=D.split("=")[0].replace(" ",""),R=D.split("=")[1].replace(" ","");d({...h,[Pt]:R})}["nano","vi","vim"].includes(D.split(" ")[0])&&(H+=`
 `+D.split(" ")[0]+" is not available on this terminal (too much David vibes)"),["touch","mkdir"].includes(D.split(" ")[0])&&(H+=`
 Permission denied. You actually thought!`),D.split(" ")[0]=="echo"&&D.split(" ").length>1&&ya(D.split(" ")[1])!=""&&(H+=`
 `+D.substring(5)),D=="cd ~/innermatrix"||We=="~"&&D=="cd innermatrix"?We="~/innermatrix":D=="cd ~"||We=="~/innermatrix"&&D=="cd .."?We="~":(D=="cd outermatrix/~"||We=="~"&&D=="cd ..")&&(We="outermatrix/~"),D=="pwd"&&(H+=`
