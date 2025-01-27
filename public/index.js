@@ -1,26 +1,21 @@
 (function() {
-    // Define the routes with and without hash
-    const hashed = ["aichess", "lazychess", "matrix"];
-    const nonhash = ["unblocked"];
+  const routes = {
+    hashed: ["aichess", "lazychess", "matrix"],
+    nonhash: ["unblocked"]
+  };
 
-    const currentPath = window.location.pathname.slice(1); // Remove leading "/"
+  const currentPath = window.location.pathname.slice(1);
+  const isHashRoute = window.location.hash.startsWith('#/');
 
-    // Handle hash-based routes
-    if (hashed.includes(currentPath)) {
-      if (!window.location.hash) {
-        // If no hash is present, redirect to the hash route
-        window.location.replace('/#/' + currentPath);
-      }
-    }
-
-    // Handle non-hash routes (like /unblocked)
-    if (nonhash.includes(currentPath) && window.location.hash !== '#/' + currentPath) {
-      // If it's a non-hash route and not already at the correct path, redirect to it
+  if (routes.hashed.includes(currentPath) && !isHashRoute) {
+    window.location.replace('/#/' + currentPath);
+  }
+  
+  if (routes.nonhash.includes(currentPath)) {
+    if (isHashRoute && window.location.hash !== '#/' + currentPath) {
+      window.location.replace('/' + currentPath);
+    } else if (!isHashRoute && window.location.pathname !== '/' + currentPath) {
       window.location.replace('/' + currentPath);
     }
-
-    // Handle specific redirect for /unblocked if it's visited with the hash route
-    if (window.location.hash === '#/unblocked' && window.location.pathname !== '/unblocked') {
-      window.location.replace('/unblocked'); // Redirect to static unblocked.html
-    }
-  })();
+  }
+})();
