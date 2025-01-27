@@ -6,9 +6,12 @@
     <title>Page Not Found</title>
   </head>
   <body>
-    <!-- <script>
-      // If 404 page is loaded, redirect to index.html to let React Router handle it
-      window.location.replace(window.location.origin + window.location.pathname.replace('/404', '') + '#/' + window.location.pathname.split('/').pop());
-    </script> -->
+    <script>
+      // Get the current path (excluding the '/404' part)
+      const cleanPath = window.location.pathname.replace('/404', '');
+      
+      // Redirect to the index.html with the proper hash-based route
+      window.location.replace(window.location.origin + '/#' + cleanPath);
+    </script>
   </body>
 </html>
