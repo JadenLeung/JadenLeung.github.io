@@ -5,17 +5,18 @@
     <link rel="icon" type="image/png" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jaden Leung, Lexington & University of Waterloo</title>
+    <script>
+      (function() {
+        const pages = ["aichess", "lazychess", "matrix"];
+        const currentPath = window.location.pathname.slice(1); // Remove leading "/"
+        if (pages.includes(currentPath)) {
+          window.location.replace('/#/' + currentPath);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
-  <script>
-    const pages = ["aichess", "lazychess", "matrix"];
-    pages.forEach((page) => {
-      if (window.location.pathname === '/' + page) {
-        window.location.replace('/#/' + page);
-      }
-    });
-  </script>
 </html>

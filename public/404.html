@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Not Found</title>
+  </head>
+  <body>
+    <script>
+      // If 404 page is loaded, redirect to index.html to let React Router handle it
+      window.location.replace(window.location.origin + window.location.pathname.replace('/404', '') + '#/' + window.location.pathname.split('/').pop());
+    </script>
+  </body>
+</html>
