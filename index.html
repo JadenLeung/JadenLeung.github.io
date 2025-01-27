@@ -10,4 +10,12 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
+  <script>
+    const pages = ["aichess", "lazychess", "matrix"];
+    pages.forEach((page) => {
+      if (window.location.pathname === '/' + page) {
+        window.location.replace('/#/' + page);
+      }
+    });
+  </script>
 </html>
