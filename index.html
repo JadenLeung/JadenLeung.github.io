@@ -5,22 +5,6 @@
     <link rel="icon" type="image/png" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jaden Leung, Lexington & University of Waterloo</title>
-    <script>
-      (function() {
-        const pages = ["aichess", "lazychess", "matrix", "unblocked"];
-        const currentPath = window.location.pathname.slice(1); // Remove leading "/"
-
-        // Redirect for pages that should use hash-based routing
-        if (pages.includes(currentPath) && currentPath !== "unblocked") {
-          window.location.replace('/#/' + currentPath);
-        }
-
-        // Handle specific redirect for /unblocked if it's visited with the hash route
-        if (window.location.hash === '#/unblocked') {
-          window.location.replace('/unblocked'); // Redirect to static unblocked.html
-        }
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>
