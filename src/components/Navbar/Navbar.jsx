@@ -10,12 +10,16 @@ const projects = [
         link: "/aichess",
     },
     {
-        name: "Lunar New Year",
-        link: "http://lny2023.caal-ma.org/",
+        name: "Codehoot",
+        link: "https://jadenleung.github.io/codehoot/",
     },
     {
         name: "Lazy Chess",
         link: "/lazychess",
+    },
+    {
+        name: "Lunar New Year",
+        link: "http://lny2023.caal-ma.org/",
     },
     {
         name: "Symptocare",

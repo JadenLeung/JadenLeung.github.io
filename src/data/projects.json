@@ -3,7 +3,7 @@
         "title": "virtual-cube.net",
         "imageSrc": "projects/cube.png",
         "description": "An online rubiks cube with webcam integration, self-solving, custom cube designs, and more!",
-        "skills": ["HTML/CSS", "SQL", "P5.JS", "Express.js"],
+        "skills": ["HTML/CSS", "SQL", "P5.JS", "Express"],
         "demo": "https://virtual-cube.net/",
         "source": "https://github.com/JadenLeung/rubiks"
     },
@@ -16,20 +16,20 @@
         "source": "https://github.com/JadenLeung/ai-chess"
     },
     {
+        "title": "Codehoot",
+        "imageSrc": "projects/codehoot.png",
+        "description": "Remake of Kahoot!, for coders, used in University of Waterloo's CS136 Final Review Session.",
+        "skills": ["React", "Flask", "Express", "C", "Docker"],
+        "demo": "http://jadenleung.github.io/codehoot/",
+        "source": "https://github.com/JadenLeung/codehoot"
+    },
+    {
         "title": "Symptocare",
         "imageSrc": "projects/symptocare.png",
         "description": "An AI diagnosis for Boston University's Civil Tech hackathon using Machine Learning and OpenAI to give a diagnosis.",
         "skills": ["Flask", "OpenAI"],
         "demo": "https://devpost.com/software/symptocare",
         "source": "https://github.com/Ryan-J-Gilbert/tfc-hack-2024-symptocare/?tab=readme-ov-file"
-    },
-    {
-        "title": "Lazy Chess",
-        "imageSrc": "projects/lazychess3.png",
-        "description": "A chess-based puzzle game to strengthen chess tactics and strategies. Contains 28 levels of mind-inducing gameplay.",
-        "skills": ["C#", "Unity"],
-        "demo": "https://jadenleung.github.io/#/lazychess",
-        "source": "https://github.com/JadenLeung/lazy-chess"
     },
     {
         "title": "Lunar New Year Gala",
