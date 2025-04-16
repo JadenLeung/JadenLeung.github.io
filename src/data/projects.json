@@ -19,7 +19,7 @@
         "title": "Codehoot",
         "imageSrc": "projects/codehoot.png",
         "description": "Remake of Kahoot!, for coders, used in University of Waterloo's CS136 Final Review Session.",
-        "skills": ["React", "Flask", "Express", "C", "Docker"],
+        "skills": ["React", "C", "Flask", "Express",  "Docker"],
         "demo": "http://jadenleung.github.io/codehoot/",
         "source": "https://github.com/JadenLeung/codehoot"
     },
