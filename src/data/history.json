@@ -1,18 +1,18 @@
 [
     {
+        "role": "CS136 Instructional Support Assistant",
+        "organization": "UWaterloo",
+        "startDate": "Jan, 2025",
+        "endDate": "April, 2025",
+        "experiences": ["Led development of Codehoot, a C programming competition game, utilizing a Docker container with Flask backend to safely compile + distribute code, a websocket server, and a React frontend. Used in CS136’s final review session.", "Created Python and Bash scripts to automate style and attendance grading, leading to consistent grading", "Assisted instructors in answering C-related questions from students, gave weekly presentations on course material"],
+        "imageSrc": "history/uwaterloo.png"
+    },
+    {
         "role": "Software Engineer",
         "organization": "Lexington STEAM Team",
         "startDate": "Oct, 2021",
         "endDate": "June, 2023",
         "experiences": ["Organized and created website for a library science presentation using HTML, CSS, and Bootstrap", "Led scavenger photo hunt project for our local library and built its website for players", "Made web design tutorials and presented them in a townwide hackathon, inspiring students to help with a library fundraising website"],
         "imageSrc": "history/steamteam.png"
-    },
-    {
-        "role": "Java Tutor",
-        "organization": "Lexington HS Tutors",
-        "startDate": "Sep, 2020",
-        "endDate": "June, 2023",
-        "experiences": ["Taught Scratch and Java programming to middle schooler, inspiring student to make own Connect 4 and Battleship games", "Designed core coding curriculum based on student’s progress assessment, mastered problem-making and presentation skills"],
-        "imageSrc": "history/lexington.png"
     }
 ]
