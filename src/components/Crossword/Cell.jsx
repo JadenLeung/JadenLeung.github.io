@@ -11,6 +11,7 @@ export const Cell = ({x, y, cluenum, text, setGrid, selected, clicked, sameline,
     }
   }, [selected]); // runs whenever `selected` changes
   const MARGIN = 15;
+  const WIDTH = window.innerHeight / 12;
 
   function changeText(retext) {
     setGrid(prevGrid => {
@@ -34,8 +35,8 @@ export const Cell = ({x, y, cluenum, text, setGrid, selected, clicked, sameline,
   return (
     <div>
     <p className={styles.text} style={{
-        '--posx2': `${x * 75 + MARGIN}px`,
-        '--posy2': `${y * 75 + MARGIN}px`,
+        '--posx2': `${x * WIDTH + MARGIN}px`,
+        '--posy2': `${y * WIDTH + MARGIN}px`,
       }}>{cluenum != -1 ? cluenum : ""}
     </p>
 
@@ -44,9 +45,11 @@ export const Cell = ({x, y, cluenum, text, setGrid, selected, clicked, sameline,
       className={styles.rectangle}
        ref={inputRef}
       style={{
-        '--posx': `${x * 75 + MARGIN}px`,
-        '--posy': `${y * 75 + MARGIN}px`,
-        '--bg-color': `${text == "*" ? "black" : (selected[0] == y && selected[1] == x) ? "#ffd902" : (sameline.some(n => n[0] == y && n[1] == x)) ? "#a7d8ff" : "white"}`
+        '--posx': `${x * WIDTH + MARGIN}px`,
+        '--posy': `${y * WIDTH + MARGIN}px`,
+        '--bg-color': `${text == "*" ? "black" : (selected[0] == y && selected[1] == x) ? "#ffd902" : (sameline.some(n => n[0] == y && n[1] == x)) ? "#a7d8ff" : "white"}`,
+        width: `${WIDTH}px`,
+        height: `${WIDTH}px`,
       }}
       value={text != "*" ? text : ""}
       onClick={(e) =>
@@ -57,6 +60,7 @@ export const Cell = ({x, y, cluenum, text, setGrid, selected, clicked, sameline,
             changeText("");
         }
       }}
+      onMouseDown={(e) => e.preventDefault()} 
         onChange={(e) => changeText(e.target.value)}
     />
     </div>

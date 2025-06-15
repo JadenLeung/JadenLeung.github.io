@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './CrosswordComp.module.css';
 import {Cell} from './Cell.jsx';
+import {Clue} from './Clue.jsx';
 import { Square } from './Square';
 
 
@@ -8,22 +9,7 @@ import { Square } from './Square';
 
 export const CrosswordComp = () => {
 
-  const cluenums = {
-    "00" : [1, "hv"],
-    "21" : [2, "v"],
-    "61" : [3, "hv"],
-    "02" : [4, "v"],
-    "62" : [5, "v"],
-    "33" : [6, "v"],
-    "24" : [7, "v"],
-    "05" : [8, "v"],
-    "35" : [9, "v"],
-    "20" : [10, "h"],
-    "30" : [11, "h"],
-    "42" : [12, "h"],
-    "53" : [13, "h"],
-    "70" : [14, "h"],
-  }
+  let cluenums = {}
 
   const solution = 
   [
@@ -38,8 +24,30 @@ export const CrosswordComp = () => {
     "*D****"
   ]
 
-  const [grid, setGrid] = useState(Array.from({ length: 9 }, (_, r) =>
-    Array.from({ length: 6 }, (_, c) => new Square(solution[r][c] == "*" ? "*" : "", false, false, r, c, -1))
+  const across = {
+    1: "Has never broken a racket in his Career",
+    3: "Keyword to free malloced memory in C++",
+    10: "ls, on Windows",
+    11: "Web Application where someone might fork",
+    12: "Fiscal ___",
+    13: "Jaden has 2000 of this in Rapid",
+    14: "__ kids, a terrible website"
+  }
+
+  const down = {
+    1: "Most Wimbledon wins (as of 2025)",
+    2: "Two",
+    3: "What Padre means in Spanish",
+    4: "COMM's highest stock price, rounded to the tens",
+    5: "Teenage slang for something easy",
+    6: "High __ boots",
+    7: "Consisting of two parts",
+    8: "Liga",
+    9: "2026 All NBA Second Team, at least",
+  }
+
+  const [grid, setGrid] = useState(Array.from({ length: solution.length }, (_, r) =>
+    Array.from({ length: solution[0].length }, (_, c) => new Square(solution[r][c] == "*" ? "*" : "", false, false, r, c, -1))
   ));
 
   const [selected, setSelected] = useState([-1, -1]);
@@ -47,6 +55,31 @@ export const CrosswordComp = () => {
   const [dir, setDir] = useState('h');
   const gridRef = useRef(null);
 
+  let colnum = 1;
+  for (let cols = 0; cols < solution[0].length; ++cols) {
+    for (let rows = 0; rows < solution.length; ++rows) {
+      if (!isObstacle(rows, cols) && isObstacle(rows - 1, cols) && !isObstacle(rows + 1, cols)) {
+        cluenums[rows + "" + cols] = [colnum, "v"];
+        colnum++;
+      }
+    }
+  }
+  for (let rows = 0; rows < solution.length; ++rows) {
+    for (let cols = 0; cols < solution[0].length; ++cols) {
+       if (!isObstacle(rows, cols) && isObstacle(rows, cols - 1) && !isObstacle(rows, cols + 1)) {
+        if (cluenums[rows + "" + cols]) {
+          cluenums[rows + "" + cols][1] = "vh";
+        } else {
+          cluenums[rows + "" + cols] = [colnum, "h"];
+          colnum++;
+        }
+      }
+    }
+  }
+
+
+
+       
 
   useEffect(() => {
     setGrid(prevGrid => {
@@ -119,6 +152,7 @@ export const CrosswordComp = () => {
     let s = new Set();
     dfs(row, col, s);
     setSelected([row, col]);
+    newsameline.sort()
     setSameLine(newsameline);
     console.log(newsameline);
   }
@@ -155,12 +189,33 @@ export const CrosswordComp = () => {
         onKeyDown={moveSelected}
         ref={gridRef}
     >
-      {grid.map((row, i) => 
-        row.map((c, j) => 
-          <Cell key={`${i}-${j}-${c.cluenum}`} x={c.col} y={c.row} cluenum={c.cluenum} text={c.text} setGrid={setGrid} 
-            selected={selected} clicked={clicked} sameline={sameline} shiftDir={shiftDir} dir={dir}/>
-        )
-      )}
+      <h4 className={styles.title}>Father's Day Crossword</h4>
+      <div className={styles.rec}>
+        {grid.map((row, i) => 
+          row.map((c, j) => 
+            <Cell key={`${i}-${j}-${c.cluenum}`} x={c.col} y={c.row} cluenum={c.cluenum} text={c.text} setGrid={setGrid} 
+              selected={selected} clicked={clicked} sameline={sameline} shiftDir={shiftDir} dir={dir}/>
+          )
+        )}
+      </div>
+      <div className={styles.cluecontainer}>
+        <div className={styles.col1}>
+          <p>ACROSS</p>
+          <div style={{marginTop: 20}}>
+            {Object.keys(across).map(key => (
+              <Clue key={key} num={key} sameline={sameline} grid={grid} direction="h" curdir={dir} clicked={clicked} setDir={setDir}>{across[key]}</Clue>
+            ))}
+            </div>
+        </div>
+        <div className={styles.col2}>
+          <p>DOWN</p>
+          <div style={{marginTop: 20}}>
+            {Object.keys(down).map(key => (
+              <Clue key={key} num={key} sameline={sameline} grid={grid} direction="v" curdir={dir}>{down[key]}</Clue>
+            ))}
+            </div>
+        </div>
+      </div>
     </div>
   );
 };

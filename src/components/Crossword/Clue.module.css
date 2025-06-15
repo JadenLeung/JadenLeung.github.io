@@ -1,0 +1,33 @@
+@import "../../vars.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500&display=swap');
+
+
+.cluetext {
+  font-family: Arial;
+  overflow-wrap: break-word;
+
+}
+
+
+.cluerec {
+  display: flex;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+
+.numcoltext{
+   word-wrap: break-word;      /* allow wrapping */
+  white-space: normal;         /* allow wrapping on spaces */
+  overflow-wrap: break-word;
+}
+
+.numcol {
+  margin: 10px;
+  width: 30px;
+}
+
+.cluecol {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
