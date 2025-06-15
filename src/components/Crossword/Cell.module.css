@@ -1,0 +1,44 @@
+@import "../../vars.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500&display=swap');
+
+
+
+.rectangle {
+  width: 75px;
+  height: 75px;
+  resize: none;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  position: absolute;
+  text-align: center;
+
+  /* Optional: smooth font */
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  caret-color: transparent;
+  outline: none;
+  /* If you want to use CSS variables for position: */
+  left: var(--posx);
+  top: var(--posy);
+  background-color: var(--bg-color);
+  user-select: none;
+  
+}
+
+.text {
+    color: black;
+    position: absolute;
+    left: var(--posx2);
+    top: var(--posy2);
+    z-index: 2;
+    margin-left: 4px;
+    margin-top: 4px;
+    font-family: 'Libre Franklin', sans-serif;
+}
+
+.rectangle:hover {
+    cursor: default;
+}
+
+
