@@ -21,7 +21,7 @@ export const CrosswordComp = () => {
     "R**ELO",
     "*DEL*W",
     "RAZ**N",
-    "*D****"
+    "*D****",
   ]
 
   const across = {
@@ -53,6 +53,9 @@ export const CrosswordComp = () => {
   const [selected, setSelected] = useState([-1, -1]);
   const [sameline, setSameLine] = useState([]);
   const [dir, setDir] = useState('h');
+  const [mode, setMode] = useState("normal");
+  const [solved, setSolved] = useState(false);
+  const [startanimation, setStartAnimation] = useState(0);
   const gridRef = useRef(null);
 
   let colnum = 1;
@@ -77,7 +80,28 @@ export const CrosswordComp = () => {
     }
   }
 
-
+  useEffect(() => {
+    let solved = true;
+    for (let rows = 0; rows < solution.length; ++rows) {
+      for (let cols = 0; cols < solution[0].length; ++cols) {
+        if (grid[rows][cols].text != solution[rows][cols]) {
+          solved = false;
+        }
+      }
+    }
+    if (solved) {
+      setMode("solved");
+      setSelected([-1, -1]);
+      setSameLine([])
+      setSolved(solved);
+      setTimeout(() => {
+        setStartAnimation(1);
+        setTimeout(() => {
+          setStartAnimation(2);
+        }, 200);
+      }, 1000);
+    }
+  }, [grid])
 
        
 
@@ -97,20 +121,6 @@ export const CrosswordComp = () => {
       console.log("updated grid", newGrid);
       return newGrid;
     });
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (gridRef.current && !gridRef.current.contains(e.target)) {
-        setSelected([-1, -1]);
-        setSameLine([]);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, []);
 
 
@@ -158,6 +168,7 @@ export const CrosswordComp = () => {
   }
 
   function moveSelected(e) {
+    if (mode != "normal" && mode != "autocheck") return;
     let dr = 0
     let dc = 0;
     const map = {
@@ -171,12 +182,78 @@ export const CrosswordComp = () => {
       if (!isObstacle(selected[0] + dr, selected[1] + dc)) {
         clicked(selected[0] + dr, selected[1] + dc)
       }
+    } else {
+        setGrid(prevGrid => {
+            console.log("herere")
+            const newGrid = prevGrid.map(row =>
+                row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum))
+            );
+            let typed = e.key;
+            if (typed == "Backspace") {
+              typed = ""
+            }
+            let y = selected[0]
+            let x = selected[1]
+            if (typed.length < 2 && ('A' <= typed && typed <= 'Z' || 'a' <= typed && typed <= 'z' || typed == '')) {
+                newGrid[y][x].text = typed.toUpperCase();
+                if (typed.length == 1) {
+                    if (dir == "h") shiftDir(y, x + 1); else shiftDir(y + 1, x);
+                } else if (typed == "") {
+                    if (dir == "h") shiftDir(y, x - 1); else shiftDir(y - 1, x);
+                }
+            }
+            return newGrid;
+        });
     }
   }
 
   function shiftDir(newrow, newcol) {
     if (!isObstacle(newrow, newcol)) {
       clicked(newrow, newcol)
+    }
+  }
+
+  function clearGrid() {
+    if (solved) return;
+    const result = confirm("Are you sure you want to clear your grid?");
+    if (result) {
+      setMode("normal");
+      setGrid(prevGrid => {
+            console.log("herere")
+            const newGrid = prevGrid.map(row =>
+                row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum))
+            );
+            for (let r = 0; r < newGrid.length; r++) {
+              for (let c = 0; c < newGrid[0].length; c++) {
+                newGrid[r][c].text = newGrid[r][c].text == "*" ? "*" : "";
+              }
+            }
+            return newGrid;
+        });
+    } else {
+      console.log("Cancelled.");
+    }
+  }
+
+  function solveGrid() {
+    if (solved) return;
+    const result = confirm("Are you sure you want the solution?");
+    if (result) {
+      setMode("normal");
+      setGrid(prevGrid => {
+            console.log("herere")
+            const newGrid = prevGrid.map(row =>
+                row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum))
+            );
+            for (let r = 0; r < newGrid.length; r++) {
+              for (let c = 0; c < newGrid[0].length; c++) {
+                newGrid[r][c].text = solution[r][c];
+              }
+            }
+            return newGrid;
+        });
+    } else {
+      console.log("Cancelled.");
     }
   }
 
@@ -188,17 +265,46 @@ export const CrosswordComp = () => {
     <div className={styles.page}
         onKeyDown={moveSelected}
         ref={gridRef}
+        tabIndex={0} 
     >
-      <h4 className={styles.title}>Father's Day Crossword</h4>
+      <div className={styles.navbar}>
+        <h4 className={styles.title}>Father's Day Crossword</h4>
+        <div className={styles.autocheck}>
+          <button onClick={(e) => {
+            setMode(mode == "normal" ? "autocheck" : "normal");
+          }
+          }
+          >Autocheck</button>
+          <button className={styles.clear}
+            onClick={clearGrid}
+          > Clear</button>
+          <button className={styles.clear}
+            onClick={solveGrid}
+          >Solution</button>
+        </div>
+      </div>
       <div className={styles.rec}>
         {grid.map((row, i) => 
           row.map((c, j) => 
-            <Cell key={`${i}-${j}-${c.cluenum}`} x={c.col} y={c.row} cluenum={c.cluenum} text={c.text} setGrid={setGrid} 
-              selected={selected} clicked={clicked} sameline={sameline} shiftDir={shiftDir} dir={dir}/>
+            <Cell key={`${i}-${j}-${c.cluenum}`} x={c.col} y={c.row} cluenum={c.cluenum} text={c.text} grid={grid} 
+              selected={selected} clicked={clicked} sameline={sameline} shiftDir={shiftDir} dir={dir} expected={solution[i][j]}
+              mode={mode}/>
           )
         )}
       </div>
-      <div className={styles.cluecontainer}>
+      {startanimation > 0 && 
+          <div className={styles.winnercontainer}
+            style={{
+              transform: startanimation < 2 ? '' : 'translateX(-900px)'
+            }}
+          >
+            <h1 className={styles.winnerText}>You solved the crossword!</h1>
+            <h1 className={styles.winnerText}>Happy father's day!</h1>
+          </div>
+      }
+      <div className={styles.cluecontainer} style={{
+        opacity: solved ? '0' : '1',
+      }}>
         <div className={styles.col1}>
           <p>ACROSS</p>
           <div style={{marginTop: 20}}>

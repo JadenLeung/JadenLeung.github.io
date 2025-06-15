@@ -12,6 +12,36 @@
 
 }
 
+
+button {
+  font-size: 30px;
+  padding: 10px;
+  border-radius: 10px;
+  border-width: 0px;
+  background-color: 0;
+  transition: opacity 0.2s ease;
+}
+
+.clear {
+    margin-left: 10px;
+}
+
+button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.autocheck {
+    text-align: right;
+}
+
 .title {
     text-align: center;
     font-size: 40px;
@@ -29,6 +59,18 @@
     padding-top: 20px;
     display: flex;
     justify-content: right;
+    transition: opacity 0.2s ease;
+}
+
+.winnerText{
+    font-family: 'Libre Franklin', sans-serif;
+    text-align: right;
+    margin-top: 120px;
+    margin-right: -800px;
+}
+
+.winnercontainer {
+    transition: transform 1s ease;
 }
 
 .col1 {

@@ -3,7 +3,7 @@ import styles from './Cell.module.css';
 import { Square } from './Square';
 
 
-export const Cell = ({x, y, cluenum, text, setGrid, selected, clicked, sameline, shiftDir, dir}) => {
+export const Cell = ({x, y, cluenum, text, grid, selected, clicked, sameline, shiftDir, dir, expected, mode}) => {
     const inputRef = useRef(null);
     useEffect(() => {
     if (selected[0] == y && selected[1] == x && inputRef.current) {
@@ -11,26 +11,7 @@ export const Cell = ({x, y, cluenum, text, setGrid, selected, clicked, sameline,
     }
   }, [selected]); // runs whenever `selected` changes
   const MARGIN = 15;
-  const WIDTH = window.innerHeight / 12;
-
-  function changeText(retext) {
-    setGrid(prevGrid => {
-        console.log("herere")
-        const newGrid = prevGrid.map(row =>
-            row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum))
-        );
-        let typed = retext.replace(text, "");
-        if (('A' <= typed && typed <= 'Z' || 'a' <= typed && typed <= 'z' || typed == '')) {
-            newGrid[y][x].text = typed.toUpperCase();
-            if (typed.length == 1) {
-                if (dir == "h") shiftDir(y, x + 1); else shiftDir(y + 1, x);
-            } else if (text == "") {
-                if (dir == "h") shiftDir(y, x - 1); else shiftDir(y - 1, x);
-            }
-        }
-        return newGrid;
-    });
-  }
+  const WIDTH = window.innerHeight / (grid.length * 1.25);
 
   return (
     <div>
@@ -48,6 +29,7 @@ export const Cell = ({x, y, cluenum, text, setGrid, selected, clicked, sameline,
         '--posx': `${x * WIDTH + MARGIN}px`,
         '--posy': `${y * WIDTH + MARGIN}px`,
         '--bg-color': `${text == "*" ? "black" : (selected[0] == y && selected[1] == x) ? "#ffd902" : (sameline.some(n => n[0] == y && n[1] == x)) ? "#a7d8ff" : "white"}`,
+        color: `${text == expected && mode == "autocheck" ? "#2860d7" : mode == "autocheck" ? "red" : "black"}`,
         width: `${WIDTH}px`,
         height: `${WIDTH}px`,
       }}
@@ -55,13 +37,7 @@ export const Cell = ({x, y, cluenum, text, setGrid, selected, clicked, sameline,
       onClick={(e) =>
         clicked(y, x)
       }
-      onKeyDown={(e) => {
-        if (e.key === 'Backspace') {
-            changeText("");
-        }
-      }}
       onMouseDown={(e) => e.preventDefault()} 
-        onChange={(e) => changeText(e.target.value)}
     />
     </div>
   );
