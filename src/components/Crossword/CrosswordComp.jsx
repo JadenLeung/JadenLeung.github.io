@@ -35,7 +35,7 @@ export const CrosswordComp = () => {
   }
 
   const down = {
-    1: "Most Wimbledon wins (as of 2025)",
+    1: "Combination of 2 words: a Wimbledon Champion, a Cat-like animal",
     2: "Two",
     3: "What Padre means in Spanish",
     4: "COMM's highest stock price, rounded to the tens",
@@ -184,14 +184,18 @@ export const CrosswordComp = () => {
     return 0;
   }
 
-  function clicked(row, col) {
+  function clicked(row, col, d) {
     let curdir = dir;
-    if (isObstacle(row + 1, col) == 1 && isObstacle(row - 1, col) == 1) {
-      curdir = "h";
-    } else if (isObstacle(row, col + 1) == 1 && isObstacle(row, col - 1) == 1) {
-      curdir = "v";
-    } else if (selected[0] == row && selected[1] == col) {
-      curdir = dir == "h" ? "v" : "h"
+    if (!d) {
+      if (isObstacle(row + 1, col) == 1 && isObstacle(row - 1, col) == 1) {
+        curdir = "h";
+      } else if (isObstacle(row, col + 1) == 1 && isObstacle(row, col - 1) == 1) {
+        curdir = "v";
+      } else if (selected[0] == row && selected[1] == col) {
+        curdir = dir == "h" ? "v" : "h"
+      }
+    } else {
+      curdir = d;
     }
     setDir(curdir);
     let newsameline = []
@@ -370,7 +374,7 @@ export const CrosswordComp = () => {
           <p>DOWN</p>
           <div style={{marginTop: 20}}>
             {Object.keys(down).map(key => (
-              <Clue key={key} num={key} sameline={sameline} grid={grid} direction="v" curdir={dir}>{down[key]}</Clue>
+              <Clue key={key} num={key} sameline={sameline} grid={grid} direction="v" curdir={dir} clicked={clicked} setDir={setDir}>{down[key]}</Clue>
             ))}
             </div>
         </div>

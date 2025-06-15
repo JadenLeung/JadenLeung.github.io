@@ -13,10 +13,9 @@ export const Clue = ({num, children, sameline, grid, direction, curdir, setDir, 
             console.log("hererere")
             for (let r = 0; r < grid.length; r++) {
                 for (let c = 0; c < grid[0].length; c++) {
-                    console.log(grid[r][c].cluenum, r, c)
-                    if (grid[r][c].cluenum == num && !sameline.some((arr) => arr[0] == r && arr[1] == c)) {
-                        console.log("hererere")
-                        clicked(r, c);
+                    if (grid[r][c].cluenum == num) {
+                        clicked(r, c, direction);
+                        console.log("setting direction to", direction)
                         setDir(direction);
                     }
                 }
