@@ -25,8 +25,8 @@ export const CrosswordComp = () => {
   ]
 
   const across = {
-    1: "Has never broken a racket in his Career",
-    3: "Keyword to free malloced memory in C++",
+    1: "Has never broken a racket in his career",
+    3: "Keyword to free malloced memory in C++, abbr.",
     10: "ls, on Windows",
     11: "Web Application where someone might fork",
     12: "Fiscal ___",
@@ -35,7 +35,7 @@ export const CrosswordComp = () => {
   }
 
   const down = {
-    1: "Combination of 2 words: a Wimbledon Champion, a Cat-like animal",
+    1: "Combination of 2 words: a Wimbledon Champion, a Racoon-like animal",
     2: "Two",
     3: "What Padre means in Spanish",
     4: "COMM's highest stock price, rounded to the tens",
@@ -325,6 +325,7 @@ export const CrosswordComp = () => {
         <h4 className={styles.title}>Father's Day Crossword</h4>
         <div className={styles.autocheck}>
           <button onClick={(e) => {
+            if (solved) return;
             setMode(mode == "normal" ? "autocheck" : "normal");
           }
           }
