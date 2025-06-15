@@ -1,6 +1,6 @@
 (function() {
   const routes = {
-    hashed: ["aichess", "lazychess", "matrix"],
+    hashed: ["aichess", "lazychess", "matrix", "crossword"],
     nonhash: ["unblocked", "unblocked2"]
   };
 
