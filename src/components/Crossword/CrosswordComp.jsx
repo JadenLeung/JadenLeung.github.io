@@ -94,21 +94,74 @@ export const CrosswordComp = () => {
       setSelected([-1, -1]);
       setSameLine([])
       setSolved(solved);
-      setTimeout(() => {
-        setStartAnimation(1);
+      if (mode != "solved") {
         setTimeout(() => {
-          setStartAnimation(2);
-        }, 200);
-      }, 1000);
+          setStartAnimation(1);
+          setTimeout(() => {
+            setStartAnimation(2);
+          }, 200);
+        }, 1000);
+        let period = 0;
+
+        function animate() {
+          solvedAnimation(period);
+          period = (period + 1) % (100 * Square.numbg);
+
+          const delay = 30 + 200 / (period + 1); // avoid divide by 0
+          setTimeout(animate, delay);
+        }
+
+        animate(); // start it
+      }
     }
   }, [grid])
+
+  function solvedAnimation(frame) {
+    setGrid(prevGrid => {
+    const newGrid = prevGrid.map(row =>
+      row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum, cell.bg))
+    );
+
+    // newGrid[0][0].bg = (newGrid[0][0].bg + 1) % Square.numbg; 
+    console.log("frame is", frame)
+    newGrid[0][0].bg = 1 + (frame % Square.numbg);
+    let needschange = new Set()
+    for (let r = 0; r < newGrid.length; r++) {
+      for (let c = 0; c < newGrid[0].length; c++) {
+        let bg = newGrid[r][c].bg;
+        if (BGbelow(r, c + 1, bg)) needschange.add([r, c + 1, bg]);
+        if (BGbelow(r, c - 1, bg)) needschange.add([r, c - 1, bg]);
+        if (BGbelow(r + 1, c, bg)) needschange.add([r + 1, c , bg]);
+        if (BGbelow(r - 1, c - 1, bg)) needschange.add([r - 1, c, bg]);
+      }
+    }
+    for (const arr of needschange) {
+      console.log(arr[0], arr[1])
+      if (arr[2] == 1 && newGrid[arr[0]][arr[1]].bg == Square.numbg - 1) {
+        newGrid[arr[0]][arr[1]].bg = 1;
+      } else {
+        newGrid[arr[0]][arr[1]].bg = Math.max(newGrid[arr[0]][arr[1]].bg, arr[2]);
+      }
+    }
+    
+
+    function BGbelow(r, c, bg) {
+      if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c].text == '*') {
+        return false;
+      }
+      return grid[r][c].bg < bg;
+    }
+
+    return newGrid;
+    });
+  }
 
        
 
   useEffect(() => {
     setGrid(prevGrid => {
       const newGrid = prevGrid.map(row =>
-        row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum))
+        row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum, cell.bg))
       );
 
       for (const str in cluenums) {
@@ -186,7 +239,7 @@ export const CrosswordComp = () => {
         setGrid(prevGrid => {
             console.log("herere")
             const newGrid = prevGrid.map(row =>
-                row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum))
+                row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum, cell.bg))
             );
             let typed = e.key;
             if (typed == "Backspace") {
@@ -221,7 +274,7 @@ export const CrosswordComp = () => {
       setGrid(prevGrid => {
             console.log("herere")
             const newGrid = prevGrid.map(row =>
-                row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum))
+                row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum, cell.bg))
             );
             for (let r = 0; r < newGrid.length; r++) {
               for (let c = 0; c < newGrid[0].length; c++) {
@@ -243,7 +296,7 @@ export const CrosswordComp = () => {
       setGrid(prevGrid => {
             console.log("herere")
             const newGrid = prevGrid.map(row =>
-                row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum))
+                row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum, cell.bg))
             );
             for (let r = 0; r < newGrid.length; r++) {
               for (let c = 0; c < newGrid[0].length; c++) {
@@ -256,9 +309,6 @@ export const CrosswordComp = () => {
       console.log("Cancelled.");
     }
   }
-
-
-
 
   
   return (
@@ -274,6 +324,9 @@ export const CrosswordComp = () => {
             setMode(mode == "normal" ? "autocheck" : "normal");
           }
           }
+          style={{
+            backgroundColor: mode == "autocheck" ? "#a7d8ff" : ""
+          }}
           >Autocheck</button>
           <button className={styles.clear}
             onClick={clearGrid}
@@ -295,7 +348,7 @@ export const CrosswordComp = () => {
       {startanimation > 0 && 
           <div className={styles.winnercontainer}
             style={{
-              transform: startanimation < 2 ? '' : 'translateX(-900px)'
+              transform: startanimation != 2 ? '' : 'translateX(-900px)'
             }}
           >
             <h1 className={styles.winnerText}>You solved the crossword!</h1>

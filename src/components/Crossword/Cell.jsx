@@ -28,7 +28,7 @@ export const Cell = ({x, y, cluenum, text, grid, selected, clicked, sameline, sh
       style={{
         '--posx': `${x * WIDTH + MARGIN}px`,
         '--posy': `${y * WIDTH + MARGIN}px`,
-        '--bg-color': `${text == "*" ? "black" : (selected[0] == y && selected[1] == x) ? "#ffd902" : (sameline.some(n => n[0] == y && n[1] == x)) ? "#a7d8ff" : "white"}`,
+        '--bg-color': `${text == "*" ? "black" : (selected[0] == y && selected[1] == x) ? "#ffd902" : (sameline.some(n => n[0] == y && n[1] == x)) ? "#a7d8ff" : Square.colors[grid[y][x].bg % Object.keys(Square.colors).length]}`,
         color: `${text == expected && mode == "autocheck" ? "#2860d7" : mode == "autocheck" ? "red" : "black"}`,
         width: `${WIDTH}px`,
         height: `${WIDTH}px`,
