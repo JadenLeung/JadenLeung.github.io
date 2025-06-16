@@ -10,9 +10,8 @@ import {data} from './data';
 
 export const CrosswordComp = () => {
 
-  let cluenums = {}
   const [board, setBoard] = useState("Father's Day 2025")
-
+  const [cluenums, setClueNums] = useState({});
   const [selected, setSelected] = useState([-1, -1]);
   const [sameline, setSameLine] = useState([]);
   const [info, setInfo] = useState(data[board]);
@@ -40,11 +39,11 @@ export const CrosswordComp = () => {
       const newGrid = Array.from({ length:  data[board].solution.length }, (_, r) =>
       Array.from({ length: data[board].solution[0].length }, (_, c) => new Square(data[board].solution[r][c] == "*" ? "*" : "", false, false, r, c, -1)));
       colnum = 1;
-      cluenums = {};
+      let temp = {};
       for (let cols = 0; cols < data[board].solution[0].length; ++cols) {
         for (let rows = 0; rows < data[board].solution.length; ++rows) {
           if (!isObstacle(rows, cols, newGrid) && isObstacle(rows - 1, cols, newGrid) && !isObstacle(rows + 1, cols, newGrid)) {
-            cluenums[rows + "" + cols] = [colnum, "v"];
+            temp[rows + "" + cols] = [colnum, "v"];
             colnum++;
           }
         }
@@ -52,22 +51,23 @@ export const CrosswordComp = () => {
       for (let rows = 0; rows < data[board].solution.length; ++rows) {
         for (let cols = 0; cols < data[board].solution[0].length; ++cols) {
           if (!isObstacle(rows, cols, newGrid) && isObstacle(rows, cols - 1, newGrid) && !isObstacle(rows, cols + 1, newGrid)) {
-            if (cluenums[rows + "" + cols]) {
-              cluenums[rows + "" + cols][1] = "vh";
+            if (temp[rows + "" + cols]) {
+              temp[rows + "" + cols][1] = "vh";
             } else {
-              cluenums[rows + "" + cols] = [colnum, "h"];
+              temp[rows + "" + cols] = [colnum, "h"];
               colnum++;
             }
           }
         }
       }
 
-      for (const str in cluenums) {
-        const [num] = cluenums[str];
+      for (const str in temp) {
+        const [num] = temp[str];
         const i = +str[0];
         const j = +str[1];
         newGrid[i][j].cluenum = num;
       }
+      setClueNums(temp);
       return newGrid;
     });
   }, [board])
