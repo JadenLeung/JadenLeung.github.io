@@ -271,7 +271,6 @@ export const CrosswordComp = () => {
     if (result) {
       setMode("normal");
       setGrid(prevGrid => {
-            console.log("herere")
             const newGrid = prevGrid.map(row =>
                 row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum, cell.bg))
             );

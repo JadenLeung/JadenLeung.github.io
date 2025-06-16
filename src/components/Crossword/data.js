@@ -45,7 +45,7 @@ export const data = {
             "E*JOB",
             "GRAD*",
             "*BY**",
-            "*G***",
+            "*****",
         ],
         across: {
             1: "Forgotten Adventure Time animal, made from a tie at College Gate College Academy camp",
@@ -60,7 +60,7 @@ export const data = {
         down: {
             1: "[Spelled upside down] Complete set of genetic material in an organism",
             2: "娘 pinyin, as in 姑娘",
-            3: "Hex alternative",
+            3: "Rubidium",
             4: "Jennifer's last name. TGIF!",
             5: "Gadsby's first name",
             6: "Anywhere else he'd be a ten",
