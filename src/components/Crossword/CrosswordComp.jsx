@@ -37,7 +37,7 @@ export const CrosswordComp = () => {
       setDown(data[board].down);
       setInfo(data[board]);
       setGrid(prevGrid => {
-      const newGrid = Array.from({ length: solution.length }, (_, r) =>
+      const newGrid = Array.from({ length:  data[board].solution.length }, (_, r) =>
       Array.from({ length: data[board].solution[0].length }, (_, c) => new Square(data[board].solution[r][c] == "*" ? "*" : "", false, false, r, c, -1)));
       colnum = 1;
       cluenums = {};

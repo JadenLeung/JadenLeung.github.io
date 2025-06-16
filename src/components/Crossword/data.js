@@ -45,7 +45,6 @@ export const data = {
             "E*JOB",
             "GRAD*",
             "*BY**",
-            "*****",
         ],
         across: {
             1: "Forgotten Adventure Time animal, made from a tie at College Gate College Academy camp",
