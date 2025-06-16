@@ -35,6 +35,7 @@ export const CrosswordComp = () => {
       setSolution(data[board].solution);
       setAcross(data[board].across);
       setDown(data[board].down);
+      setInfo(data[board]);
       setGrid(prevGrid => {
       const newGrid = Array.from({ length: solution.length }, (_, r) =>
       Array.from({ length: data[board].solution[0].length }, (_, c) => new Square(data[board].solution[r][c] == "*" ? "*" : "", false, false, r, c, -1)));

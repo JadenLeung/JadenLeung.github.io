@@ -30,6 +30,10 @@ const projects = [
         link: "/matrix",
     },
     {
+        name: "Mini Crossword",
+        link: "/crossword",
+    },
+    {
         name: "Wordle",
         link: "https://replit.com/@JadenLeung2/Wordle",
     },
