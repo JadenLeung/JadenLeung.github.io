@@ -38,6 +38,11 @@ button:hover {
     justify-content: space-evenly;
 }
 
+.select {
+    margin-left: 10px;
+    font-size: 15px;
+}
+
 .autocheck {
     text-align: right;
 }

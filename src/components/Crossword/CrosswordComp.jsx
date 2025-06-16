@@ -3,6 +3,7 @@ import styles from './CrosswordComp.module.css';
 import {Cell} from './Cell.jsx';
 import {Clue} from './Clue.jsx';
 import { Square } from './Square';
+import {data} from './data';
 
 
 
@@ -10,75 +11,65 @@ import { Square } from './Square';
 export const CrosswordComp = () => {
 
   let cluenums = {}
-
-  const solution = 
-  [
-    "RAFAEL",
-    "O*O**A",
-    "DIR*D*",
-    "GITHUB",
-    "E*YEAR",
-    "R**ELO",
-    "*DEL*W",
-    "RAZ**N",
-    "*D****",
-  ]
-
-  const across = {
-    1: "Has never broken a racket in his career",
-    3: "Keyword to free malloced memory in C++, abbr.",
-    10: "ls, on Windows",
-    11: "Web Application where someone might fork",
-    12: "Fiscal ___",
-    13: "Jaden has 2000 of this in Rapid",
-    14: "__ kids, a terrible website"
-  }
-
-  const down = {
-    1: "Combination of 2 words: a Wimbledon Champion, a Racoon-like animal",
-    2: "Two",
-    3: "What Padre means in Spanish",
-    4: "COMM's highest stock price, rounded to the tens",
-    5: "Teenage slang for something easy",
-    6: "High __ boots",
-    7: "Consisting of two parts",
-    8: "Liga",
-    9: "2026 All NBA Second Team, at least",
-  }
-
-  const [grid, setGrid] = useState(Array.from({ length: solution.length }, (_, r) =>
-    Array.from({ length: solution[0].length }, (_, c) => new Square(solution[r][c] == "*" ? "*" : "", false, false, r, c, -1))
-  ));
+  const [board, setBoard] = useState("Father's Day 2025")
 
   const [selected, setSelected] = useState([-1, -1]);
   const [sameline, setSameLine] = useState([]);
+  const [info, setInfo] = useState(data[board]);
   const [dir, setDir] = useState('h');
   const [mode, setMode] = useState("normal");
   const [solved, setSolved] = useState(false);
   const [startanimation, setStartAnimation] = useState(0);
   const gridRef = useRef(null);
+  const [solution, setSolution] = useState(data[board].solution);
+  const [across, setAcross] = useState(data[board].across);
+  const [down, setDown] = useState(data[board].down);
+  const [grid, setGrid] = useState(Array.from({ length: solution.length }, (_, r) =>
+    Array.from({ length: solution[0].length }, (_, c) => new Square(solution[r][c] == "*" ? "*" : "", false, false, r, c, -1))
+  ));
+
 
   let colnum = 1;
-  for (let cols = 0; cols < solution[0].length; ++cols) {
-    for (let rows = 0; rows < solution.length; ++rows) {
-      if (!isObstacle(rows, cols) && isObstacle(rows - 1, cols) && !isObstacle(rows + 1, cols)) {
-        cluenums[rows + "" + cols] = [colnum, "v"];
-        colnum++;
-      }
-    }
-  }
-  for (let rows = 0; rows < solution.length; ++rows) {
-    for (let cols = 0; cols < solution[0].length; ++cols) {
-       if (!isObstacle(rows, cols) && isObstacle(rows, cols - 1) && !isObstacle(rows, cols + 1)) {
-        if (cluenums[rows + "" + cols]) {
-          cluenums[rows + "" + cols][1] = "vh";
-        } else {
-          cluenums[rows + "" + cols] = [colnum, "h"];
-          colnum++;
+
+  useEffect(() => {
+      setSolution(data[board].solution);
+      setAcross(data[board].across);
+      setDown(data[board].down);
+      setGrid(prevGrid => {
+      const newGrid = Array.from({ length: solution.length }, (_, r) =>
+      Array.from({ length: data[board].solution[0].length }, (_, c) => new Square(data[board].solution[r][c] == "*" ? "*" : "", false, false, r, c, -1)));
+      colnum = 1;
+      cluenums = {};
+      for (let cols = 0; cols < data[board].solution[0].length; ++cols) {
+        for (let rows = 0; rows < data[board].solution.length; ++rows) {
+          if (!isObstacle(rows, cols, newGrid) && isObstacle(rows - 1, cols, newGrid) && !isObstacle(rows + 1, cols, newGrid)) {
+            cluenums[rows + "" + cols] = [colnum, "v"];
+            colnum++;
+          }
         }
       }
-    }
-  }
+      for (let rows = 0; rows < data[board].solution.length; ++rows) {
+        for (let cols = 0; cols < data[board].solution[0].length; ++cols) {
+          if (!isObstacle(rows, cols, newGrid) && isObstacle(rows, cols - 1, newGrid) && !isObstacle(rows, cols + 1, newGrid)) {
+            if (cluenums[rows + "" + cols]) {
+              cluenums[rows + "" + cols][1] = "vh";
+            } else {
+              cluenums[rows + "" + cols] = [colnum, "h"];
+              colnum++;
+            }
+          }
+        }
+      }
+
+      for (const str in cluenums) {
+        const [num] = cluenums[str];
+        const i = +str[0];
+        const j = +str[1];
+        newGrid[i][j].cluenum = num;
+      }
+      return newGrid;
+    });
+  }, [board])
 
   useEffect(() => {
     let solved = true;
@@ -143,7 +134,6 @@ export const CrosswordComp = () => {
         newGrid[arr[0]][arr[1]].bg = Math.max(newGrid[arr[0]][arr[1]].bg, arr[2]);
       }
     }
-    
 
     function BGbelow(r, c, bg) {
       if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c].text == '*') {
@@ -158,27 +148,9 @@ export const CrosswordComp = () => {
 
        
 
-  useEffect(() => {
-    setGrid(prevGrid => {
-      const newGrid = prevGrid.map(row =>
-        row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum, cell.bg))
-      );
 
-      for (const str in cluenums) {
-        const [num] = cluenums[str];
-        const i = +str[0];
-        const j = +str[1];
-        newGrid[i][j].cluenum = num;
-      }
-
-      console.log("updated grid", newGrid);
-      return newGrid;
-    });
-  }, []);
-
-
-  function isObstacle(r, c) {
-    if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c].text == '*') {
+  function isObstacle(r, c, g = grid) {
+    if (r < 0 || r >= g.length || c < 0 || c >= g[0].length || g[r][c].text == '*') {
       return 1;
     }
     return 0;
@@ -322,7 +294,7 @@ export const CrosswordComp = () => {
         tabIndex={0} 
     >
       <div className={styles.navbar}>
-        <h4 className={styles.title}>Father's Day Crossword</h4>
+        <h4 className={styles.title}>{info.title}</h4>
         <div className={styles.autocheck}>
           <button onClick={(e) => {
             if (solved) return;
@@ -339,6 +311,10 @@ export const CrosswordComp = () => {
           <button className={styles.clear}
             onClick={solveGrid}
           >Solution</button>
+            {!solved && <select className={styles.select} id="fruit" name="fruit" onChange={(e) => {setBoard(e.target.value);}}>
+            <option value="Father's Day 2025">Father's Day 2025</option>
+            <option value="Joley's Crossword">Joley's Crossword</option>
+          </select>}
         </div>
       </div>
       <div className={styles.rec}>
@@ -357,7 +333,7 @@ export const CrosswordComp = () => {
             }}
           >
             <h1 className={styles.winnerText}>You solved the crossword!</h1>
-            <h1 className={styles.winnerText}>Happy father's day!</h1>
+            <h1 className={styles.winnerText}>{info.message}</h1>
           </div>
       }
       <div className={styles.cluecontainer} style={{
