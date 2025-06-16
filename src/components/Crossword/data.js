@@ -49,6 +49,7 @@ export const data = {
         ],
         across: {
             1: "Forgotten Adventure Time animal, made from a tie at College Gate College Academy camp",
+            5: "Everyone in college is worried about this",
             9: "__vector",
             10: "Helped students cheat on the ACT",
             11: "Sum of states in a Markov Chain",
