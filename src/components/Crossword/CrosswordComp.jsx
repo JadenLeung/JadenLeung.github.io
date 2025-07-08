@@ -32,6 +32,8 @@ export const CrosswordComp = () => {
 
   useEffect(() => {
       setSolution(data[board].solution);
+      setSelected([-1, -1]);
+      setSameLine([])
       setAcross(data[board].across);
       setDown(data[board].down);
       setInfo(data[board]);
@@ -199,6 +201,7 @@ export const CrosswordComp = () => {
 
   function moveSelected(e) {
     if (mode != "normal" && mode != "autocheck") return;
+    if (selected[0] == -1) return;
     let dr = 0
     let dc = 0;
     const map = {
