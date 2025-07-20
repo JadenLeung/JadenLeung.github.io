@@ -10,7 +10,7 @@
     {
         "title": "AI Plays: Chess",
         "imageSrc": "projects/ailogo6.png",
-        "description": "Simulate a chess game between GPT-4o-mini, Gemini, Stockfish, Randombot, and yourself.",
+        "description": "Simulate a chess game between GPT, Gemini, Stockfish, Randombot, and yourself.",
         "skills": ["Flask", "C#", "Unity", "OpenAI", "Gemini"],
         "demo": "https://jadenleung.github.io/#/aichess",
         "source": "https://github.com/JadenLeung/ai-chess"
@@ -18,7 +18,7 @@
     {
         "title": "Codehoot",
         "imageSrc": "projects/codehoot.png",
-        "description": "Remake of Kahoot!, for coders, used in University of Waterloo's CS136 Final Review Session.",
+        "description": "Remake of Kahoot!, for coders, used in Uwaterloo's CS136 Final Review Session.",
         "skills": ["React", "C", "Flask", "Express",  "Docker"],
         "demo": "http://jadenleung.github.io/codehoot/",
         "source": "https://github.com/JadenLeung/codehoot"
@@ -26,7 +26,7 @@
     {
         "title": "Symptocare",
         "imageSrc": "projects/symptocare.png",
-        "description": "An AI diagnosis for Boston University's Civil Tech hackathon using Machine Learning and OpenAI to give a diagnosis.",
+        "description": "An AI diagnosis for Boston University's Civil Tech hackathon using ML and OpenAI to give a diagnosis.",
         "skills": ["Flask", "OpenAI"],
         "demo": "https://devpost.com/software/symptocare",
         "source": "https://github.com/Ryan-J-Gilbert/tfc-hack-2024-symptocare/?tab=readme-ov-file"
@@ -34,7 +34,7 @@
     {
         "title": "Lunar New Year Gala",
         "imageSrc": "projects/gala.png",
-        "description": "As a member of the STEAM Team, I mentored the design of this website for the town library promoting its LNY festival.",
+        "description": "I mentored the design of this STEAM Team website for the town library promoting its Lunar New Year festival.",
         "skills": ["HTML", "CSS"],
         "demo": "http://lny2023.caal-ma.org/",
         "source": "https://github.com/JadenLeung/lunar"
