@@ -10,27 +10,53 @@ import {data} from './data';
 
 export const CrosswordComp = () => {
 
-  const [board, setBoard] = useState("Father's Day 2025")
+  const [board, setBoard] = useState("NYT Mini Crossword");
   const [cluenums, setClueNums] = useState({});
   const [selected, setSelected] = useState([-1, -1]);
   const [sameline, setSameLine] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState(data[board]);
   const [dir, setDir] = useState('h');
   const [mode, setMode] = useState("normal");
   const [solved, setSolved] = useState(false);
   const [startanimation, setStartAnimation] = useState(0);
   const gridRef = useRef(null);
-  const [solution, setSolution] = useState(data[board].solution);
-  const [across, setAcross] = useState(data[board].across);
-  const [down, setDown] = useState(data[board].down);
-  const [grid, setGrid] = useState(Array.from({ length: solution.length }, (_, r) =>
-    Array.from({ length: solution[0].length }, (_, c) => new Square(solution[r][c] == "*" ? "*" : "", false, false, r, c, -1))
-  ));
+  const [solution, setSolution] = useState(null);
+  const [across, setAcross] = useState({});
+  const [down, setDown] = useState({});
+  const [grid, setGrid] = useState([]);
 
-
+  const API_URL = 'https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword';
   let colnum = 1;
 
   useEffect(() => {
+    const fetchCrossword = async () => {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const res = await response.json();
+        data["NYT Mini Crossword"] = res;
+        console.log("data is ", data);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCrossword();
+  }, []);
+
+  useEffect(() => {
+
+      if (loading) return;
+
+      const puzzle = data[board];
+      setSolution(puzzle.solution);
+      setAcross(puzzle.across);
+      setDown(puzzle.down);
+      setInfo(puzzle);
+
       setSolution(data[board].solution);
       setSelected([-1, -1]);
       setSameLine([])
@@ -42,16 +68,12 @@ export const CrosswordComp = () => {
       Array.from({ length: data[board].solution[0].length }, (_, c) => new Square(data[board].solution[r][c] == "*" ? "*" : "", false, false, r, c, -1)));
       colnum = 1;
       let temp = {};
-      for (let cols = 0; cols < data[board].solution[0].length; ++cols) {
-        for (let rows = 0; rows < data[board].solution.length; ++rows) {
+      for (let rows = 0; rows < data[board].solution.length; ++rows) {
+        for (let cols = 0; cols < data[board].solution[0].length; ++cols) {
           if (!isObstacle(rows, cols, newGrid) && isObstacle(rows - 1, cols, newGrid) && !isObstacle(rows + 1, cols, newGrid)) {
             temp[rows + "" + cols] = [colnum, "v"];
             colnum++;
           }
-        }
-      }
-      for (let rows = 0; rows < data[board].solution.length; ++rows) {
-        for (let cols = 0; cols < data[board].solution[0].length; ++cols) {
           if (!isObstacle(rows, cols, newGrid) && isObstacle(rows, cols - 1, newGrid) && !isObstacle(rows, cols + 1, newGrid)) {
             if (temp[rows + "" + cols]) {
               temp[rows + "" + cols][1] = "vh";
@@ -72,9 +94,12 @@ export const CrosswordComp = () => {
       setClueNums(temp);
       return newGrid;
     });
-  }, [board])
+  }, [board, loading])
 
   useEffect(() => {
+
+    if (loading || !solution) return;
+
     let solved = true;
     for (let rows = 0; rows < solution.length; ++rows) {
       for (let cols = 0; cols < solution[0].length; ++cols) {
@@ -108,7 +133,7 @@ export const CrosswordComp = () => {
         animate(); // start it
       }
     }
-  }, [grid])
+  }, [grid, loading, solution])
 
   function solvedAnimation(frame) {
     setGrid(prevGrid => {
@@ -289,6 +314,14 @@ export const CrosswordComp = () => {
     }
   }
 
+  if (loading || !solution) {
+    return (
+    <div className={styles.page}>
+       <h4 className={styles.title}>Loading today's NYT Mini Crossword...</h4>
+    
+    </div>);
+  }
+
   
   return (
     <div className={styles.page}
@@ -315,6 +348,7 @@ export const CrosswordComp = () => {
             onClick={solveGrid}
           >Solution</button>
             {!solved && <select className={styles.select} id="fruit" name="fruit" onChange={(e) => {setBoard(e.target.value);}}>
+            <option value="NYT Mini Crossword">NYT Mini Crossword</option>
             <option value="Father's Day 2025">Father's Day 2025</option>
             <option value="Joley's Crossword">Joley's Crossword</option>
           </select>}
