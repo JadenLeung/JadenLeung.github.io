@@ -8,31 +8,38 @@
   resize: none;
   border: 1px solid #ccc;
   box-sizing: border-box;
-  position: absolute;
-  text-align: center;
 
-  /* Optional: smooth font */
+  display: flex;           /* enable flex layout */
+  align-items: center;     /* vertical centering */
+  justify-content: center; /* horizontal centering */
+
   font-family: Arial, sans-serif;
-  font-size: 30px;
+  font-size: var(--font-size);
   caret-color: transparent;
   outline: none;
-  /* If you want to use CSS variables for position: */
-  left: var(--posx);
-  top: var(--posy);
+
   background-color: var(--bg-color);
   user-select: none;
-  
+  text-align: center;      /* fallback for horizontal centering */
+  margin: 0;               /* remove default p margin */
+  padding: 0;              /* remove default p padding */
+}
+
+
+
+.cellWrapper {
+  position: relative;
+  display: inline-block;
 }
 
 .text {
     color: black;
     position: absolute;
-    left: var(--posx2);
-    top: var(--posy2);
+    top: 2px;    /* lock to top of the cell */
+    left: 4px;   /* lock to left */
     z-index: 2;
-    margin-left: 4px;
-    margin-top: 4px;
     font-family: 'Libre Franklin', sans-serif;
+    font-size:var(--font-size);
 }
 
 .rectangle:hover {

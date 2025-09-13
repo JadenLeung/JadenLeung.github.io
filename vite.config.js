@@ -10,4 +10,8 @@ export default defineConfig({
       localsConvention: "camelCase"
     },
   },
+  server: {
+    host: '0.0.0.0', // listen on all addresses
+    port: 5173
+  }
 });

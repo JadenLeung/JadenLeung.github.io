@@ -12,8 +12,8 @@
 
 .cluerec {
   display: flex;
-  margin-right: 20px;
   margin-bottom: 10px;
+  align-items: flex-start;
 }
 
 .numcoltext{
@@ -24,10 +24,11 @@
 
 .numcol {
   margin: 10px;
-  width: 30px;
 }
 
 .cluecol {
   margin-top: 10px;
   margin-bottom: 10px;
+  margin-left: 10px;
+  padding-right: 50px;
 }

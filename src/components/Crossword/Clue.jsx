@@ -3,7 +3,10 @@ import styles from './Clue.module.css';
 import { Square } from './Square';
 
 
-export const Clue = ({num, children, sameline, grid, direction, curdir, setDir, clicked}) => {
+export const Clue = ({num, children, sameline, grid, direction, curdir, setDir, clicked, isMobile}) => {
+    if (isMobile && !(sameline[0] && grid[sameline[0][0]][sameline[0][1]].cluenum == num && direction == curdir)) {
+        return;
+    }
   return (
     <div className={styles.cluerec} 
         style={{
@@ -23,7 +26,7 @@ export const Clue = ({num, children, sameline, grid, direction, curdir, setDir, 
         }}
     >
         <div className={styles.numcol}>
-            <p className={styles.numcoltext}>{num}</p>
+            <p className={styles.numcoltext}>{isMobile ? num + (curdir == "h" ? "A" : "D") : num}</p>
         </div>
         <div className={styles.cluecol}>
             <p className={styles.cluetext}>{children}</p>

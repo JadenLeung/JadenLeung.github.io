@@ -4,6 +4,8 @@ import {Cell} from './Cell.jsx';
 import {Clue} from './Clue.jsx';
 import { Square } from './Square';
 import {data} from './data';
+import Keyboard from 'react-simple-keyboard';
+import 'simple-keyboard/build/css/index.css';
 
 
 
@@ -25,7 +27,15 @@ export const CrosswordComp = () => {
   const [across, setAcross] = useState({});
   const [down, setDown] = useState({});
   const [grid, setGrid] = useState([]);
-
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const [size, setSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  const MAX_WIDTH = "767px";
+  const isthin = window.matchMedia("(max-width: " + MAX_WIDTH + ")").matches;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && isthin;
+  const WIDTH_MULT = isMobile ? 1.25 : 1.25;
   const API_URL = 'https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword';
   let colnum = 1;
 
@@ -45,6 +55,18 @@ export const CrosswordComp = () => {
     };
 
     fetchCrossword();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -96,6 +118,21 @@ export const CrosswordComp = () => {
     });
   }, [board, loading])
 
+
+  useEffect(() => {
+  const handleKeyDown = (e) => {
+    console.log(grid)
+    moveSelected(e); // call your existing logic
+  };
+
+  document.addEventListener('keydown', handleKeyDown);
+
+  // cleanup on unmount
+  return () => {
+    document.removeEventListener('keydown', handleKeyDown);
+  };
+}, [selected, dir, grid]);
+
   useEffect(() => {
 
     if (loading || !solution) return;
@@ -110,6 +147,7 @@ export const CrosswordComp = () => {
     }
     if (solved) {
       setMode("solved");
+      setShowKeyboard(false);
       setSelected([-1, -1]);
       setSameLine([])
       setSolved(solved);
@@ -191,6 +229,7 @@ export const CrosswordComp = () => {
 
   function clicked(row, col, d) {
     let curdir = dir;
+    setShowKeyboard(true);
     if (!d) {
       if (isObstacle(row + 1, col) == 1 && isObstacle(row - 1, col) == 1) {
         curdir = "h";
@@ -270,6 +309,12 @@ export const CrosswordComp = () => {
     }
   }
 
+  function restart() {
+    // setMode("normal");
+    // setSolved(false);
+    // clearGrid();
+  }
+
   function shiftDir(newrow, newcol) {
     if (!isObstacle(newrow, newcol)) {
       clicked(newrow, newcol)
@@ -330,12 +375,11 @@ export const CrosswordComp = () => {
   
   return (
     <div className={styles.page}
-        onKeyDown={moveSelected}
         ref={gridRef}
         tabIndex={0} 
     >
       <div className={styles.navbar}>
-        <h4 className={styles.title}>{info.title}</h4>
+        {!isMobile && <h4 className={styles.title} onClick={restart}>{info.title}</h4>}
         <div className={styles.autocheck}>
           <button onClick={(e) => {
             if (solved) return;
@@ -345,7 +389,7 @@ export const CrosswordComp = () => {
           style={{
             backgroundColor: mode == "autocheck" ? "#a7d8ff" : ""
           }}
-          >Autocheck</button>
+          >Check</button>
           <button className={styles.clear}
             onClick={clearGrid}
           > Clear</button>
@@ -359,45 +403,77 @@ export const CrosswordComp = () => {
           </select>}
         </div>
       </div>
-      <div className={styles.rec}>
-        {grid.map((row, i) => 
-          row.map((c, j) => 
-            <Cell key={`${i}-${j}-${c.cluenum}`} x={c.col} y={c.row} cluenum={c.cluenum} text={c.text} grid={grid} 
-              selected={selected} clicked={clicked} sameline={sameline} shiftDir={shiftDir} dir={dir} expected={solution[i][j]}
-              mode={mode}/>
-          )
-        )}
-      </div>
-      {startanimation > 0 && 
-          <div className={styles.winnercontainer}
-            style={{
-              transform: startanimation != 2 ? '' : 'translateX(-900px)'
-            }}
-          >
-            <h1 className={styles.winnerText}>You solved the crossword!</h1>
-            <h1 className={styles.winnerText}>{info.message}</h1>
+      <div className={styles.container}>
+        <div className={styles.rec} style={{
+          '--cols': grid[0].length,
+          '--width': `${(Math.min(window.innerHeight, window.innerWidth) / (grid.length * WIDTH_MULT)) * grid[0].length}px`,
+          '--height': `${(Math.min(window.innerHeight, window.innerWidth) / (grid.length * WIDTH_MULT)) * grid.length}px`,
+        }}>
+          {grid.map((row, i) => 
+            row.map((c, j) => 
+              <Cell key={`${i}-${j}-${c.cluenum}`} x={c.col} y={c.row} cluenum={c.cluenum} text={c.text} grid={grid} 
+                selected={selected} clicked={clicked} sameline={sameline} shiftDir={shiftDir} dir={dir} expected={solution[i][j]}
+                mode={mode} WIDTH_MULT={WIDTH_MULT} moveSelected={moveSelected}/>
+            )
+          )}
+        </div>
+        {startanimation > 0 && 
+            <div className={styles.winnercontainer}
+              style={{
+                transform: startanimation != 2 ? '' : 'translateX(0)'
+              }}
+            >
+              <h1 className={styles.winnerText}>You solved the crossword!</h1>
+              <h1 className={styles.winnerText}>{info.message}</h1>
+            </div>
+        }
+        <div className={styles.cluecontainer} style={{
+          opacity: solved ? '0' : '1',
+        }}>
+          <div className={styles.col1}>
+            {!isMobile && <p style={{marginBottom: 20}}>ACROSS</p>}
+            <div>
+              {Object.keys(across).map(key => (
+                <Clue key={key} num={key} sameline={sameline} grid={grid} direction="h" curdir={dir} clicked={clicked} setDir={setDir} isMobile={isMobile}>{across[key]}</Clue>
+              ))}
+              </div>
           </div>
-      }
-      <div className={styles.cluecontainer} style={{
-        opacity: solved ? '0' : '1',
-      }}>
-        <div className={styles.col1}>
-          <p>ACROSS</p>
-          <div style={{marginTop: 20}}>
-            {Object.keys(across).map(key => (
-              <Clue key={key} num={key} sameline={sameline} grid={grid} direction="h" curdir={dir} clicked={clicked} setDir={setDir}>{across[key]}</Clue>
-            ))}
-            </div>
-        </div>
-        <div className={styles.col2}>
-          <p>DOWN</p>
-          <div style={{marginTop: 20}}>
-            {Object.keys(down).map(key => (
-              <Clue key={key} num={key} sameline={sameline} grid={grid} direction="v" curdir={dir} clicked={clicked} setDir={setDir}>{down[key]}</Clue>
-            ))}
-            </div>
+          <div className={styles.col2}>
+           {!isMobile && <p style={{marginBottom: 20}}>DOWN</p>}
+            <div>
+              {Object.keys(down).map(key => (
+                <Clue key={key} num={key} sameline={sameline} grid={grid} direction="v" curdir={dir} clicked={clicked} setDir={setDir} isMobile={isMobile}>{down[key]}</Clue>
+              ))}
+              </div>
+          </div>
         </div>
       </div>
+      {/* Mobile custom keyboard */}
+      {isMobile && showKeyboard && (
+  <div style={{
+    position: 'fixed',
+    bottom: 20,
+    left: 0,
+    width: '100%',
+    zIndex: 1000,          // make sure it’s above other elements
+    backgroundColor: '#fff', // optional: match page background
+  }}>
+    <Keyboard
+      layout={{
+        default: ['Q W E R T Y U I O P', 'A S D F G H J K L', 'Z X C V B N M {bksp}'],
+      }}
+      display={{
+        '{bksp}': '⌫',
+      }}
+      theme={'hg-theme-default hg-layout-default'}
+      onKeyPress={(button) => {
+        let key = button;
+        if (button === '{bksp}') key = 'Backspace';
+        moveSelected({ key });
+      }}
+    />
+  </div>
+)}
     </div>
   );
 };
