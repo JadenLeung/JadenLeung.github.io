@@ -142,8 +142,13 @@ export const CrosswordComp = () => {
     );
 
     // newGrid[0][0].bg = (newGrid[0][0].bg + 1) % Square.numbg; 
-    console.log("frame is", frame)
-    newGrid[0][0].bg = 1 + (frame % Square.numbg);
+    console.log("frame is", frame);
+    for (let blank = 0; blank < newGrid.length; blank++) {
+      if (solution[0][blank] != '*') {
+        newGrid[0][blank].bg = 1 + (frame % Square.numbg);
+        break;
+      }
+    }
     let needschange = new Set()
     for (let r = 0; r < newGrid.length; r++) {
       for (let c = 0; c < newGrid[0].length; c++) {
