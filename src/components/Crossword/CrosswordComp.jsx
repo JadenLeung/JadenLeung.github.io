@@ -343,6 +343,18 @@ export const CrosswordComp = () => {
     }
   }
 
+  function inRange() {
+    return selected[0] >= 0 && selected[0] < solution[0].length && selected[1] >= 0 && selected[1] < solution.length;
+  }
+
+  function revealCell() {
+    if (!inRange()) {
+      return;
+    }
+    const event = { key: solution[selected[0]][selected[1]] };
+    moveSelected(event);
+  }
+
   function solveGrid() {
     if (solved) return;
     const result = confirm("Are you sure you want the solution?");
@@ -381,21 +393,17 @@ export const CrosswordComp = () => {
       <div className={styles.navbar}>
         {!isMobile && <h4 className={styles.title} onClick={restart}>{info.title}</h4>}
         <div className={styles.autocheck}>
+          <button className={styles.clear} onClick={clearGrid}>Clear</button>
           <button onClick={(e) => {
             if (solved) return;
-            setMode(mode == "normal" ? "autocheck" : "normal");
-          }
-          }
+            setMode(mode != "autocheck" ? "autocheck" : "normal");
+          }} className={styles.clear}
           style={{
             backgroundColor: mode == "autocheck" ? "#a7d8ff" : ""
           }}
-          >Check</button>
-          <button className={styles.clear}
-            onClick={clearGrid}
-          > Clear</button>
-          <button className={styles.clear}
-            onClick={solveGrid}
-          >Solution</button>
+          >Autocheck</button>
+          <button className={styles.clear}onClick={revealCell}>Reveal Cell</button>
+          <button className={styles.clear}onClick={solveGrid}>Solution</button>
             {!solved && <select className={styles.select} id="fruit" name="fruit" onChange={(e) => {setBoard(e.target.value);}}>
             <option value="NYT Mini Crossword">NYT Mini Crossword</option>
             <option value="Father's Day 2025">Father's Day 2025</option>
@@ -452,7 +460,7 @@ export const CrosswordComp = () => {
       {isMobile && showKeyboard && (
   <div style={{
     position: 'fixed',
-    bottom: 20,
+    bottom: 5,
     left: 0,
     width: '100%',
     zIndex: 1000,          // make sure it’s above other elements
