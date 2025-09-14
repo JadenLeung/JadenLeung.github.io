@@ -14,6 +14,10 @@ const projects = [
         link: "https://jadenleung.github.io/codehoot/",
     },
     {
+        name: "Mini Crossword",
+        link: "/crossword",
+    },
+    {
         name: "Lazy Chess",
         link: "/lazychess",
     },
@@ -28,10 +32,6 @@ const projects = [
     {
         name: "The Matrix",
         link: "/matrix",
-    },
-    {
-        name: "Mini Crossword",
-        link: "/crossword",
     },
     {
         name: "Wordle",
