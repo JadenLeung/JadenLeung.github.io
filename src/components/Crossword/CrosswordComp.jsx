@@ -150,28 +150,45 @@ export const CrosswordComp = () => {
       setShowKeyboard(false);
       setSelected([-1, -1]);
       setSameLine([])
-      setSolved(solved);
-      if (mode != "solved") {
-        setTimeout(() => {
-          setStartAnimation(1);
-          setTimeout(() => {
-            setStartAnimation(2);
-          }, 200);
-        }, 1000);
-        let period = 0;
-
-        function animate() {
-          solvedAnimation(period);
-          period = (period + 1) % (100 * Square.numbg);
-
-          const delay = 30 + 200 / (period + 1); // avoid divide by 0
-          setTimeout(animate, delay);
-        }
-
-        animate(); // start it
-      }
+      setSolved(true);
     }
   }, [grid, loading, solution])
+
+  useEffect(() => {
+    if (mode === "solved") {
+      const animations = [1000, 1200, 5000, 6500];
+      const ids = [];
+      animations.forEach((times, i) => {
+          const t = setTimeout(() => {
+            setStartAnimation(i + 1);
+          }, times);
+          ids.push(t)
+      })
+
+      let period = 0;
+      let timeoutId;
+
+      function animate() {
+        solvedAnimation(period);
+        period = (period + 1) % (100 * Square.numbg);
+
+        const delay = 30 + 200 / (period + 1);
+        if (period < 200)
+          timeoutId = setTimeout(animate, delay);
+      }
+      if (period < 150)
+        animate();
+
+      // cleanup: stop animation when mode changes/unmounts
+      return () => {
+        ids.forEach((t) => {
+          clearTimeout(t);
+        })
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [solved, mode]);
+
 
   function solvedAnimation(frame) {
     setGrid(prevGrid => {
@@ -180,7 +197,7 @@ export const CrosswordComp = () => {
     );
 
     // newGrid[0][0].bg = (newGrid[0][0].bg + 1) % Square.numbg; 
-    console.log("frame is", frame);
+    console.log("frame is", frame, mode, solved);
     for (let blank = 0; blank < newGrid.length; blank++) {
       if (solution[0][blank] != '*') {
         newGrid[0][blank].bg = 1 + (frame % Square.numbg);
@@ -198,11 +215,10 @@ export const CrosswordComp = () => {
       }
     }
     for (const arr of needschange) {
-      console.log(arr[0], arr[1])
       if (arr[2] == 1 && newGrid[arr[0]][arr[1]].bg == Square.numbg - 1) {
         newGrid[arr[0]][arr[1]].bg = 1;
       } else {
-        newGrid[arr[0]][arr[1]].bg = Math.max(newGrid[arr[0]][arr[1]].bg, arr[2]);
+        newGrid[arr[0]][arr[1]].bg = Math.max(newGrid[arr[0]][arr[1]]?.bg, arr[2]);
       }
     }
 
@@ -228,6 +244,9 @@ export const CrosswordComp = () => {
   }
 
   function clicked(row, col, d) {
+    if (solved) {
+      return;
+    }
     let curdir = dir;
     setShowKeyboard(true);
     if (!d) {
@@ -309,12 +328,6 @@ export const CrosswordComp = () => {
     }
   }
 
-  function restart() {
-    // setMode("normal");
-    // setSolved(false);
-    // clearGrid();
-  }
-
   function shiftDir(newrow, newcol) {
     if (!isObstacle(newrow, newcol)) {
       clicked(newrow, newcol)
@@ -376,11 +389,17 @@ export const CrosswordComp = () => {
     }
   }
 
+  function changeBoard(b) {
+    setStartAnimation(0);
+    setSolved(false);
+    setBoard(b);
+    setMode("normal");
+  }
+
   if (loading || !solution) {
     return (
     <div className={styles.page}>
        <h4 className={styles.title}>Loading today's NYT Mini Crossword...</h4>
-    
     </div>);
   }
 
@@ -391,7 +410,7 @@ export const CrosswordComp = () => {
         tabIndex={0} 
     >
       <div className={styles.navbar}>
-        {!isMobile && <h4 className={styles.title} onClick={restart}>{info.title}</h4>}
+        {!isMobile && <h4 className={styles.title}>{info.title}</h4>}
         <div className={styles.autocheck}>
           <button className={styles.clear} onClick={clearGrid}>Clear</button>
           <button onClick={(e) => {
@@ -404,11 +423,11 @@ export const CrosswordComp = () => {
           >Autocheck</button>
           <button className={styles.clear}onClick={revealCell}>Reveal Cell</button>
           <button className={styles.clear}onClick={solveGrid}>Solution</button>
-            {!solved && <select className={styles.select} id="fruit" name="fruit" onChange={(e) => {setBoard(e.target.value);}}>
+          <select className={styles.select} id="fruit" name="fruit" onChange={(e) => {changeBoard(e.target.value)}}>
             <option value="NYT Mini Crossword">NYT Mini Crossword</option>
             <option value="Father's Day 2025">Father's Day 2025</option>
             <option value="Joley's Crossword">Joley's Crossword</option>
-          </select>}
+          </select>
         </div>
       </div>
       <div className={styles.container}>
@@ -425,7 +444,7 @@ export const CrosswordComp = () => {
             )
           )}
         </div>
-        {startanimation > 0 && 
+        {startanimation > 0 && startanimation < 4 && solved &&
             <div className={styles.winnercontainer}
               style={{
                 transform: startanimation != 2 ? '' : 'translateX(0)'
@@ -436,7 +455,7 @@ export const CrosswordComp = () => {
             </div>
         }
         <div className={styles.cluecontainer} style={{
-          opacity: solved ? '0' : '1',
+          opacity: solved && startanimation < 4 ? '0' : '1',
         }}>
           <div className={styles.col1}>
             {!isMobile && <p style={{marginBottom: 20}}>ACROSS</p>}
