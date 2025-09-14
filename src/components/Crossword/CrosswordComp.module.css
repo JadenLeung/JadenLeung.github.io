@@ -94,6 +94,7 @@ button:hover {
     justify-content: right;
     transition: opacity 0.2s ease;
     flex-wrap: wrap;
+    flex: 2 1 400px; 
 }
 
 .winnerText{
@@ -111,9 +112,11 @@ button:hover {
 .col1 {
     width: 400px;
     text-align: left;
+    flex: 1 1 200px;
 }
 .col2 {
     width: 400px;
+    flex: 1 1 200px;
 }
 
 p {
