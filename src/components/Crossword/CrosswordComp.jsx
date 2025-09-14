@@ -28,6 +28,7 @@ export const CrosswordComp = () => {
   const [down, setDown] = useState({});
   const [grid, setGrid] = useState([]);
   const [showKeyboard, setShowKeyboard] = useState(false);
+  const [selectedclue, setSelectedClue] = useState(0);
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -78,7 +79,7 @@ export const CrosswordComp = () => {
       setAcross(puzzle.across);
       setDown(puzzle.down);
       setInfo(puzzle);
-
+      console.log(sameline[0] && grid[sameline[0][0]][sameline[0][1]].cluenum)
       setSolution(data[board].solution);
       setSelected([-1, -1]);
       setSameLine([])
@@ -189,6 +190,9 @@ export const CrosswordComp = () => {
     }
   }, [solved, mode]);
 
+  useEffect(() => {
+    setSelectedClue(sameline[0] && grid[sameline[0][0]][sameline[0][1]].cluenum);
+  }, [sameline])
 
   function solvedAnimation(frame) {
     setGrid(prevGrid => {
@@ -454,29 +458,31 @@ export const CrosswordComp = () => {
               <h1 className={styles.winnerText}>{info.message}</h1>
             </div>
         }
-        <div className={styles.cluecontainer} style={{
+        {!isMobile && <div className={styles.cluecontainer} style={{
           opacity: solved && startanimation < 4 ? '0' : '1',
         }}>
           <div className={styles.col1}>
-            {!isMobile && <p style={{marginBottom: 20}}>ACROSS</p>}
+            <p style={{marginBottom: 20}}>ACROSS</p>
             <div>
               {Object.keys(across).map(key => (
-                <Clue key={key} num={key} sameline={sameline} grid={grid} direction="h" curdir={dir} clicked={clicked} setDir={setDir} isMobile={isMobile}>{across[key]}</Clue>
+                <Clue key={key} num={key} grid={grid} direction="h" curdir={dir} 
+                    clicked={clicked} setDir={setDir} isMobile={isMobile} selectedclue={selectedclue}>{across[key]}</Clue>
               ))}
               </div>
           </div>
           <div className={styles.col2}>
-           {!isMobile && <p style={{marginBottom: 20}}>DOWN</p>}
+           <p style={{marginBottom: 20}}>DOWN</p>
             <div>
               {Object.keys(down).map(key => (
-                <Clue key={key} num={key} sameline={sameline} grid={grid} direction="v" curdir={dir} clicked={clicked} setDir={setDir} isMobile={isMobile}>{down[key]}</Clue>
+                <Clue key={key} num={key} grid={grid} direction="v" curdir={dir} 
+                clicked={clicked} setDir={setDir} isMobile={isMobile} selectedclue={selectedclue}>{down[key]}</Clue>
               ))}
               </div>
           </div>
-        </div>
+        </div>}
       </div>
       {/* Mobile custom keyboard */}
-      {isMobile && showKeyboard && (
+      {selectedclue && isMobile && (
   <div style={{
     position: 'fixed',
     bottom: 5,
@@ -485,6 +491,8 @@ export const CrosswordComp = () => {
     zIndex: 1000,          // make sure it’s above other elements
     backgroundColor: '#fff', // optional: match page background
   }}>
+    {selectedclue && <Clue num={selectedclue} grid={grid} direction={dir} curdir={dir} 
+                clicked={clicked} setDir={setDir} isMobile={isMobile} selectedclue={selectedclue}>{dir == "h" ? across[selectedclue] : down[selectedclue]}</Clue>}
     <Keyboard
       layout={{
         default: ['Q W E R T Y U I O P', 'A S D F G H J K L', 'Z X C V B N M {bksp}'],

@@ -3,14 +3,12 @@ import styles from './Clue.module.css';
 import { Square } from './Square';
 
 
-export const Clue = ({num, children, sameline, grid, direction, curdir, setDir, clicked, isMobile}) => {
-    if (isMobile && !(sameline[0] && grid[sameline[0][0]][sameline[0][1]].cluenum == num && direction == curdir)) {
-        return;
-    }
+export const Clue = ({num, children, grid, direction, curdir, setDir, clicked, isMobile, selectedclue}) => {
   return (
     <div className={styles.cluerec} 
         style={{
-            backgroundColor:`${sameline[0] && grid[sameline[0][0]][sameline[0][1]].cluenum == num && direction == curdir ? "#a7d8ff" : "white"}`,
+            backgroundColor:`${selectedclue == num && direction == curdir ? "#a7d8ff" : "white"}`,
+            marginBottom: isMobile ? 0 : 10
         }}
         onClick={(e) => {
             console.log("hererere")

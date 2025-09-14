@@ -89,7 +89,7 @@ button:hover {
 
 .cluecontainer {
     padding-top: 20px;
-    margin-left: 20px;
+    margin-left: 30px;
     display: flex;
     justify-content: right;
     transition: opacity 0.2s ease;
