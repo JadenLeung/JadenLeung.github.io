@@ -2,15 +2,10 @@ export let data = {
     "Father's Day 2025":  {
         title: "Father's Day Crossword",
         solution : [
-            "RAFAEL",
-            "O*O**A",
-            "DIR*D*",
-            "GITHUB",
-            "E*YEAR",
-            "R**ELO",
-            "*DEL*W",
-            "RAZ**N",
-            "*D****",
+            "R**E",
+            "*DEL",
+            "RAZ*",
+            "*D**",
         ],
         across : {
             1: "Has never broken a racket in his career",
