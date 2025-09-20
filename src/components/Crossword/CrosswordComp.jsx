@@ -449,14 +449,16 @@ export const CrosswordComp = () => {
           )}
         </div>
         {startanimation > 0 && startanimation < 4 && solved &&
-              <div
-                className={`${styles.winnercontainer} ${startanimation === 2 ? styles.active : ""}`}
-              >
+            <div className={styles.winnercontainer}
+              style={{
+                transform: startanimation != 2 ? '' : 'translateX(0)'
+              }}
+            >
               <h1 className={styles.winnerText}>You solved the crossword!</h1>
               <h1 className={styles.winnerText}>{info.message}</h1>
             </div>
         }
-        {!isMobile && <div className={styles.cluecontainer} style={{
+        {!isMobile && (startanimation < 1 || startanimation == 4) && <div className={styles.cluecontainer} style={{
           opacity: solved && startanimation < 4 ? '0' : '1',
         }}>
           <div className={styles.col1}>
