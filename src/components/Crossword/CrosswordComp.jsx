@@ -451,7 +451,7 @@ export const CrosswordComp = () => {
         {startanimation > 0 && startanimation < 4 && solved &&
             <div className={styles.winnercontainer}
               style={{
-                transform: startanimation != 2 ? '' : 'translateX(0)'
+                transform: startanimation != 2 ? '' : 'translateX(100%)'
               }}
             >
               <h1 className={styles.winnerText}>You solved the crossword!</h1>
