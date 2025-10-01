@@ -92,7 +92,7 @@ button:hover {
     margin-left: 30px;
     display: flex;
     justify-content: right;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.5s ease;
     flex-wrap: wrap;
     flex: 2 1 400px; 
 }

@@ -38,7 +38,31 @@ export const CrosswordComp = () => {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && isthin;
   const WIDTH_MULT = isMobile ? 1.25 : 1.25;
   const API_URL = 'https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword';
+  const [elapsed, setElapsed] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const [startTime, setStartTime] = useState(Date.now());
   let colnum = 1;
+
+  // Main timer loop
+  useEffect(() => {
+    let timer;
+    if (!solved && isRunning) {
+      timer = setInterval(() => {
+        setElapsed(Date.now() - startTime);
+      }, 1);
+    }
+
+    return () => clearInterval(timer);
+  }, [isRunning, solved, startTime]);
+
+  const formatTime = (ms) => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (totalSeconds % 60).toString().padStart(2, "0");
+    return Math.round(ms / 10) / 100.0;
+  };
 
   useEffect(() => {
     const fetchCrossword = async () => {
@@ -49,6 +73,8 @@ export const CrosswordComp = () => {
         }
         const res = await response.json();
         data["NYT Mini Crossword"] = res;
+        setIsRunning(true);
+        setStartTime(Date.now());
         console.log("data is ", data);
       } finally {
         setLoading(false);
@@ -75,6 +101,8 @@ export const CrosswordComp = () => {
       if (loading) return;
 
       const puzzle = data[board];
+      setStartTime(Date.now());
+      setIsRunning(true);
       setSolution(puzzle.solution);
       setAcross(puzzle.across);
       setDown(puzzle.down);
@@ -454,7 +482,7 @@ export const CrosswordComp = () => {
                 transform: startanimation != 2 ? '' : 'translateX(0)'
               }}
             >
-              <h1 className={styles.winnerText}>You solved the crossword!</h1>
+              <h1 className={styles.winnerText}>{`You solved the crossword in ${formatTime(elapsed)} secs.`}</h1>
               <h1 className={styles.winnerText}>{info.message}</h1>
             </div>
         }
