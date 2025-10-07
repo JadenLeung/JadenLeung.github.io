@@ -37,7 +37,6 @@ export const CrosswordComp = () => {
   const isthin = window.matchMedia("(max-width: " + MAX_WIDTH + ")").matches;
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && isthin;
   const WIDTH_MULT = isMobile ? 1.25 : 1.25;
-  const API_URL = 'https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword';
   const [elapsed, setElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
@@ -64,25 +63,31 @@ export const CrosswordComp = () => {
     return Math.round(ms / 10) / 100.0;
   };
 
-  useEffect(() => {
-    const fetchCrossword = async () => {
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const res = await response.json();
-        data["NYT Mini Crossword"] = res;
-        setIsRunning(true);
-        setStartTime(Date.now());
-        console.log("data is ", data);
-      } finally {
-        setLoading(false);
+  const fetchCrossword = async (url, boardname) => {
+    setLoading(true);
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+      const res = await response.json();
+      data[boardname] = res;
+      setIsRunning(true);
+      setStartTime(Date.now());
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchCrossword();
-  }, []);
+  useEffect(() => {
+    if (board == "NYT Mini Crossword" && Object.keys(data["NYT Mini Crossword"]).length === 0) {
+      fetchCrossword(data.CROSSWORD_URL, "NYT Mini Crossword");
+    }
+    if (board == "AI Generated Mini Crossword" && Object.keys(data["AI Generated Mini Crossword"]).length === 0) {
+      console.log("HERE")
+      fetchCrossword(data.AI_URL, "AI Generated Mini Crossword");
+    }
+  }, [board]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -98,7 +103,7 @@ export const CrosswordComp = () => {
 
   useEffect(() => {
 
-      if (loading) return;
+      if (loading || !data[board].solution) return;
 
       const puzzle = data[board];
       setStartTime(Date.now());
@@ -431,7 +436,7 @@ export const CrosswordComp = () => {
   if (loading || !solution) {
     return (
     <div className={styles.page}>
-       <h4 className={styles.title}>Loading today's NYT Mini Crossword...</h4>
+       <h4 className={styles.title}>{board == "NYT Mini Crossword" ? "Loading today's NYT Mini Crossword..." : "Generating AI Crossword..."}</h4>
     </div>);
   }
 
@@ -455,8 +460,9 @@ export const CrosswordComp = () => {
           >Autocheck</button>
           <button className={styles.clear}onClick={revealCell}>Reveal Cell</button>
           <button className={styles.clear}onClick={solveGrid}>Solution</button>
-          <select className={styles.select} id="fruit" name="fruit" onChange={(e) => {changeBoard(e.target.value)}}>
+          <select className={styles.select} onChange={(e) => {changeBoard(e.target.value)}} value={board}>
             <option value="NYT Mini Crossword">NYT Mini Crossword</option>
+            <option value="AI Generated Mini Crossword">AI Generated Crossword</option>
             <option value="Father's Day 2025">Father's Day 2025</option>
             <option value="Joley's Crossword">Joley's Crossword</option>
           </select>

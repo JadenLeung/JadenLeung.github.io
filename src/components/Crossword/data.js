@@ -68,5 +68,8 @@ export let data = {
         },
         message: "What a Moley!",
     },
-    "NYT Mini Crossword": {}
+    "NYT Mini Crossword": {},
+    "AI Generated Mini Crossword": {},
+    CROSSWORD_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",
+    AI_URL: "https://monkey2.azurewebsites.net/gen",
 };
