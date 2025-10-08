@@ -84,7 +84,6 @@ export const CrosswordComp = () => {
       fetchCrossword(data.CROSSWORD_URL, "NYT Mini Crossword");
     }
     if (board == "AI Generated Mini Crossword" && Object.keys(data["AI Generated Mini Crossword"]).length === 0) {
-      console.log("HERE")
       fetchCrossword(data.AI_URL, "AI Generated Mini Crossword");
     }
   }, [board]);
@@ -394,7 +393,8 @@ export const CrosswordComp = () => {
   }
 
   function inRange() {
-    return selected[0] >= 0 && selected[0] < solution[0].length && selected[1] >= 0 && selected[1] < solution.length;
+    console.log(selected)
+    return selected[0] >= 0 && selected[0] < solution.length && selected[1] >= 0 && selected[1] < solution[0].length;
   }
 
   function revealCell() {
@@ -433,6 +433,15 @@ export const CrosswordComp = () => {
     setMode("normal");
   }
 
+  function handleTitleClick() {
+    if (board == "AI Generated Mini Crossword") {
+      if (confirm("Generate New AI Crossword?")) {
+        setLoading(true);
+        fetchCrossword(data.AI_URL, "AI Generated Mini Crossword");
+      }
+    }
+  }
+
   if (loading || !solution) {
     return (
     <div className={styles.page}>
@@ -447,7 +456,7 @@ export const CrosswordComp = () => {
         tabIndex={0} 
     >
       <div className={styles.navbar}>
-        {!isMobile && <h4 className={styles.title}>{info.title}</h4>}
+        {!isMobile && <h4 className={styles.title} onClick={handleTitleClick}>{info.title}</h4>}
         <div className={styles.autocheck}>
           <button className={styles.clear} onClick={clearGrid}>Clear</button>
           <button onClick={(e) => {
@@ -471,8 +480,8 @@ export const CrosswordComp = () => {
       <div className={styles.container}>
         <div className={styles.rec} style={{
           '--cols': grid[0].length,
-          '--width': `${(Math.min(window.innerHeight, window.innerWidth) / (grid.length * WIDTH_MULT)) * grid[0].length}px`,
-          '--height': `${(Math.min(window.innerHeight, window.innerWidth) / (grid.length * WIDTH_MULT)) * grid.length}px`,
+          '--width': `${(Math.min(window.innerHeight, window.innerWidth) / (Math.max(grid.length, grid[0].length) * WIDTH_MULT)) * grid[0].length}px`,
+          '--height': `${(Math.min(window.innerHeight, window.innerWidth) / (Math.max(grid.length, grid[0].length) * WIDTH_MULT)) * grid.length}px`,
         }}>
           {grid.map((row, i) => 
             row.map((c, j) => 
