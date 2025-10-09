@@ -65,6 +65,8 @@ export const CrosswordComp = () => {
 
   const fetchCrossword = async (url, boardname) => {
     setLoading(true);
+    setSolved(false);
+    setSolution(null)
     try {
       const response = await fetch(url);
       if (!response.ok) {
