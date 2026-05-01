@@ -192,10 +192,17 @@ export const CrosswordComp = () => {
 
   useEffect(() => {
     if (mode === "solved") {
-      if (!cheat && board == "NYT Mini Crossword") {
-        if (!localStorage.bestTim || elapsed < localStorage.bestTime) {
+      if (!cheat && board == "NYT Mini Crossword" && localStorage.lastSolutionDate != data[board].day) {
+        if ((!localStorage.bestTime || elapsed < localStorage.bestTime)) {
           localStorage.bestTime = elapsed;
         }
+        if ((localStorage.lastRecordedWeek != getWeeksSince() || elapsed < localStorage.bestWeekTime)) {
+          localStorage.bestWeekTime = elapsed;
+          localStorage.lastRecordedWeek = getWeeksSince();
+        }
+      }
+      if (board == "NYT Mini Crossword") {
+        localStorage.lastSolutionDate = data[board].day
       }
       const animations = [1000, 1200, 5000, 6500];
       const ids = [];
@@ -233,6 +240,23 @@ export const CrosswordComp = () => {
   useEffect(() => {
     setSelectedClue(sameline[0] && grid[sameline[0][0]][sameline[0][1]].cluenum);
   }, [sameline])
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Check if the key pressed is "Shift"
+      if (event.key === 'Shift') { //shift
+        console.log(`Weeks passed: ${getWeeksSince()}`);
+      }
+    };
+
+    // Add listener to the window
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup function: removes listener when component is destroyed
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   function solvedAnimation(frame) {
     setGrid(prevGrid => {
@@ -378,6 +402,19 @@ export const CrosswordComp = () => {
     }
   }
 
+  function getWeeksSince(startDateString = "04/19/2026") {
+    const target = new Date(data[board].day);
+    const start = new Date(startDateString);
+
+    // Difference in milliseconds
+    const diffInMs = target - start;
+
+    // Convert ms to weeks: (ms / 1000ms / 60s / 60m / 24h / 7d)
+    const weeks = diffInMs / (1000 * 60 * 60 * 24 * 7);
+
+    return Math.floor(weeks);
+  }
+
   function clearGrid() {
     if (solved) return;
     const result = confirm("Are you sure you want to clear your grid?");
@@ -410,6 +447,7 @@ export const CrosswordComp = () => {
       return;
     }
     const event = { key: solution[selected[0]][selected[1]] };
+    localStorage.lastSolutionDate = data[board].day
     setCheat(true);
     moveSelected(event);
   }
@@ -418,6 +456,7 @@ export const CrosswordComp = () => {
     if (solved) return;
     const result = confirm("Are you sure you want the solution?");
     if (result) {
+      localStorage.lastSolutionDate = data[board].day
       setCheat(true);
       setMode("normal");
       setGrid(prevGrid => {
@@ -471,6 +510,7 @@ export const CrosswordComp = () => {
           <button className={styles.clear} onClick={clearGrid}>Clear</button>
           <button onClick={(e) => {
             if (solved) return;
+            localStorage.lastSolutionDate = data[board].day
             setCheat(true);
             setMode(mode != "autocheck" ? "autocheck" : "normal");
           }} className={styles.clear}
@@ -535,8 +575,9 @@ export const CrosswordComp = () => {
           </div>
           {solved && startanimation >= 4 &&
             <div className={styles.displayTime}>
-              <p>Today's Time: {formatTime(elapsed)}s{cheat ? " (with hints)" : ""}</p>
-              {localStorage.bestTime && board == "NYT Mini Crossword" && <p>Best NYT Mini Crossword Time: {formatTime(localStorage.bestTime)}s</p>}
+              <p>Time: {formatTime(elapsed)}s{cheat ? " (with hints)" : ""}</p>
+              {localStorage.lastRecordedWeek == getWeeksSince() && board == "NYT Mini Crossword" && <p>Best Time This Week: {formatTime(localStorage.bestWeekTime)}s</p>}
+              {localStorage.bestTime && board == "NYT Mini Crossword" && <p>Best Ever Time: {formatTime(localStorage.bestTime)}s</p>}
             </div>
           }
         </div>}
