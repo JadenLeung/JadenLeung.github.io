@@ -29,6 +29,7 @@ export const CrosswordComp = () => {
   const [grid, setGrid] = useState([]);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [selectedclue, setSelectedClue] = useState(0);
+  const [cheat, setCheat] = useState(false);
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -404,6 +405,7 @@ export const CrosswordComp = () => {
       return;
     }
     const event = { key: solution[selected[0]][selected[1]] };
+    setCheat(true);
     moveSelected(event);
   }
 
@@ -411,6 +413,7 @@ export const CrosswordComp = () => {
     if (solved) return;
     const result = confirm("Are you sure you want the solution?");
     if (result) {
+      setCheat(true);
       setMode("normal");
       setGrid(prevGrid => {
             const newGrid = prevGrid.map(row =>
@@ -463,6 +466,7 @@ export const CrosswordComp = () => {
           <button className={styles.clear} onClick={clearGrid}>Clear</button>
           <button onClick={(e) => {
             if (solved) return;
+            setCheat(true);
             setMode(mode != "autocheck" ? "autocheck" : "normal");
           }} className={styles.clear}
           style={{
@@ -526,7 +530,7 @@ export const CrosswordComp = () => {
           </div>
           {solved && startanimation >= 4 &&
             <div className={styles.displayTime}>
-              <p>Time: {formatTime(elapsed)}s</p>
+              <p>Time: {formatTime(elapsed)}s{cheat ? " (with hints)" : ""}</p>
             </div>
           }
         </div>}
