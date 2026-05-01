@@ -132,6 +132,11 @@ button:hover {
     flex: 1 1 200px;
 }
 
+.displayTime{
+    text-align: right;
+    margin-right: 30px;
+}
+
 p {
     font-family: 'Libre Franklin', sans-serif;
 };

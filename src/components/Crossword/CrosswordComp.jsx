@@ -524,6 +524,11 @@ export const CrosswordComp = () => {
               ))}
               </div>
           </div>
+          {solved && startanimation >= 4 &&
+            <div className={styles.displayTime}>
+              <p>Time: {formatTime(elapsed)}s</p>
+            </div>
+          }
         </div>}
       </div>
       {/* Mobile custom keyboard */}
