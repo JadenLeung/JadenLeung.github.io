@@ -192,6 +192,11 @@ export const CrosswordComp = () => {
 
   useEffect(() => {
     if (mode === "solved") {
+      if (!cheat && board == "NYT Mini Crossword") {
+        if (!localStorage.bestTim || elapsed < localStorage.bestTime) {
+          localStorage.bestTime = elapsed;
+        }
+      }
       const animations = [1000, 1200, 5000, 6500];
       const ids = [];
       animations.forEach((times, i) => {
@@ -530,7 +535,8 @@ export const CrosswordComp = () => {
           </div>
           {solved && startanimation >= 4 &&
             <div className={styles.displayTime}>
-              <p>Time: {formatTime(elapsed)}s{cheat ? " (with hints)" : ""}</p>
+              <p>Today's Time: {formatTime(elapsed)}s{cheat ? " (with hints)" : ""}</p>
+              {localStorage.bestTime && board == "NYT Mini Crossword" && <p>Best NYT Mini Crossword Time: {formatTime(localStorage.bestTime)}s</p>}
             </div>
           }
         </div>}
