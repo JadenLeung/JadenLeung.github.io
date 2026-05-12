@@ -4,7 +4,7 @@ import styles from './ResumePDF.module.css';
 
 export const ResumePDF = () => {
   return (
-    <iframe frameBorder="0" width="100%" height="1200px" src={getImageUrl("resume/ResumeUSA10:13:25.pdf")} className={styles.iframe}></iframe>
+    <iframe frameBorder="0" width="100%" height="1200px" src={getImageUrl("resume/Resume_Canada_5:12:26.pdf")} className={styles.iframe}></iframe>
   )
 }
 
