@@ -1,6 +1,7 @@
 export let data = {
     "Father's Day 2025":  {
         title: "Father's Day Crossword",
+        keyword: "f",
         solution : [
             "RAFAEL",
             "O*O**A",
@@ -36,6 +37,7 @@ export let data = {
     },
     "Joley's Crossword": {
         title: "Joley's Crossword",
+        keyword: "j",
         solution: [
             "SNAKE",
             "EIGEN",
@@ -67,6 +69,44 @@ export let data = {
             5: "Goddess of war and destruction"
         },
         message: "What a Moley!",
+    },
+    "Charlotte's Birthday Crossword": {
+        title: "Charlotte's Birthday Crossword",
+        keyword: "c",
+        solution: [
+            "**MA*T",
+            "**INGA",
+            "**RYAN",
+            "**A*MJ",
+            "***PEI",
+            "**LI*R",
+            "ADAGIO",
+            "CAI*O*",
+            "T*TONG",
+        ],
+        across: {
+            1: "BU IS IN __",
+            4: "Keys For Kids Director",
+            6: "Formerly a baby",
+            7: "Zendaya played this character",
+            8: "(Cantonese) Fong zho yaat dook __",
+            9: "3rd element in periodic table",
+            10: "Meaning to play the piece slowly",
+            13: "(Mandarin) Bok Choy, Gai Lan, e.g.",
+            14: "__ choy (it's hollow)"
+        },
+        down: {
+            1: "Problem child",
+            2: "__ day now",
+            5: "Subway Surfers, The Battle Cats, e.g.",
+            3: "Wears green and black",
+            8: "Species of protagonist, in a book containing your name",
+            9: "(French) Milk",
+            10: "Has an English, Math, Science section",
+            11: "Cool way of saying 'the'",
+            12: "Unequal number of electrons and protons"
+        },
+        message: "Happy Birthday!",
     },
     "NYT Mini Crossword": {},
     "AI Generated Mini Crossword": {},

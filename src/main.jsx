@@ -38,7 +38,7 @@ const router = createHashRouter([
     element: <Matrix/>,
   },
   {
-    path: "crossword",
+    path: "crossword/:id?",
     element: <Crossword/>,
   }
 ]);

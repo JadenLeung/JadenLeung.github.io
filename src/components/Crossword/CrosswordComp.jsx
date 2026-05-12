@@ -5,6 +5,7 @@ import {Clue} from './Clue.jsx';
 import { Square } from './Square';
 import {data} from './data';
 import Keyboard from 'react-simple-keyboard';
+import { useParams } from 'react-router-dom';
 import 'simple-keyboard/build/css/index.css';
 
 
@@ -12,11 +13,12 @@ import 'simple-keyboard/build/css/index.css';
 
 export const CrosswordComp = () => {
 
-  const [board, setBoard] = useState("NYT Mini Crossword");
+  const { id } = useParams();
+  const [board, setBoard] = useState("Father's Day 2025");
   const [cluenums, setClueNums] = useState({});
   const [selected, setSelected] = useState([-1, -1]);
   const [sameline, setSameLine] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [info, setInfo] = useState(data[board]);
   const [dir, setDir] = useState('h');
   const [mode, setMode] = useState("normal");
@@ -54,6 +56,22 @@ export const CrosswordComp = () => {
 
     return () => clearInterval(timer);
   }, [isRunning, solved, startTime]);
+
+  useEffect(() => {
+    let keywordmap = {};
+    Object.keys(data).forEach((key) => {
+      keywordmap[data[key].keyword] = data[key].title;
+    });
+
+    console.log(keywordmap, id in keywordmap)
+
+    if (id && id in keywordmap) {
+      setBoard(keywordmap[id]);
+    } else {
+      console.log("Setting to")
+      setBoard("NYT Mini Crossword")
+    }
+  }, [id]);
 
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
@@ -245,7 +263,7 @@ export const CrosswordComp = () => {
     const handleKeyDown = (event) => {
       // Check if the key pressed is "Shift"
       if (event.key === 'Shift') { //shift
-        console.log(`Weeks passed: ${getWeeksSince()}`);
+        console.log(id);
       }
     };
 
@@ -494,7 +512,7 @@ export const CrosswordComp = () => {
   if (loading || !solution) {
     return (
     <div className={styles.page}>
-       <h4 className={styles.title}>{board == "NYT Mini Crossword" ? "Loading today's NYT Mini Crossword..." : "Generating AI Crossword..."}</h4>
+       <h4 className={styles.title}>{board == "NYT Mini Crossword" ? "Loading today's NYT Mini Crossword..." : board == "AI Generated Mini Crossword" ? "Generating AI Crossword..." : "Error"}</h4>
     </div>);
   }
 
@@ -525,6 +543,7 @@ export const CrosswordComp = () => {
             <option value="AI Generated Mini Crossword">AI Generated Crossword</option>
             <option value="Father's Day 2025">Father's Day 2025</option>
             <option value="Joley's Crossword">Joley's Crossword</option>
+            <option value="Charlotte's Birthday Crossword">Charlotte's Birthday Crossword</option>
           </select>
         </div>
       </div>
