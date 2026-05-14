@@ -11,10 +11,7 @@ import 'simple-keyboard/build/css/index.css';
 
 
 
-export const CrosswordComp = () => {
-
-  const { id } = useParams();
-  const [board, setBoard] = useState("Father's Day 2025");
+export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   const [cluenums, setClueNums] = useState({});
   const [selected, setSelected] = useState([-1, -1]);
   const [sameline, setSameLine] = useState([]);
@@ -56,22 +53,6 @@ export const CrosswordComp = () => {
 
     return () => clearInterval(timer);
   }, [isRunning, solved, startTime]);
-
-  useEffect(() => {
-    let keywordmap = {};
-    Object.keys(data).forEach((key) => {
-      keywordmap[data[key].keyword] = data[key].title;
-    });
-
-    console.log(keywordmap, id in keywordmap)
-
-    if (id && id in keywordmap) {
-      setBoard(keywordmap[id]);
-    } else {
-      console.log("Setting to")
-      setBoard("NYT Mini Crossword")
-    }
-  }, [id]);
 
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
@@ -122,8 +103,8 @@ export const CrosswordComp = () => {
   }, []);
 
   useEffect(() => {
-
-      if (loading || !data[board].solution) return;
+      console.log(data, data[board])
+      if (loading || !data[board]?.solution) return;
 
       const puzzle = data[board];
       setStartTime(Date.now());
@@ -263,7 +244,7 @@ export const CrosswordComp = () => {
     const handleKeyDown = (event) => {
       // Check if the key pressed is "Shift"
       if (event.key === 'Shift') { //shift
-        console.log(id);
+        console.log(board);
       }
     };
 

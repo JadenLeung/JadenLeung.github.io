@@ -1,4 +1,5 @@
 export let data = {
+    "Order": ["NYT Mini Crossword", "AI Generated Mini Crossword", "Joley's Crossword", "Charlotte's Birthday Crossword", "Father's Day 2025"],
     "Father's Day 2025":  {
         title: "Father's Day Crossword",
         keyword: "f",
