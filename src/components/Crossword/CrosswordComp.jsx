@@ -82,10 +82,10 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   };
 
   useEffect(() => {
-    if (board == "NYT Mini Crossword" && Object.keys(data["NYT Mini Crossword"]).length === 0) {
+    if (board == "NYT Mini Crossword" && Object.keys(data["NYT Mini Crossword"]).length < 3) {
       fetchCrossword(data.CROSSWORD_URL, "NYT Mini Crossword");
     }
-    if (board == "AI Generated Mini Crossword" && Object.keys(data["AI Generated Mini Crossword"]).length === 0) {
+    if (board == "AI Generated Mini Crossword" && Object.keys(data["AI Generated Mini Crossword"]).length < 3) {
       fetchCrossword(data.AI_URL, "AI Generated Mini Crossword");
     }
   }, [board]);

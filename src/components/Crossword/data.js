@@ -109,8 +109,14 @@ export let data = {
         },
         message: "Happy Birthday!",
     },
-    "NYT Mini Crossword": {},
-    "AI Generated Mini Crossword": {},
+    "NYT Mini Crossword": {
+        title: "NYT Mini Crossword",
+        keyword: "n"
+    },
+    "AI Generated Mini Crossword": {
+        title: "AI Generated Mini Crossword",
+        keyword: "a"
+    },
     CROSSWORD_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",
     AI_URL: "https://monkey2.azurewebsites.net/gen",
 };

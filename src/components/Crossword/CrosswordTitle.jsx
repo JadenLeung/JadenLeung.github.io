@@ -4,6 +4,7 @@ import styles from './CrosswordTitle.module.css';
 import { CrosswordComp } from './CrosswordComp';
 import CTitleCard from './CTitleCard';
 import { data } from './data';
+import { Cell } from './Cell';
 
 
 export default function CrosswordTitle() {
@@ -28,8 +29,12 @@ export default function CrosswordTitle() {
             keywordmap[data[key].keyword] = data[key].title;
         });
 
+        console.log("Keyword is", keywordmap);
+
         if (id && id in keywordmap) {
             setBoard(keywordmap[id]);
+        } else {
+            setBoard("Title")
         }
     }, [id]);
 
