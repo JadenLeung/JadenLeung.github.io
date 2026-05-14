@@ -9,6 +9,14 @@ import { data } from './data';
 export default function CrosswordTitle() {
     const [board, setBoard] = useState("Title");
     const { id } = useParams();
+    const cObj = {
+        "NYT Mini Crossword": {
+            src: "NYT.png"
+        },
+        "AI Generated Mini Crossword": {
+            src: "Clanker.webp"
+        }
+    }
 
     function selectCrossword(c) {
         setBoard(c);
@@ -31,8 +39,8 @@ export default function CrosswordTitle() {
                 <h1 className={styles.title}>Select a Crossword to Play</h1>
                 <div className={styles.cardcontainer}>
                     {
-                        data.Order.map(key => (
-                            <CTitleCard selectCrossword={selectCrossword} key={key}>{key}</CTitleCard>
+                        Object.keys(cObj).map(key => (
+                            <CTitleCard selectCrossword={selectCrossword} key={key} src = {cObj[key].src}>{key}</CTitleCard>
                         ))
                     }
                 </div>

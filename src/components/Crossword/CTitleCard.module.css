@@ -1,4 +1,62 @@
 .titlecontainer {
-    margin-top: 20px;
-    margin-left: 20px;
+    display: flex;
+    margin: 20px;
+}
+
+.titlecontainer button {
+    display: flex;
+    flex-direction: column; /* Stacks image on top of text */
+    align-items: center;
+    justify-content: center;
+    gap: 16px; /* Space between image and text */
+    
+    /* Dimensions */
+    width: 260px;
+    padding: 1.25rem;
+    
+    /* Aesthetics */
+    background-color: #ffffff;
+    color: #333;
+    border: 2px solid #eaeaea;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    
+    /* Animation & Shadow */
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Keeps everything inside the border-radius */
+}
+
+.cImage {
+    width: 90%;          /* Shrinks the width slightly */
+    height: 140px;       /* Slightly shorter height */
+    object-fit: contain; /* Ensures the WHOLE image is visible without cropping */
+    margin-top: 5px;     /* Centers it better vertically within the gap */
+    border-radius: 10px;
+    background-color: #f8f9fa; 
+}
+
+/* Interaction States */
+.titlecontainer button:hover {
+    border-color: #0070f3;
+    color: #0070f3;
+    transform: translateY(-5px); /* Lift effect */
+    box-shadow: 0 10px 20px rgba(0, 112, 243, 0.1);
+}
+
+.titlecontainer button:active {
+    transform: translateY(-2px);
+    background-color: #f0f7ff;
+}
+
+/* Ensure text doesn't break the card if it's too long */
+.titlecontainer button span {
+    display: block;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
