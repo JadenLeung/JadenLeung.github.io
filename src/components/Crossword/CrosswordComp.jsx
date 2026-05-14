@@ -498,6 +498,9 @@ export const CrosswordComp = () => {
     setSolved(false);
     setBoard(b);
     setMode("normal");
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   }
 
   function handleTitleClick() {
@@ -538,7 +541,7 @@ export const CrosswordComp = () => {
           >Autocheck</button>
           <button className={styles.clear}onClick={revealCell}>Reveal Cell</button>
           <button className={styles.clear}onClick={solveGrid}>Solution</button>
-          <select className={styles.select} onFocus={(e) => e.target.blur()} onChange={(e) => {changeBoard(e.target.value)}} value={board}>
+          <select className={styles.select} onChange={(e) => {changeBoard(e.target.value)}} value={board}>
             <option value="NYT Mini Crossword">NYT Mini Crossword</option>
             <option value="AI Generated Mini Crossword">AI Generated Crossword</option>
             <option value="Father's Day 2025">Father's Day 2025</option>
