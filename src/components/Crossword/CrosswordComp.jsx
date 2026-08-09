@@ -244,7 +244,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     const id = `clue-${dir}-${selectedclue}`;
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [selectedclue, dir]);
 

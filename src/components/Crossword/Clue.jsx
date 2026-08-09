@@ -10,7 +10,6 @@ export const Clue = ({num, children, grid, direction, curdir, setDir, clicked, i
             backgroundColor:`${selectedclue == num && direction == curdir ? "#a7d8ff" : "white"}`,
             marginBottom: isMobile ? 0 : 10
         }}
-        tabIndex={-1}
         onClick={(e) => {
             console.log("hererere")
             for (let r = 0; r < grid.length; r++) {
