@@ -5,11 +5,12 @@ import { Square } from './Square';
 
 export const Clue = ({num, children, grid, direction, curdir, setDir, clicked, isMobile, selectedclue}) => {
   return (
-    <div className={styles.cluerec} 
+    <div id={`clue-${direction}-${num}`} className={styles.cluerec} 
         style={{
             backgroundColor:`${selectedclue == num && direction == curdir ? "#a7d8ff" : "white"}`,
             marginBottom: isMobile ? 0 : 10
         }}
+        tabIndex={-1}
         onClick={(e) => {
             console.log("hererere")
             for (let r = 0; r < grid.length; r++) {

@@ -91,67 +91,65 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   }, [board]);
 
   useEffect(() => {
-    const handleResize = () => {
-      setSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
+    console.log(data, data[board]);
+    if (loading || !data[board]?.solution) return;
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const puzzle = data[board];
+    setStartTime(Date.now());
+    setIsRunning(true);
+    setSolution(puzzle.solution);
+    setAcross(puzzle.across);
+    setDown(puzzle.down);
+    setInfo(puzzle);
+    setSelected([-1, -1]);
+    setSameLine([]);
 
-  useEffect(() => {
-      console.log(data, data[board])
-      if (loading || !data[board]?.solution) return;
+    setGrid(prevGrid => {
+      const solution = puzzle.solution;
+      const rowsCount = solution.length;
+      const colsCount = solution[0].length;
 
-      const puzzle = data[board];
-      setStartTime(Date.now());
-      setIsRunning(true);
-      setSolution(puzzle.solution);
-      setAcross(puzzle.across);
-      setDown(puzzle.down);
-      setInfo(puzzle);
-      console.log(sameline[0] && grid[sameline[0][0]][sameline[0][1]].cluenum)
-      setSolution(data[board].solution);
-      setSelected([-1, -1]);
-      setSameLine([])
-      setAcross(data[board].across);
-      setDown(data[board].down);
-      setInfo(data[board]);
-      setGrid(prevGrid => {
-      const newGrid = Array.from({ length:  data[board].solution.length }, (_, r) =>
-      Array.from({ length: data[board].solution[0].length }, (_, c) => new Square(data[board].solution[r][c] == "*" ? "*" : "", false, false, r, c, -1)));
-      colnum = 1;
-      let temp = {};
-      for (let rows = 0; rows < data[board].solution.length; ++rows) {
-        for (let cols = 0; cols < data[board].solution[0].length; ++cols) {
-          if (!isObstacle(rows, cols, newGrid) && isObstacle(rows - 1, cols, newGrid) && !isObstacle(rows + 1, cols, newGrid)) {
-            temp[rows + "" + cols] = [colnum, "v"];
+      const newGrid = Array.from({ length: rowsCount }, (_, r) =>
+        Array.from({ length: colsCount }, (_, c) => 
+          new Square(solution[r][c] === "*" ? "*" : "", false, false, r, c, -1)
+        )
+      );
+
+      let colnum = 1;
+      const temp = {};
+
+      for (let rows = 0; rows < rowsCount; ++rows) {
+        for (let cols = 0; cols < colsCount; ++cols) {
+          if (isObstacle(rows, cols, newGrid)) continue;
+
+          const key = `${rows},${cols}`; // Use a delimiter
+
+          const startsDown = isObstacle(rows - 1, cols, newGrid) && !isObstacle(rows + 1, cols, newGrid);
+          const startsAcross = isObstacle(rows, cols - 1, newGrid) && !isObstacle(rows, cols + 1, newGrid);
+
+          if (startsDown && startsAcross) {
+            temp[key] = [colnum, "vh"];
             colnum++;
-          }
-          if (!isObstacle(rows, cols, newGrid) && isObstacle(rows, cols - 1, newGrid) && !isObstacle(rows, cols + 1, newGrid)) {
-            if (temp[rows + "" + cols]) {
-              temp[rows + "" + cols][1] = "vh";
-            } else {
-              temp[rows + "" + cols] = [colnum, "h"];
-              colnum++;
-            }
+          } else if (startsDown) {
+            temp[key] = [colnum, "v"];
+            colnum++;
+          } else if (startsAcross) {
+            temp[key] = [colnum, "h"];
+            colnum++;
           }
         }
       }
 
-      for (const str in temp) {
-        const [num] = temp[str];
-        const i = +str[0];
-        const j = +str[1];
+      for (const key in temp) {
+        const [num] = temp[key];
+        const [i, j] = key.split(",").map(Number); // Parse multi-digit indices properly
         newGrid[i][j].cluenum = num;
       }
+
       setClueNums(temp);
       return newGrid;
     });
-  }, [board, loading])
+  }, [loading, data, board]);
 
 
   useEffect(() => {
@@ -239,6 +237,16 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   useEffect(() => {
     setSelectedClue(sameline[0] && grid[sameline[0][0]][sameline[0][1]].cluenum);
   }, [sameline])
+
+  // Auto-scroll selected clue into view
+  useEffect(() => {
+    if (!selectedclue) return;
+    const id = `clue-${dir}-${selectedclue}`;
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    }
+  }, [selectedclue, dir]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -349,7 +357,12 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     let s = new Set();
     dfs(row, col, s);
     setSelected([row, col]);
-    newsameline.sort()
+    newsameline.sort((a, b) => {
+      if (a[0] !== b[0]) {
+        return a[0] - b[0];
+      }
+      return a[1] - b[1];
+    });
     setSameLine(newsameline);
     console.log(newsameline);
   }
@@ -528,6 +541,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
             <option value="Father's Day 2025">Father's Day 2025</option>
             <option value="Joley's Crossword">Joley's Crossword</option>
             <option value="Charlotte's Birthday Crossword">Charlotte's Birthday Crossword</option>
+            <option value="Ally's STR Crossword">Ally's STR Crossword</option>
           </select>
         </div>
       </div>

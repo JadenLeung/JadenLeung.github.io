@@ -26,7 +26,7 @@ export default function CrosswordTitle() {
     useEffect(() => {
         let keywordmap = {};
         Object.keys(data).forEach((key) => {
-            keywordmap[data[key].keyword] = data[key].title;
+            keywordmap[data[key].keyword] = key;
         });
 
         console.log("Keyword is", keywordmap);
