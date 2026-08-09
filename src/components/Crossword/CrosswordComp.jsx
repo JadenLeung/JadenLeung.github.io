@@ -523,18 +523,22 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
         {!isMobile && <h4 className={styles.title} onClick={handleTitleClick}>{info.title}</h4>}
         <div className={styles.autocheck}>
           <button className={styles.clear} onClick={clearGrid}>Clear</button>
-          <button onClick={(e) => {
-            if (solved) return;
-            localStorage.lastSolutionDate = data[board].day
-            setCheat(true);
-            setMode(mode != "autocheck" ? "autocheck" : "normal");
-          }} className={styles.clear}
-          style={{
-            backgroundColor: mode == "autocheck" ? "#a7d8ff" : ""
-          }}
-          >Autocheck</button>
-          <button className={styles.clear}onClick={revealCell}>Reveal Cell</button>
-          <button className={styles.clear}onClick={solveGrid}>Solution</button>
+          {!info.noSolution &&
+            <>
+              <button onClick={(e) => {
+                if (solved) return;
+                localStorage.lastSolutionDate = data[board].day
+                setCheat(true);
+                setMode(mode != "autocheck" ? "autocheck" : "normal");
+              }} className={styles.clear}
+              style={{
+                backgroundColor: mode == "autocheck" ? "#a7d8ff" : ""
+              }}
+              >Autocheck</button>
+              <button className={styles.clear}onClick={revealCell}>Reveal Cell</button>
+              <button className={styles.clear}onClick={solveGrid}>Solution</button>
+            </>
+          }
           <select className={styles.select} onChange={(e) => {changeBoard(e.target.value)}} value={board}>
             <option value="NYT Mini Crossword">NYT Mini Crossword</option>
             <option value="AI Generated Mini Crossword">AI Generated Crossword</option>

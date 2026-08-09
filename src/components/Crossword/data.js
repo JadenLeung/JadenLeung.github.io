@@ -226,7 +226,7 @@ export let data = {
 
         },
         message: "Happy Father's Day!",
-        disabled: ["Autocheck", "Solution"],
+        noSolution: true,
     },
     CROSSWORD_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",
     AI_URL: "https://monkey2.azurewebsites.net/gen",
