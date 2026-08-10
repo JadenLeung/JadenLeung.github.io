@@ -181,6 +181,11 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
             } else if (typeof parsed.elapsed === 'number') {
               setExtraElapsed(parsed.elapsed);
             }
+            if (isGridEmpty(newGrid)) {
+              setElapsed(0);
+              setExtraElapsed(0);
+              setStartTime(Date.now());
+            }
           }
         }
       } catch (e) {
@@ -191,6 +196,13 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       return newGrid;
     });
   }, [loading, data, board]);
+
+
+  const isGridEmpty = (gridToCheck) => {
+    return gridToCheck.every(row =>
+      row.every(cell => cell.text === '' || cell.text === '*')
+    );
+  };
 
   const cleanupOldNytSaves = (currentDay) => {
     if (!currentDay) return;
@@ -479,7 +491,6 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     if (solved) return;
     const result = confirm("Are you sure you want to clear your grid?");
     if (result) {
-      // remove saved state for this board
       try { localStorage.removeItem(getSaveKey(board, info)); } catch(e) {}
       setMode("normal");
       setElapsed(0);
