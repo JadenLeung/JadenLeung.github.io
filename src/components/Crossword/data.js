@@ -227,7 +227,7 @@ export let data = {
 
         },
         message: "Happy Father's Day!",
-        groupedClues: [[4, 32]],
+        groupedClues: [["4D", "32A"]],
         noSolution: true,
     },
     CROSSWORD_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",

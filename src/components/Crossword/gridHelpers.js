@@ -36,3 +36,43 @@ export function getCellFromClueNumber(g, cluenum) {
   }
   return null;
 }
+
+// Returns a Set of "r,c" strings representing all squares to highlight for
+// the clicked cell including any grouped clues defined in `info.groupedClues`.
+export function getGroupedHighlightSet(g, info, row, col, curdir) {
+  const result = new Set();
+  if (!g || !g.length) return result;
+
+  // base derived for the clicked cell
+  const base = computeHighlightedSquares(g, row, col, curdir);
+  base.forEach(([r, c]) => result.add(`${r},${c}`));
+
+  if (!info || !Array.isArray(info.groupedClues) || base.length === 0) return result;
+
+  const startCell = g[base[0][0]][base[0][1]];
+  const curClueNum = startCell?.cluenum;
+  if (!curClueNum) return result;
+
+  const curLabel = `${curClueNum}${curdir === 'h' ? 'A' : 'D'}`;
+
+  info.groupedClues.forEach(group => {
+    if (!Array.isArray(group)) return;
+    if (group.includes(curLabel)) {
+      group.forEach(label => {
+        if (label === curLabel) return;
+        const m = String(label).match(/(\d+)([AaDd])?/);
+        if (!m) return;
+        const num = parseInt(m[1], 10);
+        const dirLetter = m[2] ? m[2].toUpperCase() : null;
+        const otherDir = dirLetter === 'A' ? 'h' : dirLetter === 'D' ? 'v' : null;
+        const cell = getCellFromClueNumber(g, num);
+        if (!cell) return;
+        const [r, c] = cell;
+        const otherDerived = computeHighlightedSquares(g, r, c, otherDir || curdir);
+        otherDerived.forEach(([rr, cc]) => result.add(`${rr},${cc}`));
+      });
+    }
+  });
+
+  return result;
+}

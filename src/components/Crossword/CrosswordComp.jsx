@@ -3,7 +3,7 @@ import styles from './CrosswordComp.module.css';
 import {Cell} from './Cell.jsx';
 import {Clue} from './Clue.jsx';
 import { Square } from './Square';
-import { isObstacle, computeHighlightedSquares, getCellFromClueNumber } from './gridHelpers';
+import { isObstacle, computeHighlightedSquares, getCellFromClueNumber, getGroupedHighlightSet } from './gridHelpers';
 import {data} from './data';
 import Keyboard from 'react-simple-keyboard';
 import { useParams } from 'react-router-dom';
@@ -239,14 +239,14 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   }, [solved, mode]);
 
   // Auto-scroll selected clue into view
-  useEffect(() => {
-    if (!selectedclue) return;
-    const id = `clue-${dir}-${selectedclue}`;
+  function scrollClue(cluenum, dir) {
+    if (!cluenum) return;
+    const id = `clue-${dir}-${cluenum}`;
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [selectedclue, dir]);
+  }
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -323,9 +323,11 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     setSelected([row, col]);
 
     const derived = computeHighlightedSquares(grid, row, col, curdir);
-    const setVals = new Set(derived.map(([r, c]) => `${r},${c}`));
+    const setVals = getGroupedHighlightSet(grid, info, row, col, curdir);
+    const clueNum = derived.length ? grid[derived[0][0]][derived[0][1]].cluenum : 0
     setHighlighted(setVals);
-    setSelectedClue(derived.length ? grid[derived[0][0]][derived[0][1]].cluenum : 0);
+    setSelectedClue(clueNum);
+    scrollClue(clueNum, curdir)
   }
 
   function moveSelected(e) {
@@ -566,7 +568,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
         </div>}
       </div>
       {/* Mobile custom keyboard */}
-      {selectedclue && isMobile && (
+      {selectedclue != 0 && isMobile && (
   <div style={{
     position: 'fixed',
     bottom: 5,
