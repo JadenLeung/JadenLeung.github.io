@@ -9,9 +9,6 @@ import Keyboard from 'react-simple-keyboard';
 import { useParams } from 'react-router-dom';
 import 'simple-keyboard/build/css/index.css';
 
-
-
-
 export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   const [cluenums, setClueNums] = useState({});
   const [selected, setSelected] = useState([-1, -1]);
@@ -195,6 +192,22 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     });
   }, [loading, data, board]);
 
+  const cleanupOldNytSaves = (currentDay) => {
+    if (!currentDay) return;
+    try {
+      const prefix = `crossword_save_${encodeURIComponent('NYT Mini Crossword')}_`;
+      const allowedKey = `${prefix}${encodeURIComponent(currentDay)}`;
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(prefix) && key !== allowedKey) {
+          localStorage.removeItem(key);
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to cleanup old NYT saves', e);
+    }
+  };
+
   const getSaveKey = (boardName, puzzleInfo) => {
     const base = `crossword_save_${encodeURIComponent(boardName)}`;
     if (boardName === 'NYT Mini Crossword' && puzzleInfo?.day) {
@@ -206,6 +219,10 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   // Persist current grid to localStorage per-board. Nullify when solved or cleared.
   useEffect(() => {
     if (!solution || loading) return;
+    if (board === 'NYT Mini Crossword') {
+      cleanupOldNytSaves(info.day);
+    }
+
     const saveKey = getSaveKey(board, info);
     try {
       if (solved || mode === 'solved') {
@@ -223,7 +240,9 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
 
   useEffect(() => {
   const handleKeyDown = (e) => {
-    console.log(grid)
+    if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) {
+      return;
+    }
     moveSelected(e); // call your existing logic
   };
 
