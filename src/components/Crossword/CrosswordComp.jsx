@@ -482,6 +482,9 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       // remove saved state for this board
       try { localStorage.removeItem(getSaveKey(board, info)); } catch(e) {}
       setMode("normal");
+      setElapsed(0);
+      setExtraElapsed(0);
+      setStartTime(Date.now());
       setGrid(prevGrid => {
             console.log("herere")
             const newGrid = prevGrid.map(row =>
