@@ -30,6 +30,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [selectedclue, setSelectedClue] = useState(0);
   const [cheat, setCheat] = useState(false);
+  const [extraElapsed, setExtraElapsed] = useState(0);
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -64,6 +65,8 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     const seconds = (totalSeconds % 60).toString().padStart(2, "0");
     return Math.round(ms / 10) / 100.0;
   };
+
+  const totalElapsed = elapsed + extraElapsed;
 
   const fetchCrossword = async (url, boardname) => {
     setLoading(true);
@@ -106,6 +109,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     setSelected([-1, -1]);
     setHighlighted(new Set());
     setSelectedClue(0);
+    setExtraElapsed(0);
 
     setGrid(prevGrid => {
       const solution = puzzle.solution;
@@ -149,10 +153,72 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
         newGrid[i][j].cluenum = num;
       }
 
+      // Try to restore saved board state from localStorage for this board
+      try {
+        const saveKey = getSaveKey(board, puzzle);
+        const saved = localStorage.getItem(saveKey);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && Array.isArray(parsed.grid) && parsed.grid.length === rowsCount && parsed.grid[0].length === colsCount) {
+            for (let r = 0; r < rowsCount; r++) {
+              for (let c = 0; c < colsCount; c++) {
+                // only overwrite non-block cells
+                if (newGrid[r][c].text !== '*') {
+                  newGrid[r][c].text = parsed.grid[r][c] || "";
+                }
+              }
+            }
+            // restore selected/dir/cheat if present
+            if (parsed.selected && parsed.selected.length === 2) {
+              setSelected(parsed.selected);
+              setDir(parsed.dir || 'h');
+              const derived = computeHighlightedSquares(newGrid, parsed.selected[0], parsed.selected[1], parsed.dir || 'h');
+              setHighlighted(new Set(derived.map(([r, c]) => `${r},${c}`)));
+              setSelectedClue(derived.length ? newGrid[derived[0][0]][derived[0][1]].cluenum : 0);
+            }
+            if (typeof parsed.cheat === 'boolean') {
+              setCheat(parsed.cheat);
+            }
+            if (typeof parsed.extraElapsed === 'number') {
+              setExtraElapsed(parsed.extraElapsed);
+            } else if (typeof parsed.elapsed === 'number') {
+              setExtraElapsed(parsed.elapsed);
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to restore saved crossword state', e);
+      }
+
       setClueNums(temp);
       return newGrid;
     });
   }, [loading, data, board]);
+
+  const getSaveKey = (boardName, puzzleInfo) => {
+    const base = `crossword_save_${encodeURIComponent(boardName)}`;
+    if (boardName === 'NYT Mini Crossword' && puzzleInfo?.day) {
+      return `${base}_${encodeURIComponent(puzzleInfo.day)}`;
+    }
+    return base;
+  };
+
+  // Persist current grid to localStorage per-board. Nullify when solved or cleared.
+  useEffect(() => {
+    if (!solution || loading) return;
+    const saveKey = getSaveKey(board, info);
+    try {
+      if (solved || mode === 'solved') {
+        localStorage.removeItem(saveKey);
+        return;
+      }
+      const gridToSave = grid.map(row => row.map(cell => cell.text));
+      const payload = { grid: gridToSave, selected, dir, cheat, extraElapsed: totalElapsed };
+      localStorage.setItem(saveKey, JSON.stringify(payload));
+    } catch (e) {
+      console.warn('Failed to save crossword state', e);
+    }
+  }, [grid, board, selected, dir, solved, mode, loading, solution, info, cheat, totalElapsed]);
 
 
   useEffect(() => {
@@ -194,11 +260,11 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   useEffect(() => {
     if (mode === "solved") {
       if (!cheat && board == "NYT Mini Crossword" && localStorage.lastSolutionDate != data[board].day) {
-        if ((!localStorage.bestTime || elapsed < localStorage.bestTime)) {
-          localStorage.bestTime = elapsed;
+        if ((!localStorage.bestTime || totalElapsed < localStorage.bestTime)) {
+          localStorage.bestTime = totalElapsed;
         }
-        if ((localStorage.lastRecordedWeek != getWeeksSince() || elapsed < localStorage.bestWeekTime)) {
-          localStorage.bestWeekTime = elapsed;
+        if ((localStorage.lastRecordedWeek != getWeeksSince() || totalElapsed < localStorage.bestWeekTime)) {
+          localStorage.bestWeekTime = totalElapsed;
           localStorage.lastRecordedWeek = getWeeksSince();
         }
       }
@@ -394,6 +460,8 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     if (solved) return;
     const result = confirm("Are you sure you want to clear your grid?");
     if (result) {
+      // remove saved state for this board
+      try { localStorage.removeItem(getSaveKey(board, info)); } catch(e) {}
       setMode("normal");
       setGrid(prevGrid => {
             console.log("herere")
@@ -431,6 +499,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     if (solved) return;
     const result = confirm("Are you sure you want the solution?");
     if (result) {
+      try { localStorage.removeItem(getSaveKey(board, info)); } catch(e) {}
       localStorage.lastSolutionDate = data[board].day
       setCheat(true);
       setMode("normal");
@@ -533,7 +602,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
                 transform: startanimation != 2 ? '' : 'translateX(0)'
               }}
             >
-              <h1 className={styles.winnerText}>{`You solved the crossword in ${formatTime(elapsed)} secs.`}</h1>
+              <h1 className={styles.winnerText}>{`You solved the crossword in ${formatTime(totalElapsed)} secs.`}</h1>
               <h1 className={styles.winnerText}>{info.message}</h1>
             </div>
         }
@@ -560,7 +629,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
           </div>
           {solved && startanimation >= 4 &&
             <div className={styles.displayTime}>
-              <p>Time: {formatTime(elapsed)}s{cheat ? " (with hints)" : ""}</p>
+              <p>Time: {formatTime(totalElapsed)}s{cheat ? " (with hints)" : ""}</p>
               {localStorage.lastRecordedWeek == getWeeksSince() && board == "NYT Mini Crossword" && <p>Best Time This Week: {formatTime(localStorage.bestWeekTime)}s</p>}
               {localStorage.bestTime && board == "NYT Mini Crossword" && <p>Best Ever Time: {formatTime(localStorage.bestTime)}s</p>}
             </div>
