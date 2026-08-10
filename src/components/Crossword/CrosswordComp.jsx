@@ -243,12 +243,12 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
         return;
       }
       const gridToSave = grid.map(row => row.map(cell => cell.text));
-      const payload = { grid: gridToSave, selected, dir, cheat, extraElapsed: totalElapsed };
+      const payload = { grid: gridToSave, cheat, extraElapsed: totalElapsed };
       localStorage.setItem(saveKey, JSON.stringify(payload));
     } catch (e) {
       console.warn('Failed to save crossword state', e);
     }
-  }, [grid, board, selected, dir, solved, mode, loading, solution, info, cheat, totalElapsed]);
+  }, [grid, board, solved, mode, loading, solution, info, cheat, totalElapsed]);
 
 
   useEffect(() => {
