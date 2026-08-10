@@ -230,12 +230,13 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
 
   // Persist current grid to localStorage per-board. Nullify when solved or cleared.
   useEffect(() => {
-    if (!solution || loading) return;
+    const currentPuzzle = data[board];
+    if (!solution || loading || !currentPuzzle || currentPuzzle.solution !== solution) return;
     if (board === 'NYT Mini Crossword') {
-      cleanupOldNytSaves(info.day);
+      cleanupOldNytSaves(currentPuzzle.day);
     }
 
-    const saveKey = getSaveKey(board, info);
+    const saveKey = getSaveKey(board, currentPuzzle);
     try {
       if (solved || mode === 'solved') {
         localStorage.removeItem(saveKey);
@@ -555,6 +556,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   function changeBoard(b) {
     setStartAnimation(0);
     setSolved(false);
+    setSolution(null);
     setBoard(b);
     setMode("normal");
     if (document.activeElement instanceof HTMLElement) {
