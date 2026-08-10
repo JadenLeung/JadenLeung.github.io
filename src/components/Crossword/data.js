@@ -151,6 +151,7 @@ export let data = {
             26: "Diabolical hangman",
             30: "Fruit Tissue",
             32: "With 4 down, up to a time",
+            35: "Not applicable, abbreb",
             36: "Rhymes with opp. of less",
             38: "Liner + stick + shine?",
             40: "Gut tract",
