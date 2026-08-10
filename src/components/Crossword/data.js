@@ -181,7 +181,7 @@ export let data = {
             1: "Chocolate Candy",
             2: "Abnormal growth",
             3: "Cute expression",
-            4: "With 33 across, up to a time",
+            4: "With 32 across, up to a time",
             5: "God of mischief",
             6: "Affectionate nickname, Tiernan",
             7: "Idris",
@@ -227,6 +227,7 @@ export let data = {
 
         },
         message: "Happy Father's Day!",
+        groupedClues: [[4, 32]],
         noSolution: true,
     },
     CROSSWORD_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",

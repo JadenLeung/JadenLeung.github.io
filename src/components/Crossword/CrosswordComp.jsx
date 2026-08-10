@@ -104,6 +104,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     setInfo(puzzle);
     setSelected([-1, -1]);
     setSameLine([]);
+    setSelectedClue(0);
 
     setGrid(prevGrid => {
       const solution = puzzle.solution;
@@ -184,6 +185,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       setShowKeyboard(false);
       setSelected([-1, -1]);
       setSameLine([])
+      setSelectedClue(0);
       setSolved(true);
     }
   }, [grid, loading, solution])
@@ -235,10 +237,6 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     }
   }, [solved, mode]);
 
-  useEffect(() => {
-    setSelectedClue(sameline[0] && grid[sameline[0][0]][sameline[0][1]].cluenum);
-  }, [sameline])
-
   // Auto-scroll selected clue into view
   useEffect(() => {
     if (!selectedclue) return;
@@ -253,7 +251,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     const handleKeyDown = (event) => {
       // Check if the key pressed is "Shift"
       if (event.key === 'Shift') { //shift
-        console.log(board);
+        console.log(sameline);
       }
     };
 
@@ -338,7 +336,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     }
     setDir(curdir);
     let newsameline = []
-    function dfs(r, c, set) {
+    function dfs(r, c, set, dir) {
       if (set.has(r * grid[0].length + c)) {
         return
       }
@@ -347,16 +345,15 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
         return;
       }
       newsameline.push([r, c]);
-      if (curdir == 'h') {
-        dfs(r, c + 1, set);
-        dfs(r, c - 1, set);
+      if (dir == 'h') {
+        dfs(r, c + 1, set, dir);
+        dfs(r, c - 1, set, dir);
       } else {
-        dfs(r + 1, c, set);
-        dfs(r - 1, c, set);
+        dfs(r + 1, c, set, dir);
+        dfs(r - 1, c, set, dir);
       }
     }
-    let s = new Set();
-    dfs(row, col, s);
+    dfs(row, col, new Set(), curdir);
     setSelected([row, col]);
     newsameline.sort((a, b) => {
       if (a[0] !== b[0]) {
@@ -365,7 +362,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       return a[1] - b[1];
     });
     setSameLine(newsameline);
-    console.log(newsameline);
+    setSelectedClue(newsameline[0] && grid[newsameline[0][0]][newsameline[0][1]].cluenum);
   }
 
   function moveSelected(e) {
@@ -503,6 +500,16 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       if (confirm("Generate New AI Crossword?")) {
         setLoading(true);
         fetchCrossword(data.AI_URL, "AI Generated Mini Crossword");
+      }
+    }
+  }
+
+  function getCellFromClueNumber(cluenum) {
+    for (let i = 0; i < grid.length; i++) {
+      for (let j = 0; j < grid[i].length; j++) {
+        if (grid[i][j].cluenum == cluenum) {
+          return [i, j]
+        }
       }
     }
   }
