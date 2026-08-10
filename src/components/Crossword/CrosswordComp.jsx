@@ -3,6 +3,7 @@ import styles from './CrosswordComp.module.css';
 import {Cell} from './Cell.jsx';
 import {Clue} from './Clue.jsx';
 import { Square } from './Square';
+import { isObstacle, computeHighlightedSquares, getCellFromClueNumber } from './gridHelpers';
 import {data} from './data';
 import Keyboard from 'react-simple-keyboard';
 import { useParams } from 'react-router-dom';
@@ -14,7 +15,7 @@ import 'simple-keyboard/build/css/index.css';
 export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   const [cluenums, setClueNums] = useState({});
   const [selected, setSelected] = useState([-1, -1]);
-  const [sameline, setSameLine] = useState([]);
+  const [highlighted, setHighlighted] = useState(new Set());
   const [loading, setLoading] = useState(false);
   const [info, setInfo] = useState(data[board]);
   const [dir, setDir] = useState('h');
@@ -103,7 +104,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     setDown(puzzle.down);
     setInfo(puzzle);
     setSelected([-1, -1]);
-    setSameLine([]);
+    setHighlighted(new Set());
     setSelectedClue(0);
 
     setGrid(prevGrid => {
@@ -122,12 +123,12 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
 
       for (let rows = 0; rows < rowsCount; ++rows) {
         for (let cols = 0; cols < colsCount; ++cols) {
-          if (isObstacle(rows, cols, newGrid)) continue;
+          if (isObstacle(newGrid, rows, cols)) continue;
 
           const key = `${rows},${cols}`; // Use a delimiter
 
-          const startsDown = isObstacle(rows - 1, cols, newGrid) && !isObstacle(rows + 1, cols, newGrid);
-          const startsAcross = isObstacle(rows, cols - 1, newGrid) && !isObstacle(rows, cols + 1, newGrid);
+          const startsDown = isObstacle(newGrid, rows - 1, cols) && !isObstacle(newGrid, rows + 1, cols);
+          const startsAcross = isObstacle(newGrid, rows, cols - 1) && !isObstacle(newGrid, rows, cols + 1);
 
           if (startsDown && startsAcross) {
             temp[key] = [colnum, "vh"];
@@ -184,7 +185,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       setMode("solved");
       setShowKeyboard(false);
       setSelected([-1, -1]);
-      setSameLine([])
+      setHighlighted(new Set())
       setSelectedClue(0);
       setSolved(true);
     }
@@ -250,9 +251,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       // Check if the key pressed is "Shift"
-      if (event.key === 'Shift') { //shift
-        console.log(sameline);
-      }
+      if (event.key === 'Shift') { /* shift pressed */ }
     };
 
     // Add listener to the window
@@ -307,62 +306,26 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     });
   }
 
-       
-
-
-  function isObstacle(r, c, g = grid) {
-    if (r < 0 || r >= g.length || c < 0 || c >= g[0].length || g[r][c].text == '*') {
-      return 1;
-    }
-    return 0;
-  }
-
   function clicked(row, col, d) {
-    if (solved) {
-      return;
-    }
-    let curdir = dir;
+    if (solved) return;
     setShowKeyboard(true);
+
+    let curdir = d ? d : dir;
+    if (!d && selected[0] === row && selected[1] === col) {
+      curdir = dir === 'h' ? 'v' : 'h';
+    }
     if (!d) {
-      if (isObstacle(row + 1, col) == 1 && isObstacle(row - 1, col) == 1) {
-        curdir = "h";
-      } else if (isObstacle(row, col + 1) == 1 && isObstacle(row, col - 1) == 1) {
-        curdir = "v";
-      } else if (selected[0] == row && selected[1] == col) {
-        curdir = dir == "h" ? "v" : "h"
-      }
-    } else {
-      curdir = d;
+      if (isObstacle(grid, row + 1, col) && isObstacle(grid, row - 1, col)) curdir = 'h';
+      else if (isObstacle(grid, row, col + 1) && isObstacle(grid, row, col - 1)) curdir = 'v';
     }
+
     setDir(curdir);
-    let newsameline = []
-    function dfs(r, c, set, dir) {
-      if (set.has(r * grid[0].length + c)) {
-        return
-      }
-      set.add(r * grid[0].length + c)
-      if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c].text == '*') {
-        return;
-      }
-      newsameline.push([r, c]);
-      if (dir == 'h') {
-        dfs(r, c + 1, set, dir);
-        dfs(r, c - 1, set, dir);
-      } else {
-        dfs(r + 1, c, set, dir);
-        dfs(r - 1, c, set, dir);
-      }
-    }
-    dfs(row, col, new Set(), curdir);
     setSelected([row, col]);
-    newsameline.sort((a, b) => {
-      if (a[0] !== b[0]) {
-        return a[0] - b[0];
-      }
-      return a[1] - b[1];
-    });
-    setSameLine(newsameline);
-    setSelectedClue(newsameline[0] && grid[newsameline[0][0]][newsameline[0][1]].cluenum);
+
+    const derived = computeHighlightedSquares(grid, row, col, curdir);
+    const setVals = new Set(derived.map(([r, c]) => `${r},${c}`));
+    setHighlighted(setVals);
+    setSelectedClue(derived.length ? grid[derived[0][0]][derived[0][1]].cluenum : 0);
   }
 
   function moveSelected(e) {
@@ -378,7 +341,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     }
     if (map.hasOwnProperty(e.key)) {
       [dr, dc] = map[e.key];
-      if (!isObstacle(selected[0] + dr, selected[1] + dc)) {
+      if (!isObstacle(grid, selected[0] + dr, selected[1] + dc)) {
         clicked(selected[0] + dr, selected[1] + dc)
       }
     } else {
@@ -407,7 +370,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   }
 
   function shiftDir(newrow, newcol) {
-    if (!isObstacle(newrow, newcol)) {
+    if (!isObstacle(grid, newrow, newcol)) {
       clicked(newrow, newcol)
     }
   }
@@ -504,16 +467,6 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     }
   }
 
-  function getCellFromClueNumber(cluenum) {
-    for (let i = 0; i < grid.length; i++) {
-      for (let j = 0; j < grid[i].length; j++) {
-        if (grid[i][j].cluenum == cluenum) {
-          return [i, j]
-        }
-      }
-    }
-  }
-
   if (loading || !solution) {
     return (
     <div className={styles.page}>
@@ -566,7 +519,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
               {grid.map((row, i) => 
             row.map((c, j) => 
               <Cell key={`${i}-${j}-${c.cluenum}`} x={c.col} y={c.row} cluenum={c.cluenum} text={c.text} grid={grid} 
-                selected={selected} clicked={clicked} sameline={sameline} shiftDir={shiftDir} dir={dir} expected={solution[i][j]}
+                selected={selected} clicked={clicked} highlighted={highlighted.has(`${i},${j}`)} shiftDir={shiftDir} dir={dir} expected={solution[i][j]}
                 mode={mode} WIDTH_MULT={WIDTH_MULT} moveSelected={moveSelected}
                 initialWidth={initialWindow.current.width} initialHeight={initialWindow.current.height} />
             )
