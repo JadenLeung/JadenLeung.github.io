@@ -3,7 +3,7 @@ import styles from './Cell.module.css';
 import { Square } from './Square';
 
 
-export const Cell = ({x, y, cluenum, text, grid, selected, clicked, sameline, shiftDir, dir, expected, mode, WIDTH_MULT, isMobile}) => {
+export const Cell = ({x, y, cluenum, text, grid, selected, clicked, sameline, shiftDir, dir, expected, mode, WIDTH_MULT, isMobile, initialWidth, initialHeight}) => {
     const inputRef = useRef(null);
     useEffect(() => {
     if (selected[0] == y && selected[1] == x && inputRef.current) {
@@ -11,7 +11,8 @@ export const Cell = ({x, y, cluenum, text, grid, selected, clicked, sameline, sh
     }
   }, [selected]); // runs whenever `selected` changes
 
-  const WIDTH = Math.min(window.innerHeight, window.innerWidth) / (Math.max(grid.length, grid[0].length) * WIDTH_MULT);
+  // Use the initial viewport size supplied by the parent so layout doesn't change on window resize
+  const WIDTH = Math.min(initialHeight, initialWidth) / (Math.max(grid.length, grid[0].length) * WIDTH_MULT);
 
   return (
     <div className={styles.cellWrapper}>

@@ -33,10 +33,11 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const initialWindow = useRef({ width: window.innerWidth, height: window.innerHeight });
   const MAX_WIDTH = "767px";
   const isthin = window.matchMedia("(max-width: " + MAX_WIDTH + ")").matches;
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && isthin;
-  const WIDTH_MULT = isMobile ? 1.25 : 1.25;
+  const WIDTH_MULT = isMobile ? 1.1 : 1.25;
   const [elapsed, setElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
@@ -552,14 +553,15 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       <div className={styles.container}>
         <div className={styles.rec} style={{
           '--cols': grid[0].length,
-          '--width': `${(Math.min(window.innerHeight, window.innerWidth) / (Math.max(grid.length, grid[0].length) * WIDTH_MULT)) * grid[0].length}px`,
-          '--height': `${(Math.min(window.innerHeight, window.innerWidth) / (Math.max(grid.length, grid[0].length) * WIDTH_MULT)) * grid.length}px`,
+          '--width': `${(Math.min(initialWindow.current.height, initialWindow.current.width) / (Math.max(grid.length, grid[0].length) * WIDTH_MULT)) * grid[0].length}px`,
+          '--height': `${(Math.min(initialWindow.current.height, initialWindow.current.width) / (Math.max(grid.length, grid[0].length) * WIDTH_MULT)) * grid.length}px`,
         }}>
-          {grid.map((row, i) => 
+              {grid.map((row, i) => 
             row.map((c, j) => 
               <Cell key={`${i}-${j}-${c.cluenum}`} x={c.col} y={c.row} cluenum={c.cluenum} text={c.text} grid={grid} 
                 selected={selected} clicked={clicked} sameline={sameline} shiftDir={shiftDir} dir={dir} expected={solution[i][j]}
-                mode={mode} WIDTH_MULT={WIDTH_MULT} moveSelected={moveSelected}/>
+                mode={mode} WIDTH_MULT={WIDTH_MULT} moveSelected={moveSelected}
+                initialWidth={initialWindow.current.width} initialHeight={initialWindow.current.height} />
             )
           )}
         </div>
