@@ -162,7 +162,7 @@ export let data = {
             51: "Cried",
             52: "Tech major",
             54: "March 14",
-            55: "Spititng Animal",
+            55: "Spitting Animal",
             57: "What Tommy John surgery is for",
             60: "___ ha!",
             61: "Julian",
