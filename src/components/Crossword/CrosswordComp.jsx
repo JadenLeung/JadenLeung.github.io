@@ -66,6 +66,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   const totalElapsed = elapsed + extraElapsed;
 
   const fetchCrossword = async (url, boardname) => {
+    console.log("Fetching ", url, boardname)
     setLoading(true);
     setSolved(false);
     setSolution(null)
@@ -84,8 +85,9 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   };
 
   useEffect(() => {
-    if (board == "NYT Mini Crossword" && Object.keys(data["NYT Mini Crossword"]).length < 3) {
-      fetchCrossword(data.CROSSWORD_URL, "NYT Mini Crossword");
+    if (board.includes("NYT") && Object.keys(data[board]).length < 3) {
+      const key = data[board].keyword.toUpperCase() + "_CROSSWORD_URL"
+      fetchCrossword(data.BASE_URL + data.urls[key], board);
     }
     if (board == "AI Generated Mini Crossword" && Object.keys(data["AI Generated Mini Crossword"]).length < 3) {
       fetchCrossword(data.AI_URL, "AI Generated Mini Crossword");
@@ -222,7 +224,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
 
   const getSaveKey = (boardName, puzzleInfo) => {
     const base = `crossword_save_${encodeURIComponent(boardName)}`;
-    if (boardName === 'NYT Mini Crossword' && puzzleInfo?.day) {
+    if (boardName.includes("NYT") && puzzleInfo?.day) {
       return `${base}_${encodeURIComponent(puzzleInfo.day)}`;
     }
     return base;
@@ -576,7 +578,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   if (loading || !solution) {
     return (
     <div className={styles.page}>
-       <h4 className={styles.title}>{board == "NYT Mini Crossword" ? "Loading today's NYT Mini Crossword..." : board == "AI Generated Mini Crossword" ? "Generating AI Crossword..." : "Error"}</h4>
+       <h4 className={styles.title}>{board.includes("NYT") ? `Loading today's ${board}...` : board == "AI Generated Mini Crossword" ? "Generating AI Crossword..." : "Error"}</h4>
     </div>);
   }
 
@@ -608,6 +610,8 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
           }
           <select className={styles.select} onChange={(e) => {changeBoard(e.target.value)}} value={board}>
             <option value="NYT Mini Crossword">NYT Mini Crossword</option>
+            <option value="NYT Midi Crossword">NYT Midi Crossword</option>
+            <option value="NYT Big Crossword">NYT Big Crossword</option>
             <option value="AI Generated Mini Crossword">AI Generated Crossword</option>
             <option value="Father's Day 2025">Father's Day 2025</option>
             <option value="Joley's Crossword">Joley's Crossword</option>

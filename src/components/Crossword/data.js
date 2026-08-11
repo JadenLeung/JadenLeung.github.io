@@ -111,11 +111,19 @@ export let data = {
     },
     "NYT Mini Crossword": {
         title: "NYT Mini Crossword",
-        keyword: "n"
+        keyword: "mini"
+    },
+    "NYT Midi Crossword": {
+        title: "NYT Midi Crossword",
+        keyword: "midi"
+    },
+    "NYT Big Crossword": {
+        title: "NYT Big Crossword",
+        keyword: "big"
     },
     "AI Generated Mini Crossword": {
         title: "AI Generated Mini Crossword",
-        keyword: "a"
+        keyword: "ai"
     },
     "Ally's STR Crossword":  {
         title: "Ally's STR Crossword",
@@ -230,6 +238,12 @@ export let data = {
         groupedClues: [["4D", "32A"]],
         noSolution: true,
     },
-    CROSSWORD_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",
-    AI_URL: "https://monkey2.azurewebsites.net/gen",
+    // BASE_URL: "http://127.0.0.1:5001/crossword",
+    BASE_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",
+    urls: {
+        MINI_CROSSWORD_URL: "/mini",
+        MIDI_CROSSWORD_URL: "/midi",
+        BIG_CROSSWORD_URL: "/big",
+        AI_URL: "https://monkey2.azurewebsites.net/gen",
+    }
 };
