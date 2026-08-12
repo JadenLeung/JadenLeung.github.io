@@ -36,6 +36,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   const MAX_WIDTH = "767px";
   const isthin = window.matchMedia("(max-width: " + MAX_WIDTH + ")").matches;
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && isthin;
+  const navbuttonStyle={ fontSize: isMobile ? 15 : undefined }
   const WIDTH_MULT = isMobile ? 1.1 : 1.25;
   const [elapsed, setElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -591,7 +592,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       <div className={styles.navbar}>
         {!isMobile && <h4 className={styles.title} onClick={handleTitleClick}>{info.title}</h4>}
         <div className={styles.autocheck}>
-          <button className={styles.clear} onClick={clearGrid}>Clear</button>
+          <button className={styles.navButton} style={navbuttonStyle} onClick={clearGrid}>Clear</button>
           {!info.noSolution &&
             <>
               <button onClick={(e) => {
@@ -599,13 +600,14 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
                 localStorage.lastSolutionDate = data[board].day
                 setCheat(true);
                 setMode(mode != "autocheck" ? "autocheck" : "normal");
-              }} className={styles.clear}
+              }} className={styles.navButton}
               style={{
-                backgroundColor: mode == "autocheck" ? "#a7d8ff" : ""
+                backgroundColor: mode == "autocheck" ? "#a7d8ff" : "",
+                ...navbuttonStyle
               }}
-              >Autocheck</button>
-              <button className={styles.clear}onClick={revealCell}>Reveal Cell</button>
-              <button className={styles.clear}onClick={solveGrid}>Solution</button>
+              >Check</button>
+              <button className={styles.navButton} style={navbuttonStyle} onClick={revealCell}>{isMobile ? "Reveal" : "Reveal Cell"}</button>
+              <button className={styles.navButton} style={navbuttonStyle} onClick={solveGrid}>Solution</button>
             </>
           }
           <select className={styles.select} onChange={(e) => {changeBoard(e.target.value)}} value={board}>
@@ -679,7 +681,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       {selectedclue != 0 && isMobile && (
   <div style={{
     position: 'fixed',
-    bottom: 5,
+    bottom: 0,
     left: 0,
     width: '100%',
     zIndex: 1000,          // make sure it’s above other elements

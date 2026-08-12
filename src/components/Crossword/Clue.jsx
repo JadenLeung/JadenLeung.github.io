@@ -11,7 +11,9 @@ export const Clue = ({num, children, grid, direction, curdir, setDir, clicked, i
             marginBottom: isMobile ? 0 : 10
         }}
         onClick={(e) => {
-            console.log("hererere")
+            if (selectedclue == num && direction == curdir) {
+                return;
+            }
             for (let r = 0; r < grid.length; r++) {
                 for (let c = 0; c < grid[0].length; c++) {
                     if (grid[r][c].cluenum == num) {
