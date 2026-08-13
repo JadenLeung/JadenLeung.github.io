@@ -34,7 +34,7 @@ export const Cell = ({x, y, cluenum, text, grid, selected, clicked, highlighted,
       >
         {text != "*" ? text : ""}
       </p>
-        <p className={styles.text} style={{'--font-size': `${WIDTH/5}px`}}>{cluenum != -1 ? cluenum : ""} </p>
+        <p className={styles.text} style={{'--font-size': `${WIDTH/6}px`}}>{cluenum != -1 ? cluenum : ""} </p>
     </div>
   );
 };
