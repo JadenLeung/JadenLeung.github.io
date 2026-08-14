@@ -91,7 +91,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       fetchCrossword(data.BASE_URL + data.urls[key], board);
     }
     if (board == "AI Generated Mini Crossword" && Object.keys(data["AI Generated Mini Crossword"]).length < 3) {
-      fetchCrossword(data.AI_URL, "AI Generated Mini Crossword");
+      fetchCrossword(data.urls.AI_URL, "AI Generated Mini Crossword");
     }
   }, [board]);
 

@@ -12,7 +12,13 @@ export default function CrosswordTitle() {
     const { id } = useParams();
     const cObj = {
         "NYT Mini Crossword": {
-            src: "NYT.png"
+            src: "NYT-Mini-Crossword.png"
+        },
+        "NYT Midi Crossword": {
+            src: "NYT-Midi-Crossword.png"
+        },
+        "NYT Big Crossword": {
+            src: "NYT-Big-Crossword.png"
         },
         "AI Generated Mini Crossword": {
             src: "Clanker.webp"
