@@ -151,47 +151,49 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       }
 
       // Try to restore saved board state from localStorage for this board
-      try {
-        const saveKey = getSaveKey(board, puzzle);
-        const saved = localStorage.getItem(saveKey);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed && Array.isArray(parsed.grid) && parsed.grid.length === rowsCount && parsed.grid[0].length === colsCount) {
-            for (let r = 0; r < rowsCount; r++) {
-              for (let c = 0; c < colsCount; c++) {
-                // only overwrite non-block cells
-                if (newGrid[r][c].text !== '*') {
-                  newGrid[r][c].text = parsed.grid[r][c] || "";
+      if (board != "Auto Generated Mini Crossword")
+      {
+        try {
+          const saveKey = getSaveKey(board, puzzle);
+          const saved = localStorage.getItem(saveKey);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed && Array.isArray(parsed.grid) && parsed.grid.length === rowsCount && parsed.grid[0].length === colsCount) {
+              for (let r = 0; r < rowsCount; r++) {
+                for (let c = 0; c < colsCount; c++) {
+                  // only overwrite non-block cells
+                  if (newGrid[r][c].text !== '*') {
+                    newGrid[r][c].text = parsed.grid[r][c] || "";
+                  }
                 }
               }
-            }
-            // restore selected/dir/cheat if present
-            if (parsed.selected && parsed.selected.length === 2) {
-              setSelected(parsed.selected);
-              setDir(parsed.dir || 'h');
-              const derived = computeHighlightedSquares(newGrid, parsed.selected[0], parsed.selected[1], parsed.dir || 'h');
-              setHighlighted(new Set(derived.map(([r, c]) => `${r},${c}`)));
-              setSelectedClue(derived.length ? newGrid[derived[0][0]][derived[0][1]].cluenum : 0);
-            }
-            if (typeof parsed.cheat === 'boolean') {
-              setCheat(parsed.cheat);
-            }
-            if (typeof parsed.extraElapsed === 'number') {
-              setExtraElapsed(parsed.extraElapsed);
-            } else if (typeof parsed.elapsed === 'number') {
-              setExtraElapsed(parsed.elapsed);
-            }
-            if (isGridEmpty(newGrid)) {
-              setElapsed(0);
-              setExtraElapsed(0);
-              setStartTime(Date.now());
+              // restore selected/dir/cheat if present
+              if (parsed.selected && parsed.selected.length === 2) {
+                setSelected(parsed.selected);
+                setDir(parsed.dir || 'h');
+                const derived = computeHighlightedSquares(newGrid, parsed.selected[0], parsed.selected[1], parsed.dir || 'h');
+                setHighlighted(new Set(derived.map(([r, c]) => `${r},${c}`)));
+                setSelectedClue(derived.length ? newGrid[derived[0][0]][derived[0][1]].cluenum : 0);
+              }
+              if (typeof parsed.cheat === 'boolean') {
+                setCheat(parsed.cheat);
+              }
+              if (typeof parsed.extraElapsed === 'number') {
+                setExtraElapsed(parsed.extraElapsed);
+              } else if (typeof parsed.elapsed === 'number') {
+                setExtraElapsed(parsed.elapsed);
+              }
+              if (isGridEmpty(newGrid)) {
+                setElapsed(0);
+                setExtraElapsed(0);
+                setStartTime(Date.now());
+              }
             }
           }
+        } catch (e) {
+          console.warn('Failed to restore saved crossword state', e);
         }
-      } catch (e) {
-        console.warn('Failed to restore saved crossword state', e);
       }
-
       setClueNums(temp);
       return newGrid;
     });
@@ -204,11 +206,11 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     );
   };
 
-  const cleanupOldNytSaves = (currentDay) => {
+  const cleanupOldNytSaves = (currentDay, fullBoardName) => {
     if (!currentDay) return;
     try {
-      const prefix = `crossword_save_${encodeURIComponent('NYT Mini Crossword')}_`;
-      const allowedKey = `${prefix}${encodeURIComponent(currentDay)}`;
+      const prefix = `crossword_save`;
+      const allowedKey = `${prefix}_${encodeURIComponent(fullBoardName)}_${encodeURIComponent(currentDay)}`;
       for (let i = localStorage.length - 1; i >= 0; i--) {
         const key = localStorage.key(i);
         if (key && key.startsWith(prefix) && key !== allowedKey) {
@@ -232,8 +234,9 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   useEffect(() => {
     const currentPuzzle = data[board];
     if (!solution || loading || !currentPuzzle || currentPuzzle.solution !== solution) return;
-    if (board === 'NYT Mini Crossword') {
-      cleanupOldNytSaves(currentPuzzle.day);
+    if (board == "Auto Generated Mini Crossword") return;
+    if (board.includes('NYT')) {
+      cleanupOldNytSaves(currentPuzzle.day, currentPuzzle.title);
     }
 
     const saveKey = getSaveKey(board, currentPuzzle);
