@@ -365,6 +365,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   }, []);
 
   function solvedAnimation(frame) {
+    if (!solution) return;
     setGrid(prevGrid => {
     const newGrid = prevGrid.map(row =>
       row.map(cell => new Square(cell.text, cell.horizontal, cell.vertical, cell.row, cell.col, cell.cluenum, cell.bg))
@@ -572,6 +573,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       if (confirm("Generate New Crossword?")) {
         setLoading(true);
         fetchCrossword(data.BASE_URL + data.urls.AUTO_CROSSWORD_URL, "Auto Gen Crossword");
+        changeBoard("Auto Gen Crossword")
       }
     }
   }
