@@ -1,5 +1,5 @@
 export let data = {
-    "Order": ["NYT Mini Crossword", "Auto Generated Mini Crossword", "Joley's Crossword", "Charlotte's Birthday Crossword", "Father's Day 2025"],
+    "Order": ["NYT Mini Crossword", "Auto Gen Crossword", "Joley's Crossword", "Charlotte's Bday", "Father's Day 2025"],
     "Father's Day 2025":  {
         title: "Father's Day Crossword",
         keyword: "f",
@@ -71,8 +71,8 @@ export let data = {
         },
         message: "What a Moley!",
     },
-    "Charlotte's Birthday Crossword": {
-        title: "Charlotte's Birthday Crossword",
+    "Charlotte's Bday": {
+        title: "Charlotte's Bday",
         keyword: "c",
         solution: [
             "**MA*T",
@@ -121,8 +121,8 @@ export let data = {
         title: "NYT Big Crossword",
         keyword: "big"
     },
-    "Auto Generated Mini Crossword": {
-        title: "Auto Generated Mini Crossword",
+    "Auto Gen Crossword": {
+        title: "Auto Gen Crossword",
         keyword: "auto"
     },
     "Ally's STR Crossword":  {

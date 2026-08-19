@@ -86,7 +86,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   };
 
   useEffect(() => {
-    if ((board.includes("NYT") || board == "Auto Generated Mini Crossword") && Object.keys(data[board]).length < 3) {
+    if ((board.includes("NYT") || board == "Auto Gen Crossword") && Object.keys(data[board]).length < 3) {
       const key = data[board].keyword.toUpperCase() + "_CROSSWORD_URL"
       fetchCrossword(data.BASE_URL + data.urls[key], board);
     }
@@ -151,7 +151,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
       }
 
       // Try to restore saved board state from localStorage for this board
-      if (board != "Auto Generated Mini Crossword")
+      if (board != "Auto Gen Crossword")
       {
         try {
           const saveKey = getSaveKey(board, puzzle);
@@ -234,7 +234,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   useEffect(() => {
     const currentPuzzle = data[board];
     if (!solution || loading || !currentPuzzle || currentPuzzle.solution !== solution) return;
-    if (board == "Auto Generated Mini Crossword") return;
+    if (board == "Auto Gen Crossword") return;
     if (board.includes('NYT')) {
       cleanupOldNytSaves(currentPuzzle.day, currentPuzzle.title);
     }
@@ -567,11 +567,11 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     }
   }
 
-  function handleTitleClick() {
-    if (board == "Auto Generated Mini Crossword") {
+  function generateNewCrossword() {
+    if (board == "Auto Gen Crossword") {
       if (confirm("Generate New Crossword?")) {
         setLoading(true);
-        fetchCrossword(data.BASE_URL + data.urls.AUTO_CROSSWORD_URL, "Auto Generated Mini Crossword");
+        fetchCrossword(data.BASE_URL + data.urls.AUTO_CROSSWORD_URL, "Auto Gen Crossword");
       }
     }
   }
@@ -579,7 +579,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   if (loading || !solution) {
     return (
     <div className={styles.page}>
-       <h4 className={styles.title}>{board.includes("NYT") ? `Loading today's ${board}...` : board == "Auto Generated Mini Crossword" ? "Generating Crossword..." : "Error"}</h4>
+       <h4 className={styles.title}>{board.includes("NYT") ? `Loading today's ${board}...` : board == "Auto Gen Crossword" ? "Generating Crossword..." : "Error"}</h4>
     </div>);
   }
 
@@ -590,7 +590,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
         tabIndex={0} 
     >
       <div className={styles.navbar}>
-        {!isMobile && <h4 className={styles.title} onClick={handleTitleClick}>{info.title}</h4>}
+        {!isMobile && <h4 className={styles.title}>{info.title}</h4>}
         <div className={styles.autocheck}>
           <button className={styles.navButton} style={navbuttonStyle} onClick={clearGrid}>Clear</button>
           {!info.noSolution &&
@@ -608,16 +608,17 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
               >Check</button>
               <button className={styles.navButton} style={navbuttonStyle} onClick={revealCell}>{isMobile ? "Reveal" : "Reveal Cell"}</button>
               <button className={styles.navButton} style={navbuttonStyle} onClick={solveGrid}>Solution</button>
+              {board == "Auto Gen Crossword" && <button className={styles.navButton} style={navbuttonStyle} onClick={generateNewCrossword}>Regenerate</button>}
             </>
           }
           <select className={styles.select} onChange={(e) => {changeBoard(e.target.value)}} value={board}>
             <option value="NYT Mini Crossword">NYT Mini Crossword</option>
             <option value="NYT Midi Crossword">NYT Midi Crossword</option>
             <option value="NYT Big Crossword">NYT Big Crossword</option>
-            <option value="Auto Generated Mini Crossword">Auto Generated Crossword</option>
+            <option value="Auto Gen Crossword">Auto Gen Crossword</option>
             <option value="Father's Day 2025">Father's Day 2025</option>
             <option value="Joley's Crossword">Joley's Crossword</option>
-            <option value="Charlotte's Birthday Crossword">Charlotte's Birthday Crossword</option>
+            <option value="Charlotte's Bday">Charlotte's Bday</option>
             <option value="Ally's STR Crossword">Ally's STR Crossword</option>
           </select>
         </div>

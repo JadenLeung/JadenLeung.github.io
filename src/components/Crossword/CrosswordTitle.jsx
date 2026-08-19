@@ -20,7 +20,7 @@ export default function CrosswordTitle() {
         "NYT Big Crossword": {
             src: "NYT-Big-Crossword.png"
         },
-        "Auto Generated Mini Crossword": {
+        "Auto Gen Crossword": {
             src: "Clanker.webp"
         }
     }
