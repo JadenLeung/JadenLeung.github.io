@@ -86,7 +86,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   };
 
   useEffect(() => {
-    if ((board.includes("NYT") || board == "AI Generated Mini Crossword") && Object.keys(data[board]).length < 3) {
+    if ((board.includes("NYT") || board == "Auto Generated Mini Crossword") && Object.keys(data[board]).length < 3) {
       const key = data[board].keyword.toUpperCase() + "_CROSSWORD_URL"
       fetchCrossword(data.BASE_URL + data.urls[key], board);
     }
@@ -565,10 +565,10 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   }
 
   function handleTitleClick() {
-    if (board == "AI Generated Mini Crossword") {
-      if (confirm("Generate New AI Crossword?")) {
+    if (board == "Auto Generated Mini Crossword") {
+      if (confirm("Generate New Crossword?")) {
         setLoading(true);
-        fetchCrossword(data.BASE_URL + data.urls.AI_CROSSWORD_URL, "AI Generated Mini Crossword");
+        fetchCrossword(data.BASE_URL + data.urls.AUTO_CROSSWORD_URL, "Auto Generated Mini Crossword");
       }
     }
   }
@@ -576,7 +576,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   if (loading || !solution) {
     return (
     <div className={styles.page}>
-       <h4 className={styles.title}>{board.includes("NYT") ? `Loading today's ${board}...` : board == "AI Generated Mini Crossword" ? "Generating AI Crossword..." : "Error"}</h4>
+       <h4 className={styles.title}>{board.includes("NYT") ? `Loading today's ${board}...` : board == "Auto Generated Mini Crossword" ? "Generating Crossword..." : "Error"}</h4>
     </div>);
   }
 
@@ -611,7 +611,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
             <option value="NYT Mini Crossword">NYT Mini Crossword</option>
             <option value="NYT Midi Crossword">NYT Midi Crossword</option>
             <option value="NYT Big Crossword">NYT Big Crossword</option>
-            <option value="AI Generated Mini Crossword">AI Generated Crossword</option>
+            <option value="Auto Generated Mini Crossword">Auto Generated Crossword</option>
             <option value="Father's Day 2025">Father's Day 2025</option>
             <option value="Joley's Crossword">Joley's Crossword</option>
             <option value="Charlotte's Birthday Crossword">Charlotte's Birthday Crossword</option>

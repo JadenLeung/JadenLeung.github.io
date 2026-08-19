@@ -1,5 +1,5 @@
 export let data = {
-    "Order": ["NYT Mini Crossword", "AI Generated Mini Crossword", "Joley's Crossword", "Charlotte's Birthday Crossword", "Father's Day 2025"],
+    "Order": ["NYT Mini Crossword", "Auto Generated Mini Crossword", "Joley's Crossword", "Charlotte's Birthday Crossword", "Father's Day 2025"],
     "Father's Day 2025":  {
         title: "Father's Day Crossword",
         keyword: "f",
@@ -121,9 +121,9 @@ export let data = {
         title: "NYT Big Crossword",
         keyword: "big"
     },
-    "AI Generated Mini Crossword": {
-        title: "AI Generated Mini Crossword",
-        keyword: "ai"
+    "Auto Generated Mini Crossword": {
+        title: "Auto Generated Mini Crossword",
+        keyword: "auto"
     },
     "Ally's STR Crossword":  {
         title: "Ally's STR Crossword",
@@ -237,13 +237,13 @@ export let data = {
         message: "Happy Father's Day!",
         groupedClues: [["4D", "32A"]],
     },
-    BASE_URL: "http://127.0.0.1:5001/crossword",
-    // BASE_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",
+    // BASE_URL: "http://127.0.0.1:5001/crossword",
+    BASE_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",
     urls: {
         MINI_CROSSWORD_URL: "/mini",
         MIDI_CROSSWORD_URL: "/midi",
         BIG_CROSSWORD_URL: "/big",
         // AI_URL: "https://monkey2.azurewebsites.net/gen",
-        AI_CROSSWORD_URL: "-gen"
+        AUTO_CROSSWORD_URL: "-gen"
     }
 };
