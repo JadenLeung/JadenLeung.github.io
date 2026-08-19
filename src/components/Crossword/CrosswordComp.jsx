@@ -86,12 +86,9 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
   };
 
   useEffect(() => {
-    if (board.includes("NYT") && Object.keys(data[board]).length < 3) {
+    if ((board.includes("NYT") || board == "AI Generated Mini Crossword") && Object.keys(data[board]).length < 3) {
       const key = data[board].keyword.toUpperCase() + "_CROSSWORD_URL"
       fetchCrossword(data.BASE_URL + data.urls[key], board);
-    }
-    if (board == "AI Generated Mini Crossword" && Object.keys(data["AI Generated Mini Crossword"]).length < 3) {
-      fetchCrossword(data.urls.AI_URL, "AI Generated Mini Crossword");
     }
   }, [board]);
 
@@ -571,7 +568,7 @@ export const CrosswordComp = ({crosswordName, board, setBoard}) => {
     if (board == "AI Generated Mini Crossword") {
       if (confirm("Generate New AI Crossword?")) {
         setLoading(true);
-        fetchCrossword(data.AI_URL, "AI Generated Mini Crossword");
+        fetchCrossword(data.BASE_URL + data.urls.AI_CROSSWORD_URL, "AI Generated Mini Crossword");
       }
     }
   }

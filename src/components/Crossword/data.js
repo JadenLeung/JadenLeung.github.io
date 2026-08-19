@@ -237,12 +237,13 @@ export let data = {
         message: "Happy Father's Day!",
         groupedClues: [["4D", "32A"]],
     },
-    // BASE_URL: "http://127.0.0.1:5001/crossword",
-    BASE_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",
+    BASE_URL: "http://127.0.0.1:5001/crossword",
+    // BASE_URL: "https://crossword-fua4bdbycsgrfwfp.eastus-01.azurewebsites.net/crossword",
     urls: {
         MINI_CROSSWORD_URL: "/mini",
         MIDI_CROSSWORD_URL: "/midi",
         BIG_CROSSWORD_URL: "/big",
-        AI_URL: "https://monkey2.azurewebsites.net/gen",
+        // AI_URL: "https://monkey2.azurewebsites.net/gen",
+        AI_CROSSWORD_URL: "-gen"
     }
 };
