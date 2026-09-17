@@ -1,11 +1,19 @@
 [
     {
         "title": "virtual-cube.net",
-        "imageSrc": "projects/cube.png",
+        "imageSrc": "projects/vcube.png",
         "description": "An online rubiks cube with webcam integration, self-solving, custom cube designs, and more!",
         "skills": ["HTML/CSS", "SQL", "P5.JS", "Express"],
         "demo": "https://virtual-cube.net/",
         "source": "https://github.com/JadenLeung/rubiks"
+    },
+    {
+        "title": "Codehoot",
+        "imageSrc": "projects/codehoot.png",
+        "description": "Remake of Kahoot!, for coders, used in UWaterloo's CS136 Final Review Session.",
+        "skills": ["React", "C", "Flask", "Express",  "Docker"],
+        "demo": "http://jadenleung.github.io/codehoot/",
+        "source": "https://github.com/JadenLeung/codehoot"
     },
     {
         "title": "AI Plays: Chess",
@@ -16,17 +24,9 @@
         "source": "https://github.com/JadenLeung/ai-chess"
     },
     {
-        "title": "Codehoot",
-        "imageSrc": "projects/codehoot.png",
-        "description": "Remake of Kahoot!, for coders, used in Uwaterloo's CS136 Final Review Session.",
-        "skills": ["React", "C", "Flask", "Express",  "Docker"],
-        "demo": "http://jadenleung.github.io/codehoot/",
-        "source": "https://github.com/JadenLeung/codehoot"
-    },
-    {
         "title": "NYT Mini Crossword",
-        "imageSrc": "projects/crossword.png",
-        "description": "The real NYT mini crossword costed money, so I made a free version.",
+        "imageSrc": "crossword/crossword.png",
+        "description": "Access NYT crosswords for free. Also includes an auto crossword generator.",
         "skills": ["React", "Flask"],
         "demo": "https://jadenleung.github.io/#/crossword",
         "source": "https://github.com/JadenLeung/nyt-mini-scraper"
