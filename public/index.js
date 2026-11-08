@@ -1,7 +1,7 @@
 (function() {
   const routes = {
     hashed: ["aichess", "lazychess", "matrix", "crossword"],
-    nonhash: ["unblocked", "unblocked2"]
+    nonhash: ["unblocked", "unblocked2", "unblocked3"]
   };
 
   const currentPath = window.location.pathname.slice(1);
